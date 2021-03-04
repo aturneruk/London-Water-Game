@@ -13,6 +13,14 @@ public class RiverThames : MonoBehaviour {
 
 
     private void Awake() {
+        SetRiverCells();
+    }
+
+    private void Start() {
+        StartCoroutine(ShowFlow());
+    }
+
+    private void SetRiverCells() {
         thamesCellPositions = new int[,] {
             { 0, 4 },
             { 0, 3 },
@@ -100,10 +108,21 @@ public class RiverThames : MonoBehaviour {
             { 47, 9 }
         };
 
+        thamesCells = new HexCell[thamesCellPositions.GetLength(0)];
+
         for (int i = 0; i < thamesCellPositions.GetLength(0); i++) {
             HexCell cell = hexGrid.GetCellFromOffset(thamesCellPositions[i, 0], thamesCellPositions[i, 1]);
-            cell.Color = Color.blue;
+            thamesCells[i] = cell;
+            // cell.Color = Color.blue;
 
+        }
+    }
+
+    private IEnumerator ShowFlow() {
+
+        for(int i = 0; i < thamesCellPositions.GetLength(0); i++) {
+            yield return new WaitForSeconds(0.5f);
+            thamesCells[i].Color = Color.blue;
         }
     }
 
