@@ -28,7 +28,7 @@ public class HexMapEditor : MonoBehaviour
         Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(inputRay, out hit)) {
-            EditCell(hexGrid.GetCell(hit.point));
+            EditCell(hexGrid.GetCellFromPosition(hit.point));
         }
     }
 

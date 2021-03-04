@@ -69,6 +69,7 @@ public class HexGrid : MonoBehaviour {
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.Color = defaultColor;
+        cell.index = i;
 
         if (x > 0) {
             cell.SetNeighbor(HexDirection.W, cells[i - 1]);
@@ -114,10 +115,16 @@ public class HexGrid : MonoBehaviour {
         chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, cell);
     }
 
-    public HexCell GetCell(Vector3 position) {
+    public HexCell GetCellFromPosition(Vector3 position) {
         position = transform.InverseTransformPoint(position);
         HexCoordinates coordinates = HexCoordinates.FromPosition(position);
         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         return cells[index];
     }
+
+    public HexCell GetCellFromOffset(int x, int z) {
+        int index = x + (z * cellCountX);
+        return cells[index];
+    }
+
 }

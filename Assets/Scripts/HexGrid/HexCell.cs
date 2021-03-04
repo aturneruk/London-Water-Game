@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
 public class HexCell : MonoBehaviour {
+
+    public int index;
     public HexCoordinates coordinates;
+
 
     public Color Color {
         get {
@@ -27,8 +30,12 @@ public class HexCell : MonoBehaviour {
 
     public RectTransform uiRect;
 
+    // Population fields
     public float population;
     public float popGrowthRate;
+
+    // River data
+    public bool hasIncomingRiver, hasOutgoingRiver;
 
     private void Start() {
             // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);
