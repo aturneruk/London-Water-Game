@@ -6,22 +6,26 @@ public class RiverThames : MonoBehaviour {
 
     public HexGrid hexGrid;
 
-    public float health;
+    public static HexCell[] cells;
+    private static int[,] cellOffsetCoords;
 
-    private static int[,] thamesCellPositions;
-    public static HexCell[] thamesCells;
+    private int riverLength;
 
+    public float[] flows;
+    public float[] quality;
+    public float totalQuality;
 
     private void Awake() {
-        SetRiverCells();
+        SetupRiverCells();
+        CollectRiversideCells();
     }
 
     private void Start() {
         StartCoroutine(ShowFlow());
     }
 
-    private void SetRiverCells() {
-        thamesCellPositions = new int[,] {
+    private void SetupRiverCells() {
+        cellOffsetCoords = new int[,] {
             { 0, 4 },
             { 0, 3 },
             { 1, 2 },
@@ -108,22 +112,55 @@ public class RiverThames : MonoBehaviour {
             { 47, 9 }
         };
 
-        thamesCells = new HexCell[thamesCellPositions.GetLength(0)];
+        riverLength = cellOffsetCoords.GetLength(0);
+        cells = new HexCell[riverLength];
 
-        for (int i = 0; i < thamesCellPositions.GetLength(0); i++) {
-            HexCell cell = hexGrid.GetCellFromOffset(thamesCellPositions[i, 0], thamesCellPositions[i, 1]);
-            thamesCells[i] = cell;
+        for (int i = 0; i < riverLength; i++) {
+            HexCell cell = hexGrid.GetCellFromOffset(cellOffsetCoords[i, 0], cellOffsetCoords[i, 1]);
+            cells[i] = cell;
+            cell.isThames = true;
+            cell.hasRiver = true;
             // cell.Color = Color.blue;
+        }
+    }
 
+    private void CollectRiversideCells() {
+        // Set discharge cell
+        for (int i = 0; i < riverLength; i++) {
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+                if (cells[i].GetNeighbor(d) && !cells[i].GetNeighbor(d).hasRiver) { 
+                    cells[i].GetNeighbor(d).dischargeCell = cells[i];
+                    cells[i].GetNeighbor(d).isRiverside = true;
+                    cells[i].GetNeighbor(d).Color = Color.green;
+                }
+            }
+        }
+
+        // Set abstraction cell
+        for (int i = riverLength - 1; i >= 0; i--) {
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+                if (cells[i].GetNeighbor(d) && !cells[i].GetNeighbor(d).hasRiver) {
+                    cells[i].GetNeighbor(d).abstractionCell = cells[i];
+                }
+            }
         }
     }
 
     private IEnumerator ShowFlow() {
-
-        for(int i = 0; i < thamesCellPositions.GetLength(0); i++) {
-            yield return new WaitForSeconds(0.5f);
-            thamesCells[i].Color = Color.blue;
+        for (int i = 0; i < riverLength; i++) {
+            yield return new WaitForSeconds(0.3f);
+            cells[i].Color = Color.blue;
         }
     }
 
+
+    public void Discharge(float flow, float quality) {
+
+    }
+
+    public void Abstract(float flow, HexCell cell) {
+
+    }
 }
+
+

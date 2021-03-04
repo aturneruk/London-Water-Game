@@ -90,6 +90,7 @@ public class HexGrid : MonoBehaviour {
             }
         }
 
+        // Set initial population
         if (x > centralAreaXIndex && x <= centralAreaXIndex + HexMetrics.startAreaSize) {
             if (z > centralAreaZIndex && z <= centralAreaZIndex + HexMetrics.startAreaSize) {
                 cell.population = 300f;

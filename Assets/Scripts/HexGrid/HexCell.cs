@@ -35,12 +35,15 @@ public class HexCell : MonoBehaviour {
     public float popGrowthRate;
 
     // River data
-    public bool hasIncomingRiver, hasOutgoingRiver;
+    public bool hasRiver;
+    public bool isThames;
+    public bool isRiverside;
+    public HexCell abstractionCell;
+    public HexCell dischargeCell;
 
     private void Start() {
             // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);
     }
-
 
     public HexCell GetNeighbor(HexDirection direction) {
         return neighbors[(int)direction];
