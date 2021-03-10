@@ -1203,7 +1203,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexGrid: {fileID: 158096126}
-  health: 0
+  flows: []
+  quality: []
+  totalQuality: 0
 --- !u!1 &1139475952
 GameObject:
   m_ObjectHideFlags: 0
