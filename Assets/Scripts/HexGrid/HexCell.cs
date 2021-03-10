@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
 
 public class HexCell : MonoBehaviour {
 
@@ -34,6 +37,9 @@ public class HexCell : MonoBehaviour {
     public float population;
     public float popGrowthRate;
 
+    // Network data
+    public int? riverDistance;
+
     // River data
     public bool hasRiver;
     public bool isThames;
@@ -43,6 +49,20 @@ public class HexCell : MonoBehaviour {
 
     private void Start() {
             // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);
+
+        if(riverDistance == 0) {
+            color = Color.blue;
+                    }
+        else if (riverDistance == 1) {
+            color = Color.yellow;
+        }
+        else if (riverDistance == 2) {
+            color = Color.green;
+        }
+        else if (riverDistance == 3) {
+            color = Color.magenta;
+        }
+
     }
 
     public HexCell GetNeighbor(HexDirection direction) {
@@ -53,6 +73,18 @@ public class HexCell : MonoBehaviour {
         neighbors[(int)direction] = cell;
         cell.neighbors[(int)direction.Opposite()] = this;
     }
+
+    public int SetRiverDistance(int distance) {
+
+        if (riverDistance == null) {
+            riverDistance = distance;
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+
     void Refresh() {
         if (chunk) {
             chunk.Refresh();
