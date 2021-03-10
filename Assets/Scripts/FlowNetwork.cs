@@ -10,7 +10,7 @@ public static class FlowNetwork
     public static void BackPass() {
 
         foreach (HexCell cell in RiverThames.riverCells) {
-            cell.SetRiverDistance(0);
+            cell.riverDistance = 0;
             cells.Add(cell);
         }
 
@@ -19,19 +19,7 @@ public static class FlowNetwork
         int level = 1;
         int changed = 0;
 
-        foreach (HexCell cell in cells) {
-            Debug.Log(cell.coordinates);
-        }
-
-
         while (!complete) {
-
-            Debug.Log("hello");
-
-            foreach (HexCell cell in cells) {
-                Debug.Log(cell.coordinates);
-            }
-
 
             foreach (HexCell cell in cells) {
 
@@ -59,4 +47,10 @@ public static class FlowNetwork
 
         }
     }
+
+    public static void ForwardPass() {
+
+    }
+
+
 }

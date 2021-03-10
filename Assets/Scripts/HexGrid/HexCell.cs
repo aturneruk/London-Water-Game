@@ -48,21 +48,23 @@ public class HexCell : MonoBehaviour {
     public HexCell dischargeCell;
 
     private void Start() {
-            // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);
+        // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);
 
-        if(riverDistance == 0) {
+        if (riverDistance == 0) {
             color = Color.blue;
-                    }
-        else if (riverDistance == 1) {
-            color = Color.yellow;
-        }
-        else if (riverDistance == 2) {
-            color = Color.green;
-        }
-        else if (riverDistance == 3) {
-            color = Color.magenta;
         }
 
+        for (int i = 0; i < 20; i+=3) {
+            if (riverDistance == i+1) {
+                color = Color.yellow;
+            }
+            else if (riverDistance == i+2) {
+                color = Color.magenta;
+            }
+            else if (riverDistance == i+3) {
+                color = Color.green;
+            }
+        }
     }
 
     public HexCell GetNeighbor(HexDirection direction) {
@@ -74,15 +76,8 @@ public class HexCell : MonoBehaviour {
         cell.neighbors[(int)direction.Opposite()] = this;
     }
 
-    public int SetRiverDistance(int distance) {
+    public void SetOutflow() {
 
-        if (riverDistance == null) {
-            riverDistance = distance;
-            return 1;
-        }
-        else {
-            return 0;
-        }
     }
 
     void Refresh() {
