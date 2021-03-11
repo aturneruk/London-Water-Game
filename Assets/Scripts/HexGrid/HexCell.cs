@@ -50,21 +50,36 @@ public class HexCell : MonoBehaviour {
     private void Start() {
         // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);
 
+        if (riverDistance > 1) { 
+            FlowNetwork.ForwardPass(this); 
+        }
+       
+
         if (riverDistance == 0) {
             color = Color.blue;
         }
 
-        for (int i = 0; i < 20; i+=3) {
-            if (riverDistance == i+1) {
-                color = Color.yellow;
-            }
-            else if (riverDistance == i+2) {
-                color = Color.magenta;
-            }
-            else if (riverDistance == i+3) {
-                color = Color.green;
-            }
-        }
+        //for (int i = 0; i < 20; i+=3) {
+        //    if (riverDistance == i+1) {
+        //        color = Color.yellow;
+        //    }
+        //    else if (riverDistance == i+2) {
+        //        color = Color.magenta;
+        //    }
+        //    else if (riverDistance == i+3) {
+        //        color = Color.green;
+        //    }
+        //}
+    }
+
+    private void OnDrawGizmosSelected() {
+        HexCell cell = this;
+
+        for (int? i = riverDistance; i > 1; i--) {
+            Gizmos.color = Color.black;
+            Gizmos.DrawLine(cell.transform.position, cell.dischargeCell.transform.position);
+            cell = cell.dischargeCell;
+        }        
     }
 
     public HexCell GetNeighbor(HexDirection direction) {

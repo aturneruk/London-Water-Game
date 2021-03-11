@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class FlowNetwork
-{
+public class FlowNetwork {
     static List<HexCell> cells = new List<HexCell>();
     static List<HexCell> nextCells = new List<HexCell>();
 
@@ -48,9 +47,21 @@ public static class FlowNetwork
         }
     }
 
-    public static void ForwardPass() {
+    private static System.Random rng = new System.Random();
 
+    public static void ForwardPass(HexCell cell) {
+
+        int cellDistance = (int)cell.riverDistance;
+
+        bool set = false;
+
+        while (!set) {
+            int random = rng.Next(6);
+            HexCell neighbor = cell.GetNeighbor((HexDirection)random);
+            if (neighbor && neighbor.riverDistance == cellDistance - 1) {
+                cell.dischargeCell = neighbor;
+                set = true;
+            }
+        }
     }
-
-
 }
