@@ -6,7 +6,9 @@ public class FlowNetwork {
     static List<HexCell> cells = new List<HexCell>();
     static List<HexCell> nextCells = new List<HexCell>();
 
-    public static void ForwardScan() {
+    private static System.Random rng = new System.Random();
+
+    public static void GenerateNetwork() {
 
         foreach (HexCell cell in RiverThames.riverCells) {
             cell.riverDistance = 0;
@@ -30,6 +32,19 @@ public class FlowNetwork {
                         neighbor.riverDistance = level;
                         changed++;
                         nextCells.Add(neighbor);
+
+                        if (level > 1) {
+                            bool set = false;
+
+                            while (!set) {
+                                int random = rng.Next(6);
+                                HexCell neighbor1 = neighbor.GetNeighbor((HexDirection)random);
+                                if (neighbor1 && neighbor1.riverDistance == level - 1) {
+                                    neighbor.dischargeCell = neighbor1;
+                                    set = true;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -44,24 +59,6 @@ public class FlowNetwork {
             cells.AddRange(nextCells);
             nextCells.Clear();
 
-        }
-    }
-
-    private static System.Random rng = new System.Random();
-
-    public static void BackwardScan(HexCell cell) {
-
-        int cellDistance = (int)cell.riverDistance;
-
-        bool set = false;
-
-        while (!set) {
-            int random = rng.Next(6);
-            HexCell neighbor = cell.GetNeighbor((HexDirection)random);
-            if (neighbor && neighbor.riverDistance == cellDistance - 1) {
-                cell.dischargeCell = neighbor;
-                set = true;
-            }
         }
     }
 }

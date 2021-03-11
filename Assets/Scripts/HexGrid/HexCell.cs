@@ -48,25 +48,20 @@ public class HexCell : MonoBehaviour {
     public HexCell dischargeCell;       
 
     private void Start() {
-        // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);
-
-        if (riverDistance > 1) { 
-            FlowNetwork.BackwardScan(this); 
-        }
-       
+        // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);     
 
         if (riverDistance == 0) {
             color = Color.blue;
         }
 
-        //for (int i = 0; i < 20; i+=3) {
-        //    if (riverDistance == i+1) {
+        //for (int i = 0; i < 20; i += 3) {
+        //    if (riverDistance == i + 1) {
         //        color = Color.yellow;
         //    }
-        //    else if (riverDistance == i+2) {
+        //    else if (riverDistance == i + 2) {
         //        color = Color.magenta;
         //    }
-        //    else if (riverDistance == i+3) {
+        //    else if (riverDistance == i + 3) {
         //        color = Color.green;
         //    }
         //}
