@@ -15,12 +15,10 @@ public class RiverThames : MonoBehaviour {
     public float[] quality;
     public float totalQuality;
 
-    public List<HexCell> riversideCells;
-
     private void Awake() {
         SetupRiverCells();
-        CollectRiversideCells();
-        FlowNetwork.BackPass();
+        FlowNetwork.ForwardScan();
+        AssignRiversideCells();
     }
 
     private void Start() {
@@ -127,34 +125,30 @@ public class RiverThames : MonoBehaviour {
         }
     }
 
-    private void CollectRiversideCells() {
+    private void AssignRiversideCells() {
         // Set discharge cell
-        //for (int i = 0; i < riverLength; i++) {
-        //    for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+        for (int i = 0; i < riverLength; i++) {
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
 
-        //        HexCell cell = riverCells[i].GetNeighbor(d);
+                HexCell neighbor = riverCells[i].GetNeighbor(d);
 
-        //        if (cell && !cell.hasRiver) {
-
-        //            cell.SetRiverDistance();
-
-        //            cell.dischargeCell = riverCells[i];
-
-        //            riversideCells.Add(cell);
-        //            cell.isRiverside = true;
-        //            cell.Color = Color.green;                    
-        //        }
-        //    }
-        //}
+                if (neighbor && neighbor.riverDistance == 1) {
+                    neighbor.dischargeCell = riverCells[i];
+                }
+            }
+        }
 
         // Set abstraction cell
-        //for (int i = riverLength - 1; i >= 0; i--) {
-        //    for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
-        //        if (riverCells[i].GetNeighbor(d) && !riverCells[i].GetNeighbor(d).hasRiver) {
-        //            riverCells[i].GetNeighbor(d).abstractionCell = riverCells[i];
-        //        }
-        //    }
-        //}
+        for (int i = riverLength - 1; i >= 0; i--) {
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+
+                HexCell neighbor = riverCells[i].GetNeighbor(d);
+
+                if (neighbor && neighbor.riverDistance == 1) {
+                    neighbor.abstractionCell = riverCells[i];
+                }
+            }
+        }
     }
 
     //private IEnumerator ShowFlow() {

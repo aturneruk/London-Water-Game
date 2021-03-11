@@ -6,7 +6,7 @@ public class FlowNetwork {
     static List<HexCell> cells = new List<HexCell>();
     static List<HexCell> nextCells = new List<HexCell>();
 
-    public static void BackPass() {
+    public static void ForwardScan() {
 
         foreach (HexCell cell in RiverThames.riverCells) {
             cell.riverDistance = 0;
@@ -49,7 +49,7 @@ public class FlowNetwork {
 
     private static System.Random rng = new System.Random();
 
-    public static void ForwardPass(HexCell cell) {
+    public static void BackwardScan(HexCell cell) {
 
         int cellDistance = (int)cell.riverDistance;
 

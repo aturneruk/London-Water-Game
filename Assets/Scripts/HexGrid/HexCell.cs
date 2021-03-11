@@ -45,13 +45,13 @@ public class HexCell : MonoBehaviour {
     public bool isThames;
     public bool isRiverside;
     public HexCell abstractionCell;
-    public HexCell dischargeCell;
+    public HexCell dischargeCell;       
 
     private void Start() {
         // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);
 
         if (riverDistance > 1) { 
-            FlowNetwork.ForwardPass(this); 
+            FlowNetwork.BackwardScan(this); 
         }
        
 
@@ -75,7 +75,7 @@ public class HexCell : MonoBehaviour {
     private void OnDrawGizmosSelected() {
         HexCell cell = this;
 
-        for (int? i = riverDistance; i > 1; i--) {
+        for (int? i = riverDistance; i > 0; i--) {
             Gizmos.color = Color.black;
             Gizmos.DrawLine(cell.transform.position, cell.dischargeCell.transform.position);
             cell = cell.dischargeCell;
