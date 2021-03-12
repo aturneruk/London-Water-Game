@@ -1544,7 +1544,7 @@ public class Elevation {
     };
 
     public static float GetElevation(int i) {
-        return elevation[i];
+        return elevation[i] * 0.2f;
     }
 
 }
