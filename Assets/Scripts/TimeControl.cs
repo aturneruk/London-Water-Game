@@ -43,5 +43,4 @@ public class TimeControl : MonoBehaviour
 
         Sprite image = speedControl.GetComponent<Image>().sprite;
     }
-
 }
