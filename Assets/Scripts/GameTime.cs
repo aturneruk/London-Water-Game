@@ -153,7 +153,7 @@ public static class GameTime {
 
             case 2:
             case 22:
-                return day.ToString() + "nd" + month.ToString() + " " + year.ToString();
+                return day.ToString() + "nd " + month.ToString() + " " + year.ToString();
 
             case 3:
                 return day.ToString() + "rd " + month.ToString() + " " + year.ToString();
