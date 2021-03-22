@@ -30,8 +30,7 @@ public static class GameTime {
         dayFraction += gameSpeed * Time.unscaledDeltaTime;
 
         if (dayFraction >= 1) {
-            day++;
-            dayFraction--;
+            NextDay();
         }
 
         switch (month) {
@@ -40,15 +39,13 @@ public static class GameTime {
                 if (year % 400 == 0 | (year % 4 == 0 && year % 100 != 0)) {
                     // leap year
                     if (day > 29) {
-                        month++;
-                        day = 1;
+                        NextMonth();
                     }
                 }
                 else {
                     // not leap year
                     if (day > 28) {
-                        month++;
-                        day = 1;
+                        NextMonth();
                     }
                 }
                 break;
@@ -58,31 +55,51 @@ public static class GameTime {
             case Month.Sep:
             case Month.Nov:
                 if (day > 30) {
-                    month++;
-                    day = 1;
+                    NextMonth();
+                }
+                break;
+
+            case Month.Jan:
+            case Month.Mar:
+            case Month.May:
+            case Month.Jul:
+            case Month.Aug:
+            case Month.Oct:
+                if (day > 31) {
+                    NextMonth();
                 }
                 break;
 
             case Month.Dec:
                 if (day > 31) {
-                    year++;
-                    month = Month.Jan;
-                    day = 1;
+                    NextYear();
                 }
                 break;
 
             default:
-                if (day > 31) {
-                    month++;
-                    day = 1;
-                }
+                Debug.LogError("GameTime.month is outside of expected values");
                 break;
         }
+    }
+
+    static private void NextDay() {
+        day++;
+        dayFraction--;
+    }
+
+    static private void NextMonth() {
+        month++;
+        day = 1;
+    }
+
+    static private void NextYear() {
+        year++;
+        month = Month.Jan;
+        day = 1;
     }
 
     static public string GetShortForm() {
         int monthNumber = (int)month + 1;
         return day.ToString() + "/" + monthNumber + "/" + year.ToString();
     }
-
 }
