@@ -19,7 +19,9 @@ public static class GameTime {
     static private int day;
     static private float dayFraction;
 
-    static private int gameSpeed = 1;
+    static private int gameSpeed;
+    static private int baseGameSpeed = 4;
+    static private int gameSpeedMultiplier = 1;
 
     static public void Set(int y, Month m, int d) {
         year = y;
@@ -32,23 +34,24 @@ public static class GameTime {
 
         switch (speed) {
             case Speed.X1:
-                gameSpeed = 1;
+                gameSpeedMultiplier = 1;
                 break;
             case Speed.X2:
-                gameSpeed = 2;
+                gameSpeedMultiplier = 2;
                 break;
             case Speed.X4:
-                gameSpeed = 4;
+                gameSpeedMultiplier = 4;
                 break;
             case Speed.X8:
-                gameSpeed = 8;
+                gameSpeedMultiplier = 8;
                 break;
         }
+        gameSpeed = baseGameSpeed * gameSpeedMultiplier;
     }
 
     static public Speed GetSpeed() {
                
-        switch (gameSpeed) {
+        switch (gameSpeedMultiplier) {
             case 1:
                 return Speed.X1;
             case 2:
@@ -138,5 +141,9 @@ public static class GameTime {
     static public string GetShortForm() {
         int monthNumber = (int)month + 1;
         return day.ToString() + "/" + monthNumber + "/" + year.ToString();
+    }
+
+    static public string GetLongForm() {
+        return day.ToString() + "th " + month.ToString() + " " + year.ToString();
     }
 }

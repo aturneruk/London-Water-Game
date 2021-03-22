@@ -15,6 +15,7 @@ public class TimeControl : MonoBehaviour
     {
         GameTime.Set(1800, (Month)0, 1);
         GameTime.SetSpeed(Speed.X1);
+        speedControl.GetComponentInChildren<Text>().text = Speed.X1.ToString();
         // Debug.Log(GameTime.Get());
     }
 
@@ -22,7 +23,7 @@ public class TimeControl : MonoBehaviour
     void Update()
     {
         GameTime.UpdateTime();
-        date.text = GameTime.GetShortForm();
+        date.text = GameTime.GetLongForm();
     }
 
     public void SpeedChange() {
