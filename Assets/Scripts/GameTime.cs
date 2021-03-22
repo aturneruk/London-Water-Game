@@ -5,6 +5,11 @@ using UnityEngine;
 public enum Month {
     Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
 }
+public enum Speed {
+    X1,
+    X2,
+    X4
+}
 
 public static class GameTime {
 
@@ -22,9 +27,35 @@ public static class GameTime {
         dayFraction = 0f;
     }
 
-    static public void SetSpeed(int speed) {
-        gameSpeed = speed;
+    static public void SetSpeed(Speed speed) {
+
+        switch (speed) {
+            case Speed.X1:
+                gameSpeed = 1;
+                break;
+            case Speed.X2:
+                gameSpeed = 2;
+                break;
+            case Speed.X4:
+                gameSpeed = 4;
+                break;
+        }
     }
+
+    static public Speed GetSpeed() {
+               
+        switch (gameSpeed) {
+            case 1:
+                return Speed.X1;
+            case 2:
+                return Speed.X2;
+            case 4:
+                return Speed.X4;
+            default:
+                throw new System.InvalidOperationException("Unknown value for game speed");
+        }
+    }
+
 
     static public void UpdateTime() {
         dayFraction += gameSpeed * Time.unscaledDeltaTime;
