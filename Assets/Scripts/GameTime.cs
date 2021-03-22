@@ -8,7 +8,8 @@ public enum Month {
 public enum Speed {
     X1,
     X2,
-    X4
+    X4,
+    X8
 }
 
 public static class GameTime {
@@ -39,6 +40,9 @@ public static class GameTime {
             case Speed.X4:
                 gameSpeed = 4;
                 break;
+            case Speed.X8:
+                gameSpeed = 8;
+                break;
         }
     }
 
@@ -51,6 +55,8 @@ public static class GameTime {
                 return Speed.X2;
             case 4:
                 return Speed.X4;
+            case 8:
+                return Speed.X8;
             default:
                 throw new System.InvalidOperationException("Unknown value for game speed");
         }

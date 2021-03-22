@@ -27,7 +27,18 @@ public class TimeControl : MonoBehaviour
 
     public void SpeedChange() {
 
+        Speed speed;
 
+        if (GameTime.GetSpeed() == Speed.X8) {
+            speed = Speed.X1;
+            GameTime.SetSpeed(speed);
+        }
+        else {
+            speed = GameTime.GetSpeed();
+            GameTime.SetSpeed(++speed);
+        }
+
+        speedControl.GetComponentInChildren<Text>().text = speed.ToString();
 
         Sprite image = speedControl.GetComponent<Image>().sprite;
     }
