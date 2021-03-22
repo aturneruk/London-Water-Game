@@ -144,6 +144,22 @@ public static class GameTime {
     }
 
     static public string GetLongForm() {
-        return day.ToString() + "th " + month.ToString() + " " + year.ToString();
+
+        switch(day) {
+            case 1:
+            case 21:
+            case 31:
+                return day.ToString() + "st " + month.ToString() + " " + year.ToString();
+
+            case 2:
+            case 22:
+                return day.ToString() + "nd" + month.ToString() + " " + year.ToString();
+
+            case 3:
+                return day.ToString() + "rd " + month.ToString() + " " + year.ToString();
+
+            default:
+                return day.ToString() + "th " + month.ToString() + " " + year.ToString();
+        }
     }
 }
