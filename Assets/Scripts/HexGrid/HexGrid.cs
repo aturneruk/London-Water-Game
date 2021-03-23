@@ -99,10 +99,10 @@ public class HexGrid : MonoBehaviour {
         }
         cell.popGrowthRate = 0.1f;
 
-        Text label = Instantiate<Text>(cellLabelPrefab);
-        label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
-        label.text = cell.coordinates.ToStringOnSeparateLines();
-        cell.uiRect = label.rectTransform;
+        //Text label = Instantiate<Text>(cellLabelPrefab);
+        //label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
+        //label.text = cell.coordinates.ToStringOnSeparateLines();
+        //cell.uiRect = label.rectTransform;
 
         AddCellToChunk(x, z, cell);
     }
