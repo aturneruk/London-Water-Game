@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class HexMesh : MonoBehaviour {
@@ -17,6 +18,9 @@ public class HexMesh : MonoBehaviour {
         GetComponent<MeshFilter>().mesh = hexMesh = new Mesh();
         meshCollider = gameObject.AddComponent<MeshCollider>();
         hexMesh.name = "Hex Mesh";
+
+        SceneVisibilityManager visibilityManager = SceneVisibilityManager.instance;
+        visibilityManager.DisablePicking(gameObject, false);
     }
 
     public void Triangulate(HexCell[] cells) {

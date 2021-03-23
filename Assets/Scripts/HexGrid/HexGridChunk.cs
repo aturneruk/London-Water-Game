@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
+
+
 
 
 public class HexGridChunk : MonoBehaviour {
@@ -12,6 +15,9 @@ public class HexGridChunk : MonoBehaviour {
     private void Awake() {
         gridCanvas = GetComponentInChildren<Canvas>();
         hexMesh = GetComponentInChildren<HexMesh>();
+
+        SceneVisibilityManager visibilityManager = SceneVisibilityManager.instance;
+        visibilityManager.DisablePicking(gameObject, false);
 
         cells = new HexCell[HexMetrics.chunkSizeX * HexMetrics.chunkSizeZ];
     }
