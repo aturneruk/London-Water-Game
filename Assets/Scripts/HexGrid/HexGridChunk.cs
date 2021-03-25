@@ -2,9 +2,6 @@
 using UnityEngine.UI;
 using UnityEditor;
 
-
-
-
 public class HexGridChunk : MonoBehaviour {
 
     HexCell[] cells;

@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class HexMapCamera : MonoBehaviour
 {
-
     Transform swivel, stick;
 
     float zoom = 0f;

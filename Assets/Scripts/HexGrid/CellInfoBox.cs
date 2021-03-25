@@ -51,8 +51,4 @@ public class CellInfoBox : MonoBehaviour
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
     }
-
-
-
-
 }
