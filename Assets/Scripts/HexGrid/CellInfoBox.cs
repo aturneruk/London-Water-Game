@@ -10,7 +10,7 @@ public class CellInfoBox : MonoBehaviour
     public HexGrid hexGrid;
 
     [SerializeField]
-    Text cellIndex;
+    Text cellIndex, cellPopulation;
 
     CanvasGroup canvasGroup;
     bool isOpen;
@@ -39,6 +39,8 @@ public class CellInfoBox : MonoBehaviour
 
     private void CellInfo(HexCell cell) {
         cellIndex.text = "Cell " + cell.index.ToString();
+        cellPopulation.text = "Population: " + cell.population.ToString();
+
 
         if (isOpen == false) {
             Show();
