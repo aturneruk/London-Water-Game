@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CellInfoBox : MonoBehaviour
 {
 
     public HexGrid hexGrid;
 
+    [SerializeField]
+    Text cellIndex;
+
     CanvasGroup canvasGroup;
     bool isOpen;
 
-    // Start is called before the first frame update
     void Start()
     {
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
@@ -26,16 +29,25 @@ public class CellInfoBox : MonoBehaviour
         } 
     }
 
-    public void CloseDiaglogue() {
-        Hide();
-    }
-
     private void HandleInput() {
         Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(inputRay, out hit)) {
-            Show(hexGrid.GetCellFromPosition(hit.point));
+            CellInfo(hexGrid.GetCellFromPosition(hit.point));
         }
+    }
+
+    private void CellInfo(HexCell cell) {
+        cellIndex.text = "Cell " + cell.index.ToString();
+
+        if (isOpen == false) {
+            Show();
+        }
+
+    }
+
+        public void CloseDiaglogue() {
+        Hide();
     }
 
     private void Hide() {
@@ -45,7 +57,7 @@ public class CellInfoBox : MonoBehaviour
         canvasGroup.blocksRaycasts = false;
     }
 
-    private void Show(HexCell cell) {
+    private void Show() {
         isOpen = true;
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
