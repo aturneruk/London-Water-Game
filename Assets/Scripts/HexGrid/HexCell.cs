@@ -14,6 +14,7 @@ public class HexCell : MonoBehaviour {
             return color;
         }
         set {
+
             if (color == value) {
                 return;
             }
@@ -113,5 +114,18 @@ public class HexCell : MonoBehaviour {
             }
         }
     }
+
+    public void SetDefaultColor() {
+        if (isThames) {
+            Color = HexGrid.riverColor;
+        }
+        else if (population != 0) {
+            Color = Color.green;
+        }
+        else {
+            Color = HexGrid.defaultColor;
+        }
+    }
+
 
 }

@@ -86,13 +86,7 @@ public class CellInfoBox : MonoBehaviour {
     }
 
     void DeselectCell(HexCell cell) {
-
-        if (cell.isThames) {
-            cell.Color = HexGrid.riverColor;
-        }
-        else {
-            cell.Color = HexGrid.defaultColor;
-        }
+        cell.SetDefaultColor();
     }
 
     void SelectCell(HexCell cell) {
