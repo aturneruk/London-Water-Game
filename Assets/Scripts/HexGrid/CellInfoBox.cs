@@ -31,8 +31,8 @@ public class CellInfoBox : MonoBehaviour {
     private void HandleInput() {
         Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(inputRay, out hit)) {
 
+        if (Physics.Raycast(inputRay, out hit)) {
             if (currentCell && currentCell != hexGrid.GetCellFromPosition(hit.point)) {
                 DeselectCell(currentCell);
             }
@@ -40,8 +40,9 @@ public class CellInfoBox : MonoBehaviour {
             currentCell = hexGrid.GetCellFromPosition(hit.point);
             SelectCell(currentCell);
             CellInfo(currentCell);
-
-
+        }
+        else {
+            CloseDiaglogue();
         }
     }
 
@@ -55,6 +56,11 @@ public class CellInfoBox : MonoBehaviour {
         }
 
     }
+
+    private void RiverInfo(HexCell cell) {
+
+    }
+
 
     public void CloseDiaglogue() {
         Hide();
