@@ -60,7 +60,7 @@ public class CellInfoBox : MonoBehaviour {
     }
 
     private void RiverCellInfo(HexCell cell) {
-
+        SelectCell(cell);
     }
 
 
@@ -86,11 +86,17 @@ public class CellInfoBox : MonoBehaviour {
     }
 
     void DeselectCell(HexCell cell) {
-        cell.Color = hexGrid.defaultColor;
+
+        if (cell.isThames) {
+            cell.Color = HexGrid.riverColor;
+        }
+        else {
+            cell.Color = HexGrid.defaultColor;
+        }
     }
 
     void SelectCell(HexCell cell) {
-        cell.Color = hexGrid.touchedColor;
+        cell.Color = HexGrid.touchedColor;
     }
 
 }
