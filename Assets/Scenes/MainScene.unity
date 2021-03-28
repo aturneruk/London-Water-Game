@@ -266,6 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 158096127}
   - component: {fileID: 158096126}
+  - component: {fileID: 158096128}
   m_Layer: 0
   m_Name: Hex Grid
   m_TagString: Untagged
@@ -293,8 +294,6 @@ MonoBehaviour:
     type: 3}
   cellLabelPrefab: {fileID: 7990225493013780573, guid: d8cebbac113db5c43aa1bb7accbe12df,
     type: 3}
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  touchedColor: {r: 1, g: 0, b: 1, a: 1}
 --- !u!4 &158096127
 Transform:
   m_ObjectHideFlags: 0
@@ -311,6 +310,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &158096128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158096125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 991bc104b878df847b2e9373a0effe62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &185687581
 GameObject:
   m_ObjectHideFlags: 0

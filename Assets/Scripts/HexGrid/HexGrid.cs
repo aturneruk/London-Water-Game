@@ -92,12 +92,6 @@ public class HexGrid : MonoBehaviour {
             }
         }
 
-        // Set initial population
-        if (x > centralAreaXIndex && x <= centralAreaXIndex + HexMetrics.startAreaSize) {
-            if (z > centralAreaZIndex && z <= centralAreaZIndex + HexMetrics.startAreaSize) {
-                cell.Population = 300f;
-            }
-        }
         cell.popGrowthRate = 0.1f;
 
         //Text label = Instantiate<Text>(cellLabelPrefab);
@@ -128,6 +122,10 @@ public class HexGrid : MonoBehaviour {
     public HexCell GetCellFromOffset(int x, int z) {
         int index = x + (z * cellCountX);
         return cells[index];
+    }
+
+    public HexCell GetCellFromIndex(int i) {
+        return cells[i];
     }
 
 }
