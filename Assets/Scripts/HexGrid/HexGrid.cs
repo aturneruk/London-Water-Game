@@ -22,8 +22,9 @@ public class HexGrid : MonoBehaviour {
     public UnityEngine.UI.Text cellLabelPrefab;
 
     // Set up colours
-    public Color defaultColor = Color.white;
-    public Color touchedColor = Color.magenta;
+    static public Color defaultColor = Color.white;
+    static public Color touchedColor = Color.magenta;
+    static public Color riverColor = Color.blue;
 
     private void Awake() {
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;

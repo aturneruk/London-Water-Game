@@ -66,7 +66,7 @@ public class HexCell : MonoBehaviour {
         // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);     
 
         if (riverDistance == 0) {
-            color = Color.blue;
+            color = HexGrid.riverColor;
         }
 
         //for (int i = 0; i < 20; i += 3) {
