@@ -45,6 +45,7 @@ public class HexCell : MonoBehaviour {
         set {
             population = value;
             populationDensity = 1000000 * population / area; // km^-2
+            Color = Color.green;
         }
     }
 
