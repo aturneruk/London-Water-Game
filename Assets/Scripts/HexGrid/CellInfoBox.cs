@@ -14,6 +14,8 @@ public class CellInfoBox : MonoBehaviour {
     CanvasGroup canvasGroup;
     bool isOpen;
 
+    private HexCell currentCell;
+
     void Start() {
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
         Hide();
@@ -30,7 +32,16 @@ public class CellInfoBox : MonoBehaviour {
         Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(inputRay, out hit)) {
-            CellInfo(hexGrid.GetCellFromPosition(hit.point));
+
+            if (currentCell && currentCell != hexGrid.GetCellFromPosition(hit.point)) {
+                DeselectCell(currentCell);
+            }
+
+            currentCell = hexGrid.GetCellFromPosition(hit.point);
+            SelectCell(currentCell);
+            CellInfo(currentCell);
+
+
         }
     }
 
@@ -47,6 +58,7 @@ public class CellInfoBox : MonoBehaviour {
 
     public void CloseDiaglogue() {
         Hide();
+        DeselectCell(currentCell);
     }
 
     private void Hide() {
@@ -62,4 +74,13 @@ public class CellInfoBox : MonoBehaviour {
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
     }
+
+    void DeselectCell(HexCell cell) {
+        cell.Color = hexGrid.defaultColor;
+    }
+
+    void SelectCell(HexCell cell) {
+        cell.Color = hexGrid.touchedColor;
+    }
+
 }
