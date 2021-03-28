@@ -43,8 +43,8 @@ public class HexCell : MonoBehaviour {
             return population;
         }
         set {
-            population = Population;
-            populationDensity = 1000000 * Population / area; // km^-2
+            population = value;
+            populationDensity = 1000000 * population / area; // km^-2
         }
     }
 
