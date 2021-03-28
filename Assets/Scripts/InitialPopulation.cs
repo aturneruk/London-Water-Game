@@ -32,8 +32,9 @@ public class InitialPopulation : MonoBehaviour
     }
 
     private void SetInitialCellPopulation() {
-        foreach (int i in cellReferences) {
-            gameObject.GetComponent<HexGrid>().GetCellFromIndex(i).Population = initialPopulations[i];
+        for (int i = 0; i < initialPopulations.Length; i++) {
+            HexCell cell = gameObject.GetComponent<HexGrid>().GetCellFromIndex(cellReferences[i]);
+            cell.Population = initialPopulations[i];
         }
     }
 
