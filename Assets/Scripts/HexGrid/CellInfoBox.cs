@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CellInfoBox : MonoBehaviour
-{
+public class CellInfoBox : MonoBehaviour {
 
     public HexGrid hexGrid;
 
@@ -15,18 +14,16 @@ public class CellInfoBox : MonoBehaviour
     CanvasGroup canvasGroup;
     bool isOpen;
 
-    void Start()
-    {
+    void Start() {
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
         Hide();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) {
             HandleInput();
-        } 
+        }
     }
 
     private void HandleInput() {
@@ -48,7 +45,7 @@ public class CellInfoBox : MonoBehaviour
 
     }
 
-        public void CloseDiaglogue() {
+    public void CloseDiaglogue() {
         Hide();
     }
 
