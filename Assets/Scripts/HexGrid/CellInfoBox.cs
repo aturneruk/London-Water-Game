@@ -33,13 +33,16 @@ public class CellInfoBox : MonoBehaviour {
         RaycastHit hit;
 
         if (Physics.Raycast(inputRay, out hit)) {
-            if (currentCell && currentCell != hexGrid.GetCellFromPosition(hit.point)) {
-                DeselectCell(currentCell);
-            }
 
+            CloseDiaglogue();
             currentCell = hexGrid.GetCellFromPosition(hit.point);
-            SelectCell(currentCell);
-            CellInfo(currentCell);
+
+            if (currentCell.isThames != true) {
+                CellInfo(currentCell);
+            }
+            else {
+                RiverCellInfo(currentCell);
+            }
         }
         else {
             CloseDiaglogue();
@@ -47,24 +50,25 @@ public class CellInfoBox : MonoBehaviour {
     }
 
     private void CellInfo(HexCell cell) {
+
+        SelectCell(cell);
+
         cellIndex.text = "Cell " + cell.index.ToString();
         cellPopulation.text = "Population: " + cell.Population.ToString();
 
-
-        if (isOpen == false) {
-            Show();
-        }
-
+        Show();
     }
 
-    private void RiverInfo(HexCell cell) {
+    private void RiverCellInfo(HexCell cell) {
 
     }
 
 
     public void CloseDiaglogue() {
         Hide();
-        DeselectCell(currentCell);
+        if (currentCell) {
+            DeselectCell(currentCell);
+        }
     }
 
     private void Hide() {
