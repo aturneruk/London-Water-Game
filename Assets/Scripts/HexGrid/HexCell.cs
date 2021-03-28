@@ -24,7 +24,7 @@ public class HexCell : MonoBehaviour {
         }
     }
 
-    Color color;
+    private Color color;
 
     [SerializeField]
     HexCell[] neighbors;
@@ -33,9 +33,24 @@ public class HexCell : MonoBehaviour {
 
     public RectTransform uiRect;
 
+    // Geometric data
+    int area = 1000000; // m^2
+
     // Population fields
-    public float population;
+
+    public float Population {
+        get {
+            return population;
+        }
+        set {
+            population = Population;
+            populationDensity = 1000000 * Population / area; // km^-2
+        }
+    }
+
+    private float population;
     public float popGrowthRate;
+    public float populationDensity;
 
     // Network data
     public int? riverDistance;
@@ -84,10 +99,6 @@ public class HexCell : MonoBehaviour {
     public void SetNeighbor(HexDirection direction, HexCell cell) {
         neighbors[(int)direction] = cell;
         cell.neighbors[(int)direction.Opposite()] = this;
-    }
-
-    public void SetOutflow() {
-
     }
 
     void Refresh() {

@@ -39,7 +39,7 @@ public class CellInfoBox : MonoBehaviour
 
     private void CellInfo(HexCell cell) {
         cellIndex.text = "Cell " + cell.index.ToString();
-        cellPopulation.text = "Population: " + cell.population.ToString();
+        cellPopulation.text = "Population: " + cell.Population.ToString();
 
 
         if (isOpen == false) {
