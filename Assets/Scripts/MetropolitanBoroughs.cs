@@ -79,8 +79,6 @@ public class MetropolitanBoroughs : MonoBehaviour {
 
         for (int i = 0; i < cellIndices.Length; i++) {
             foreach (int j in cellIndices[i]) {
-                Debug.Log(i);
-                Debug.Log(j);
                 HexCell cell = gameObject.GetComponent<HexGrid>().GetCellFromIndex(j);
                 cells.Add(cell);
             }
