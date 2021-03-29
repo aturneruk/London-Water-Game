@@ -38,13 +38,45 @@ public class MetropolitanBoroughs : MonoBehaviour {
 
     private int[][] cellIndices = {
         new int[] { 792, 793, 794 },
-        new int[] { 1 }
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { },
+        new int[] { }
     };
 
     private List<HexCell> cells = new List<HexCell>();
     public List<Borough> boroughs = new List<Borough>();
 
     private void Start() {
+
+        if (boroughNames.Length != cellIndices.Length) {
+            Debug.Log("Borough name list and cell indices list lengths do not match");
+        }
+
         for (int i = 0; i < cellIndices.Length; i++) {
             foreach (int j in cellIndices[i]) {
                 Debug.Log(i);
