@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MetropolitanBoroughs : MonoBehaviour {
 
-    public readonly string[] boroughs = {
+    public readonly string[] boroughNames = {
         "City of London",
         "Battersea",
         "Bermondsey",
@@ -36,18 +36,25 @@ public class MetropolitanBoroughs : MonoBehaviour {
         "Woolwich"
     };
 
-    private int[][] cells = {
+    private int[][] cellIndices = {
         new int[] { 792, 793, 794 },
-        new int[] {  1 }
+        new int[] { 1 }
     };
 
+    private List<HexCell> cells = new List<HexCell>();
+    public List<Borough> boroughs = new List<Borough>();
+
     private void Start() {
-        for (int i = 0; i < cells.Length; i++) {
-            foreach (int j in cells[i]) {
+        for (int i = 0; i < cellIndices.Length; i++) {
+            foreach (int j in cellIndices[i]) {
+                Debug.Log(i);
+                Debug.Log(j);
                 HexCell cell = gameObject.GetComponent<HexGrid>().GetCellFromIndex(j);
-                cell.borough = i;
+                cells.Add(cell);
             }
+
+            boroughs.Add(new Borough(cells.ToArray(), boroughNames[i]));
+            cells.Clear();
         }
     }
-
 }
