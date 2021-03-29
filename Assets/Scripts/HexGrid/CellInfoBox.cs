@@ -99,7 +99,7 @@ public class CellInfoBox : MonoBehaviour {
         }
     }
 
-        void SelectCell(HexCell cell) {
+    void SelectCell(HexCell cell) {
         cell.Color = HexGrid.touchedColor;
         Borough borough = cell.borough;
 
