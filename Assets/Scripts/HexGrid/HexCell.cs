@@ -47,7 +47,7 @@ public class HexCell : MonoBehaviour {
         set {
             population = value;
             populationDensity = 1000000 * population / area; // km^-2
-            Color = Color.green;
+            // Color = Color.green;
         }
     }
 
@@ -120,8 +120,8 @@ public class HexCell : MonoBehaviour {
         if (isThames) {
             Color = HexGrid.riverColor;
         }
-        else if (population != 0) {
-            Color = Color.green;
+        else if (borough.Name != null) {
+            Color = Color.grey;
         }
         else {
             Color = HexGrid.defaultColor;
