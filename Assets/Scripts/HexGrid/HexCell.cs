@@ -8,6 +8,7 @@ public class HexCell : MonoBehaviour {
     public int index;
     public HexCoordinates coordinates;
 
+    public int borough;
 
     public Color Color {
         get {
