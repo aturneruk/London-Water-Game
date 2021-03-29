@@ -12,7 +12,6 @@ public class CellInfoBox : MonoBehaviour {
     Text cellIndex, cellPopulation, cellBorough;
 
     CanvasGroup canvasGroup;
-    bool isOpen;
 
     private HexCell currentCell;
 
