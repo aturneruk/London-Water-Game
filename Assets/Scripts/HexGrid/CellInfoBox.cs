@@ -9,7 +9,7 @@ public class CellInfoBox : MonoBehaviour {
     public HexGrid hexGrid;
 
     [SerializeField]
-    Text cellIndex, cellPopulation;
+    Text cellIndex, cellPopulation, cellBorough;
 
     CanvasGroup canvasGroup;
     bool isOpen;
@@ -55,6 +55,7 @@ public class CellInfoBox : MonoBehaviour {
 
         cellIndex.text = "Cell " + cell.index.ToString();
         cellPopulation.text = "Population: " + cell.Population.ToString();
+        cellBorough.text = cell.borough.ToString();
 
         Show();
     }
@@ -86,11 +87,28 @@ public class CellInfoBox : MonoBehaviour {
     }
 
     void DeselectCell(HexCell cell) {
-        cell.SetDefaultColor();
+
+        Borough borough = cell.borough;
+
+        if (borough.Cells != null) {
+            foreach (HexCell boroughCell in borough.Cells)
+                boroughCell.SetDefaultColor();
+        }
+        else {
+            cell.SetDefaultColor();
+        }
     }
 
-    void SelectCell(HexCell cell) {
+        void SelectCell(HexCell cell) {
         cell.Color = HexGrid.touchedColor;
-    }
+        Borough borough = cell.borough;
 
+        if (borough.Cells != null) {
+            foreach (HexCell boroughCell in borough.Cells) {
+                if (boroughCell != cell) {
+                    boroughCell.Color = Color.yellow;
+                }
+            }
+        }
+    }
 }
