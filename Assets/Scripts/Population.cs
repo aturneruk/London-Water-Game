@@ -23,8 +23,7 @@ public struct Population {
         return Size.ToString();
     }
 
-
     public void GrowPopulation() {
-
+        Debug.Log("Population grown in cell " + cell.index);
     }
 }
