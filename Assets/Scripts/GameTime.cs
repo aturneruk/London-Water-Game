@@ -15,13 +15,13 @@ public enum Speed {
 public static class GameTime {
 
     public delegate void YearAction();
-    public static event YearAction NextYear;
+    public static event YearAction NewYear;
 
     public delegate void MonthAction();
-    public static event MonthAction NextMonth;
+    public static event MonthAction NewMonth;
 
     public delegate void DayAction();
-    public static event DayAction NextDay;
+    public static event DayAction NewDay;
 
     static private int year;
     static private Month month;
@@ -38,9 +38,9 @@ public static class GameTime {
         day = d;
         dayFraction = 0f;
 
-        NextDay += ChangeDay;
-        NextMonth += ChangeMonth;
-        NextYear += ChangeYear;
+        NewDay += ChangeDay;
+        NewMonth += ChangeMonth;
+        NewYear += ChangeYear;
     }
 
     static public void SetSpeed(Speed speed) {
@@ -83,7 +83,7 @@ public static class GameTime {
         dayFraction += gameSpeed * Time.unscaledDeltaTime;
 
         if (dayFraction >= 1) {
-            NextDay();
+            NewDay();
         }
 
         switch (month) {
@@ -92,13 +92,13 @@ public static class GameTime {
                 if (year % 400 == 0 | (year % 4 == 0 && year % 100 != 0)) {
                     // leap year
                     if (day > 29) {
-                        NextMonth();
+                        NewMonth();
                     }
                 }
                 else {
                     // not leap year
                     if (day > 28) {
-                        NextMonth();
+                        NewMonth();
                     }
                 }
                 break;
@@ -108,7 +108,7 @@ public static class GameTime {
             case Month.Sep:
             case Month.Nov:
                 if (day > 30) {
-                    NextMonth();
+                    NewMonth();
                 }
                 break;
 
@@ -119,13 +119,13 @@ public static class GameTime {
             case Month.Aug:
             case Month.Oct:
                 if (day > 31) {
-                    NextMonth();
+                    NewMonth();
                 }
                 break;
 
             case Month.Dec:
                 if (day > 31) {
-                    NextYear();
+                    NewYear();
                 }
                 break;
 
