@@ -69,6 +69,15 @@ public class HexCell : MonoBehaviour {
         //}
     }
 
+    private void OnEnable() {
+        GameTime.NewMonth += UpdatePopulation;
+    }
+
+    private void OnDisable() {
+        GameTime.NewMonth -= UpdatePopulation;
+
+    }
+
     private void OnDrawGizmosSelected() {
         HexCell cell = this;
 
@@ -112,5 +121,7 @@ public class HexCell : MonoBehaviour {
         }
     }
 
-
+    public void UpdatePopulation() {
+        population.GrowPopulation();
+    }
 }
