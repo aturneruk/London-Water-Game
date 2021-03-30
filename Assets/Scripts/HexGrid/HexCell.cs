@@ -8,6 +8,7 @@ public class HexCell : MonoBehaviour {
     public int index;
     public HexCoordinates coordinates;
 
+    [SerializeField]
     public Borough borough;
 
     public Color Color {
@@ -35,25 +36,8 @@ public class HexCell : MonoBehaviour {
 
     public RectTransform uiRect;
 
-    // Geometric data
-    int area = 1000000; // m^2
-
     // Population fields
-
-    public float Population {
-        get {
-            return population;
-        }
-        set {
-            population = value;
-            populationDensity = 1000000 * population / area; // km^-2
-            // Color = Color.green;
-        }
-    }
-
-    private float population;
-    public float popGrowthRate;
-    public float populationDensity;
+    public Population population;
 
     // Network data
     public int? riverDistance;

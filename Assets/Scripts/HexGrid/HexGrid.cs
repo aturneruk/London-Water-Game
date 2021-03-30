@@ -72,6 +72,7 @@ public class HexGrid : MonoBehaviour {
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.Color = defaultColor;
         cell.index = i;
+        cell.population = new Population(cell);
 
         if (x > 0) {
             cell.SetNeighbor(HexDirection.W, cells[i - 1]);
@@ -91,8 +92,6 @@ public class HexGrid : MonoBehaviour {
                 }
             }
         }
-
-        cell.popGrowthRate = 0.1f;
 
         //Text label = Instantiate<Text>(cellLabelPrefab);
         //label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);

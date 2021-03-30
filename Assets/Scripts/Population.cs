@@ -2,10 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Population : MonoBehaviour
-{
-    public void GrowPopulation(HexCell cell) {
-        cell.Population = cell.Population + (cell.Population * cell.popGrowthRate);
-        cell.Population = Mathf.RoundToInt(cell.Population);
+public struct Population {
+
+    HexCell cell;
+    public int Size { get; private set; }
+    public float GrowthRate { get; private set; }
+
+    // public float popGrowthRate;
+    // public float populationDensity;
+
+    public Population(HexCell cell) {
+        this.cell = cell;
+        Size = 0;
+        GrowthRate = 0;
+    }
+
+    public void SetInitialPopulation(int size, float growthRate) {
+        Size = size;
+        GrowthRate = growthRate;
+    }
+
+    public override string ToString() {
+        return Size.ToString();
+    }
+
+
+    public void GrowPopulation() {
+
     }
 }

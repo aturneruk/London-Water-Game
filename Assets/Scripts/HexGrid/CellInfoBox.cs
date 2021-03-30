@@ -9,7 +9,7 @@ public class CellInfoBox : MonoBehaviour {
     public HexGrid hexGrid;
 
     [SerializeField]
-    Text cellIndex, cellPopulation, cellBorough;
+    Text cellIndex, cellPopulation, cellBorough, boroughPopulation;
 
     CanvasGroup canvasGroup;
 
@@ -53,9 +53,13 @@ public class CellInfoBox : MonoBehaviour {
         SelectCell(cell);
 
         cellIndex.text = "Cell " + cell.index.ToString();
-        cellPopulation.text = "Population: " + cell.Population.ToString();
-        cellBorough.text = cell.borough.ToString();
+        cellPopulation.text = "Population: " + cell.population.ToString();
 
+        if (cell.borough.Name != null) {
+            cellBorough.text = cell.borough.ToString();
+            boroughPopulation.text = "Population: " + cell.borough.Population();
+        }
+        
         Show();
     }
 
