@@ -14,6 +14,15 @@ public enum Speed {
 
 public static class GameTime {
 
+    public delegate void YearAction();
+    public static event YearAction NextYear;
+
+    public delegate void MonthAction();
+    public static event MonthAction NextMonth;
+
+    public delegate void DayAction();
+    public static event DayAction NextDay;
+
     static private int year;
     static private Month month;
     static private int day;
@@ -28,6 +37,10 @@ public static class GameTime {
         month = m;
         day = d;
         dayFraction = 0f;
+
+        NextDay += ChangeDay;
+        NextMonth += ChangeMonth;
+        NextYear += ChangeYear;
     }
 
     static public void SetSpeed(Speed speed) {
@@ -122,17 +135,17 @@ public static class GameTime {
         }
     }
 
-    static private void NextDay() {
+    static private void ChangeDay() {
         day++;
         dayFraction--;
     }
 
-    static private void NextMonth() {
+    static private void ChangeMonth() {
         month++;
         day = 1;
     }
 
-    static private void NextYear() {
+    static private void ChangeYear() {
         year++;
         month = Month.Jan;
         day = 1;
