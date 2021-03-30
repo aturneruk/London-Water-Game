@@ -8,9 +8,6 @@ public struct Population {
     public int Size { get; private set; }
     public float GrowthRate { get; private set; }
 
-    // public float popGrowthRate;
-    // public float populationDensity;
-
     public Population(HexCell cell) {
         this.cell = cell;
         Size = 0;

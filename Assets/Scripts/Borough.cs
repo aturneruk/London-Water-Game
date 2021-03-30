@@ -30,7 +30,6 @@ public struct Borough {
         return boroughPopulation.ToString();
     }
 
-
     public override string ToString() {
         return Name;
     }
