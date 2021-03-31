@@ -127,4 +127,16 @@ public class HexGrid : MonoBehaviour {
         return cells[i];
     }
 
+    public int GetTotalPopulation() {
+
+        int totalPopulation = 0;
+
+        foreach (HexCell cell in cells) {
+            totalPopulation += cell.population.Size;
+        }
+
+        return totalPopulation;
+
+    }
+
 }
