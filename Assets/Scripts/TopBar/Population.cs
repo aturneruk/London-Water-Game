@@ -17,7 +17,7 @@ namespace TopBar {
 
         // Update is called once per frame
         void Update() {
-            population.text = grid.GetTotalPopulation().ToString();
+            population.text = "Population: " + grid.GetTotalPopulation().ToString();
         }
     }
 }
