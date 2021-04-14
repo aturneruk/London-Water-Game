@@ -17,7 +17,7 @@ public class RiverThames : MonoBehaviour {
 
     private void Awake() {
         SetupRiverCells();
-        Water.FlowNetwork.GenerateNetwork();
+        Waste.FlowNetwork.GenerateNetwork();
         AssignRiversideCells();
     }
 
