@@ -6,7 +6,7 @@ namespace Water {
 
     public class Groundwater {
 
-        private Manager manager;
+        private readonly Manager manager;
         private float level;
         private float quality;
         private float volume;

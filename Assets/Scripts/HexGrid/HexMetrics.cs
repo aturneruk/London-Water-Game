@@ -22,9 +22,6 @@ public class HexMetrics {
     public const float solidFactor = 0.75f;
     public const float blendFactor = 1f - solidFactor;
 
-    // Starting area size
-    public const int startAreaSize = 8;
-
     public static Vector3 GetFirstCorner(HexDirection direction) {
         return corners[(int)direction];
     }

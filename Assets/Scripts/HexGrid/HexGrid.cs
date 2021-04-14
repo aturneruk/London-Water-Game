@@ -7,9 +7,6 @@ public class HexGrid : MonoBehaviour {
     public int chunkCountX = 12, chunkCountZ = 8;
     int cellCountX, cellCountZ;
 
-    int centralAreaXIndex;
-    int centralAreaZIndex;
-
     // Set up chunk reference
     public HexGridChunk chunkPrefab;
     HexGridChunk[] chunks;
@@ -29,9 +26,6 @@ public class HexGrid : MonoBehaviour {
     private void Awake() {
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
-
-        centralAreaXIndex = ((cellCountX - HexMetrics.startAreaSize) / 2) - 1;
-        centralAreaZIndex = ((cellCountZ - HexMetrics.startAreaSize) / 2) - 1;
 
         CreateChunks();
         CreateCells();

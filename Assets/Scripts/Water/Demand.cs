@@ -8,7 +8,7 @@ namespace Water {
 
         private int demandPerCapita;
 
-        private Manager manager;
+        private readonly Manager manager;
 
         public Demand(Manager manager) {
             this.manager = manager;

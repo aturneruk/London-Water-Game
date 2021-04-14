@@ -11,7 +11,6 @@ public class HexCell : MonoBehaviour {
     public HexCoordinates coordinates;
     public int area = 1000000;
     
-    [SerializeField]
     public Borough borough;
 
     private Color color;
@@ -23,8 +22,6 @@ public class HexCell : MonoBehaviour {
 
     public RectTransform uiRect;
 
-    // Population
-    [SerializeField]
     public Population Population;
 
     // Network data

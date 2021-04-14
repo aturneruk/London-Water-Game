@@ -6,8 +6,8 @@ namespace Water {
 
     public class WasteRouter {
 
-        private Manager manager;
-        private Groundwater groundwater;
+        private readonly Manager manager;
+        private readonly Groundwater groundwater;
 
         public Water waste;
 

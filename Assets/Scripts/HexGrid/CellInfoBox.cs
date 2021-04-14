@@ -35,9 +35,8 @@ public class CellInfoBox : MonoBehaviour {
 
     private void HandleInput() {
         Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
 
-        if (Physics.Raycast(inputRay, out hit)) {
+        if (Physics.Raycast(inputRay, out RaycastHit hit)) {
 
             HexCell newCell = hexGrid.GetCellFromPosition(hit.point);
 
@@ -65,7 +64,7 @@ public class CellInfoBox : MonoBehaviour {
             }
             selectedCell = null;
             HideWindow();
-        }  
+        }
     }
 
     public void CloseButton() {
