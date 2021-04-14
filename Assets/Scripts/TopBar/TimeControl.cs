@@ -11,7 +11,7 @@ namespace TopBar {
 
         // Start is called before the first frame update
         void Start() {
-            GameTime.Set(1800, (Month)0, 1);
+            GameTime.Set(1800, Month.Jan, 1, Weekday.Mon);
             GameTime.SetSpeed(Speed.X1);
             speedControl.GetComponentInChildren<Text>().text = Speed.X1.ToString();
             // Debug.Log(GameTime.Get());

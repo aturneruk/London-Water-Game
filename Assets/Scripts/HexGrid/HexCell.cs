@@ -6,10 +6,38 @@ using System.Collections.Generic;
 public class HexCell : MonoBehaviour {
 
     public int index;
-    public HexCoordinates coordinates;
 
+    // Geometric data
+    public HexCoordinates coordinates;
+    public int area = 1000000;
+    
     [SerializeField]
     public Borough borough;
+
+    private Color color;
+
+    [SerializeField]
+    HexCell[] neighbors;
+
+    public HexGridChunk chunk;
+
+    public RectTransform uiRect;
+
+    // Population
+    [SerializeField]
+    public Population Population;
+
+    // Network data
+    public int? riverDistance;
+
+    // River data
+    public bool hasRiver;
+    public bool isThames;
+    public bool isRiverside;
+    public HexCell abstractionCell;
+    public HexCell dischargeCell;
+
+    public Water.Manager waterManager;
 
     public Color Color {
         get {
@@ -26,28 +54,6 @@ public class HexCell : MonoBehaviour {
             }
         }
     }
-
-    private Color color;
-
-    [SerializeField]
-    HexCell[] neighbors;
-
-    public HexGridChunk chunk;
-
-    public RectTransform uiRect;
-
-    // Population fields
-    public Population population;
-
-    // Network data
-    public int? riverDistance;
-
-    // River data
-    public bool hasRiver;
-    public bool isThames;
-    public bool isRiverside;
-    public HexCell abstractionCell;
-    public HexCell dischargeCell;       
 
     private void Start() {
         // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);     
@@ -70,11 +76,11 @@ public class HexCell : MonoBehaviour {
     }
 
     private void OnEnable() {
-        GameTime.NewMonth += UpdatePopulation;
+        GameTime.NewWeek += UpdatePopulation;
     }
 
     private void OnDisable() {
-        GameTime.NewMonth -= UpdatePopulation;
+        GameTime.NewWeek -= UpdatePopulation;
 
     }
 
@@ -122,6 +128,6 @@ public class HexCell : MonoBehaviour {
     }
 
     public void UpdatePopulation() {
-        population.GrowPopulation();
+        Population.GrowPopulation();
     }
 }

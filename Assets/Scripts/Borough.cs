@@ -16,7 +16,7 @@ public struct Borough {
         foreach (HexCell cell in cells) {
             cell.borough = this;
             cell.Color = Color.grey;
-            cell.population.SetInitialPopulation(cellPopulation, 0.1f);
+            cell.Population.Size = cellPopulation;
         }
     }
 
@@ -24,7 +24,7 @@ public struct Borough {
         int boroughPopulation = 0;
 
         foreach (HexCell cell in Cells) {
-            boroughPopulation += cell.population.Size;
+            boroughPopulation += cell.Population.Size;
         }
 
         return boroughPopulation.ToString();

@@ -11,19 +11,25 @@ public class CellInfoBox : MonoBehaviour {
     [SerializeField]
     Text cellIndex, cellPopulation, cellBorough, boroughPopulation;
 
+    [SerializeField]
+    Text waterDemand, waterSupply, groundwaterLevel, groundwaterQuality;
+
     CanvasGroup canvasGroup;
 
-    private HexCell currentCell;
+    private HexCell selectedCell;
 
     void Start() {
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
-        Hide();
+        HideWindow();
     }
 
     // Update is called once per frame
     void Update() {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) {
             HandleInput();
+        }
+        if (selectedCell) {
+            UpdateInfo();
         }
     }
 
@@ -33,58 +39,50 @@ public class CellInfoBox : MonoBehaviour {
 
         if (Physics.Raycast(inputRay, out hit)) {
 
-            CloseDiaglogue();
-            currentCell = hexGrid.GetCellFromPosition(hit.point);
+            HexCell newCell = hexGrid.GetCellFromPosition(hit.point);
 
-            if (currentCell.isThames != true) {
-                CellInfo(currentCell);
-            }
-            else {
-                RiverCellInfo(currentCell);
+            if (selectedCell != newCell) {
+
+                if (selectedCell) {
+                    DeselectCell(selectedCell);
+                }
+
+                selectedCell = newCell;
+
+                if (selectedCell.isThames != true) {
+                    SelectCell(selectedCell);
+                    ShowWindow();
+                }
+                else {
+                    SelectCell(selectedCell);
+                    HideWindow();
+                }
             }
         }
         else {
-            CloseDiaglogue();
-        }
+            if (selectedCell) {
+                DeselectCell(selectedCell);
+            }
+            selectedCell = null;
+            HideWindow();
+        }  
     }
 
-    private void CellInfo(HexCell cell) {
-
-        SelectCell(cell);
-
-        cellIndex.text = "Cell " + cell.index.ToString();
-        cellPopulation.text = "Population: " + cell.population.ToString();
-
-        if (cell.borough.Name != null) {
-            cellBorough.text = cell.borough.ToString();
-            boroughPopulation.text = "Population: " + cell.borough.Population();
-        }
-        
-        Show();
+    public void CloseButton() {
+        HideWindow();
+        DeselectCell(selectedCell);
     }
 
-    private void RiverCellInfo(HexCell cell) {
-        SelectCell(cell);
-    }
-
-
-    public void CloseDiaglogue() {
-        Hide();
-        if (currentCell) {
-            DeselectCell(currentCell);
-        }
-    }
-
-    private void Hide() {
-        canvasGroup.alpha = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
-    }
-
-    private void Show() {
+    private void ShowWindow() {
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+    }
+
+    private void HideWindow() {
+        canvasGroup.alpha = 0f;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
     }
 
     void DeselectCell(HexCell cell) {
@@ -111,5 +109,24 @@ public class CellInfoBox : MonoBehaviour {
                 }
             }
         }
+    }
+
+    void UpdateInfo() {
+        cellIndex.text = "Cell " + selectedCell.index.ToString();
+        cellPopulation.text = "Population: " + selectedCell.Population.ToString();
+
+        if (selectedCell.borough.Name != null) {
+            cellBorough.text = selectedCell.borough.ToString();
+            boroughPopulation.text = "Population: " + selectedCell.borough.Population();
+        }
+        else {
+            cellBorough.text = null;
+            boroughPopulation.text = null;
+        }
+
+        waterDemand.text = "Demand: " + selectedCell.waterManager.FormattedDemand + " L/day";
+        waterSupply.text = "Supply: " + selectedCell.waterManager.FormattedSupply + " L/day";
+        groundwaterLevel.text = "Groundwater remaining: " + selectedCell.waterManager.groundwaterLevel.ToString("P2");
+        groundwaterQuality.text = "Groundwater quality: " + selectedCell.waterManager.groundwaterQuality.ToString("P2");
     }
 }

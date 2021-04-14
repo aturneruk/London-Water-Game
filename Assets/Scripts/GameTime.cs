@@ -5,6 +5,11 @@ using UnityEngine;
 public enum Month {
     Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
 }
+
+public enum Weekday {
+    Mon, Tue, Wed, Thu, Fri, Sat, Sun
+}
+
 public enum Speed {
     X1,
     X2,
@@ -20,25 +25,33 @@ public static class GameTime {
     public delegate void MonthAction();
     public static event MonthAction NewMonth;
 
+    public delegate void WeekAction();
+    public static event WeekAction NewWeek;
+
     public delegate void DayAction();
     public static event DayAction NewDay;
 
     static private int year;
     static private Month month;
     static private int day;
+    static private int week;
+    static private Weekday weekday;
     static private float dayFraction;
 
     static private int gameSpeed;
-    static private int baseGameSpeed = 4;
+    static private int baseGameSpeed = 16;
     static private int gameSpeedMultiplier = 1;
 
-    static public void Set(int y, Month m, int d) {
+    static public void Set(int y, Month m, int d, Weekday wd) {
         year = y;
         month = m;
         day = d;
+        week = 1;
+        weekday = wd;
         dayFraction = 0f;
 
         NewDay += ChangeDay;
+        NewWeek += ChangeWeek;
         NewMonth += ChangeMonth;
         NewYear += ChangeYear;
     }
@@ -80,6 +93,7 @@ public static class GameTime {
 
 
     static public void UpdateTime() {
+
         dayFraction += gameSpeed * Time.unscaledDeltaTime;
 
         if (dayFraction >= 1) {
@@ -138,6 +152,18 @@ public static class GameTime {
     static private void ChangeDay() {
         day++;
         dayFraction--;
+
+        if (weekday == Weekday.Sun) {
+            NewWeek();
+        }
+        else {
+            weekday++;
+        }
+    }
+
+    static private void ChangeWeek() {
+        week++;
+        weekday = Weekday.Mon;
     }
 
     static private void ChangeMonth() {

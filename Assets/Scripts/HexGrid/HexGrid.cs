@@ -72,7 +72,9 @@ public class HexGrid : MonoBehaviour {
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.Color = defaultColor;
         cell.index = i;
-        cell.population = new Population(cell);
+
+        cell.Population = new Population(cell);
+        cell.waterManager = cell.gameObject.AddComponent<Water.Manager>();
 
         if (x > 0) {
             cell.SetNeighbor(HexDirection.W, cells[i - 1]);
@@ -132,7 +134,7 @@ public class HexGrid : MonoBehaviour {
         int totalPopulation = 0;
 
         foreach (HexCell cell in cells) {
-            totalPopulation += cell.population.Size;
+            totalPopulation += cell.Population.Size;
         }
 
         return totalPopulation;

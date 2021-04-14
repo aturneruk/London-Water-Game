@@ -69,7 +69,7 @@ public class MetropolitanBoroughs : MonoBehaviour {
     };
 
     private int[] boroughPopulations = {
-        128835, // City of London
+        128833, // City of London
         3368, // Battersea
         46221, // Bermondsey
         22385, // Bethnal Green
