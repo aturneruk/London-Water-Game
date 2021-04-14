@@ -14,6 +14,8 @@ namespace Water {
         public float supplyRatio;
         public float supplyQuality;
 
+        public float waste;
+
         public string FormattedDemand {
             get {
                 if (demand < 10000) {

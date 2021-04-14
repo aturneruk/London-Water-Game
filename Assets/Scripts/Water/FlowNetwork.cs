@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Waste {
+namespace Water {
     public class FlowNetwork {
         static List<HexCell> cells = new List<HexCell>();
         static List<HexCell> nextCells = new List<HexCell>();
