@@ -5,7 +5,7 @@ using UnityEngine;
 public class Population : MonoBehaviour {
 
     HexCell hexCell;
-    public int Size { get; set; }
+    public float Size { get; set; }
     public float GrowthRate { get; set; }
 
     private void Awake() {
@@ -24,7 +24,7 @@ public class Population : MonoBehaviour {
     }
 
     public override string ToString() {
-        return Size.ToString();
+        return Mathf.Round(Size).ToString(); ;
     }
 
     public void UpdatePopulation() {
@@ -33,6 +33,6 @@ public class Population : MonoBehaviour {
 
         float factor = waterSupplyFactor;
 
-        Size += Mathf.RoundToInt((float)Size * GrowthRate * factor);
+        Size += Size * GrowthRate * factor;
     }
 }

@@ -21,13 +21,13 @@ public struct Borough {
     }
 
     public string Population() {
-        int boroughPopulation = 0;
+        float boroughPopulation = 0;
 
         foreach (HexCell cell in Cells) {
             boroughPopulation += cell.Population.Size;
         }
 
-        return boroughPopulation.ToString();
+        return Mathf.RoundToInt(boroughPopulation).ToString();
     }
 
     public override string ToString() {
