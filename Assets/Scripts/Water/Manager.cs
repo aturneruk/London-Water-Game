@@ -6,26 +6,30 @@ namespace Water {
     public class Manager : MonoBehaviour {
 
         public HexCell hexCell;
-        private Groundwater groundwater;
+        public Groundwater groundwater;
         private Demand waterDemand;
+        private WasteRouter wasteRouter;
 
-        public float demand;
-        public float supply;
+        public float demandVolume;
+        public Water Supply;
         public float supplyRatio;
-        public float supplyQuality;
 
-        public float waste;
+        public Water Waste;
+
+        public Water groundwaterSupply;
+        public float groundwaterLevel;
+        private float maxGroundwaterAbstraction;
 
         public string FormattedDemand {
             get {
-                if (demand < 10000) {
-                    return Mathf.Round(demand).ToString();
+                if (demandVolume < 10000) {
+                    return Mathf.Round(demandVolume).ToString();
                 }
-                else if (demand >= 10000 && demand < 1000000) {
-                    return (demand / 1000f).ToString("G3") + "k";
+                else if (demandVolume >= 10000 && demandVolume < 1000000) {
+                    return (demandVolume / 1000f).ToString("G3") + "k";
                 }
-                else if (demand >= 1000000) {
-                    return (demand / 1000000f).ToString("G3") + "M";
+                else if (demandVolume >= 1000000) {
+                    return (demandVolume / 1000000f).ToString("G3") + "M";
                 }
                 else {
                     throw new System.ArgumentException("Something has gone wrong formatting the demand to a string");
@@ -35,14 +39,14 @@ namespace Water {
 
         public string FormattedSupply {
             get {
-                if (supply < 10000) {
-                    return Mathf.Round(supply).ToString();
+                if (Supply.Volume < 10000) {
+                    return Mathf.Round(Supply.Volume).ToString();
                 }
-                else if (supply >= 10000 && supply < 1000000) {
-                    return (supply / 1000f).ToString("G3") + "k";
+                else if (Supply.Volume >= 10000 && Supply.Volume < 1000000) {
+                    return (Supply.Volume / 1000f).ToString("G3") + "k";
                 }
-                else if (supply >= 1000000) {
-                    return (supply / 1000000f).ToString("G3") + "M";
+                else if (Supply.Volume >= 1000000) {
+                    return (Supply.Volume / 1000000f).ToString("G3") + "M";
                 }
                 else {
                     throw new System.ArgumentException("Something has gone wrong formatting the supply to a string");
@@ -50,16 +54,11 @@ namespace Water {
             }
         }
 
-        public float groundwaterLevel;
-        public float groundwaterQuality;
-        private float groundwaterSupply;
-        private float maxGroundwaterAbstraction;
-
-
         private void Awake() {
             hexCell = gameObject.GetComponent<HexCell>();
             groundwater = new Groundwater(this);
             waterDemand = new Demand(this);
+            wasteRouter = new WasteRouter(this);
         }
 
         private void OnEnable() {
@@ -77,11 +76,11 @@ namespace Water {
         }
 
         private void Collate() {
-            demand = waterDemand.GetDemand;
+            demandVolume = waterDemand.GetDemand;
 
             maxGroundwaterAbstraction = groundwater.GetMaxAbstraction;
 
-            groundwaterQuality = groundwater.Quality;
+            groundwaterSupply.Quality = groundwater.Quality;
 
             // rainfall, river data and pipe data to go here
         }
@@ -94,17 +93,19 @@ namespace Water {
             //    groundwaterSupply = groundwater.Abstract(maxGroundwaterAbstraction);
             //}
 
-            groundwaterSupply = groundwater.Abstract(demand);
-            supply = groundwaterSupply; // + river + pipes
+            groundwaterSupply = groundwater.Abstract(demandVolume);
+            Supply = groundwaterSupply; // + river + pipes
 
-            supplyRatio = supply / demand;
+            supplyRatio = Supply.Volume / demandVolume;
 
-            supplyQuality = (groundwaterSupply * groundwaterQuality) / supply; // weighted average of different source qualities
+            if (Supply.Volume > 0) {
+                Supply.Quality = (groundwaterSupply.Volume * groundwaterSupply.Quality) / Supply.Volume; // weighted average of different source qualities
+            }
         }
 
         private void Distribute() {
             groundwaterLevel = groundwater.Level;
-            groundwaterQuality = groundwater.Quality;
+            groundwaterSupply.Quality = groundwater.Quality;
         }
 
     }
