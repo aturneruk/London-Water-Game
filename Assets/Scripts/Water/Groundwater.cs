@@ -65,15 +65,15 @@ namespace Water {
             }
         }
 
-        public float Abstract(float abstraction) {
+        public Water Abstract(float abstraction) {
             if (abstraction <= GetMaxAbstraction) {
                 Volume -= abstraction;
-                return abstraction;
-            }
+                return new Water(abstraction, Quality);
+                }
             else {
                 abstraction = GetMaxAbstraction;
                 Volume -= abstraction;
-                return abstraction;
+                return new Water(abstraction, Quality);
             }
         }
     }
