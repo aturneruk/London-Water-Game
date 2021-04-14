@@ -96,7 +96,15 @@ namespace Water {
             groundwaterSupply = groundwater.Abstract(demandVolume);
             Supply = groundwaterSupply; // + river + pipes
 
-            supplyRatio = Supply.Volume / demandVolume;
+            if (demandVolume > 0) {
+                supplyRatio = Supply.Volume / demandVolume;
+            }
+            else if (demandVolume == 0) {
+                supplyRatio = 1;
+            }
+            else {
+                throw new System.ArgumentOutOfRangeException("Demand is less than 0 in cell " + hexCell.index);
+            }
 
             if (Supply.Volume > 0) {
                 Supply.Quality = (groundwaterSupply.Volume * groundwaterSupply.Quality) / Supply.Volume; // weighted average of different source qualities
