@@ -73,7 +73,7 @@ public class HexGrid : MonoBehaviour {
         cell.Color = defaultColor;
         cell.index = i;
 
-        cell.Population = new Population(cell);
+        cell.Population = cell.gameObject.AddComponent<Population>();
         cell.waterManager = cell.gameObject.AddComponent<Water.Manager>();
 
         if (x > 0) {

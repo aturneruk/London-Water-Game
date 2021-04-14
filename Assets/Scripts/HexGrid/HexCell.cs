@@ -75,15 +75,6 @@ public class HexCell : MonoBehaviour {
         //}
     }
 
-    private void OnEnable() {
-        GameTime.NewWeek += UpdatePopulation;
-    }
-
-    private void OnDisable() {
-        GameTime.NewWeek -= UpdatePopulation;
-
-    }
-
     private void OnDrawGizmosSelected() {
         HexCell cell = this;
 
@@ -125,9 +116,5 @@ public class HexCell : MonoBehaviour {
         else {
             Color = HexGrid.defaultColor;
         }
-    }
-
-    public void UpdatePopulation() {
-        Population.GrowPopulation();
     }
 }

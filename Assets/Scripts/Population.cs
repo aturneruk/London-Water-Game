@@ -2,36 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Population {
+public class Population : MonoBehaviour {
 
-    HexCell cell;
+    HexCell hexCell;
     public int Size { get; set; }
     public float GrowthRate { get; set; }
 
-    public Population(HexCell cell) {
-        this.cell = cell;
+    private void Awake() {
+        hexCell = gameObject.GetComponent<HexCell>();
         Size = 0;
         GrowthRate = 0.0004f;
     }
 
-    public Population(HexCell cell, int size) {
-        this.cell = cell;
-        Size = size;
-        GrowthRate = 0.0004f;
+    private void OnEnable() {
+        GameTime.NewWeek += UpdatePopulation;
     }
 
-    public Population(HexCell cell, int size, float growthRate) {
-        this.cell = cell;
-        Size = size;
-        GrowthRate = growthRate;
+    private void OnDisable() {
+        GameTime.NewWeek -= UpdatePopulation;
+
     }
 
     public override string ToString() {
         return Size.ToString();
     }
 
-    public void GrowPopulation() {
-        float waterSupplyRatio = cell.waterManager.supplyRatio;
+    public void UpdatePopulation() {
+        float waterSupplyRatio = hexCell.waterManager.supplyRatio;
         float waterSupplyFactor = 10.526f * (waterSupplyRatio * waterSupplyRatio) - 8.526f;
 
         float factor = waterSupplyFactor;
