@@ -32,7 +32,7 @@ public class Population {
 
     public void GrowPopulation() {
         float waterSupplyRatio = cell.waterManager.supplyRatio;
-        float waterSupplyFactor = (waterSupplyRatio * 2) - 1;
+        float waterSupplyFactor = 10.526f * (waterSupplyRatio * waterSupplyRatio) - 8.526f;
 
         float factor = waterSupplyFactor;
 
