@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Elevation {
 
+        public static float GetElevation(int i) {
+        return elevation[i] * 0.1f;
+    }
+
     static float[] elevation = {
         37.15899852f,
         24.25064671f,
@@ -1542,9 +1546,4 @@ public class Elevation {
         173.1089708f,
         175.5863359f,
     };
-
-    public static float GetElevation(int i) {
-        return elevation[i] * 0.2f;
-    }
-
 }
