@@ -27,7 +27,14 @@ public struct Borough {
             boroughPopulation += cell.Population.Size;
         }
 
-        return Mathf.RoundToInt(boroughPopulation).ToString();
+        try {
+            return Mathf.RoundToInt(boroughPopulation).ToString();
+        }
+        catch (System.Exception e) {
+            Debug.Log(boroughPopulation.ToString() + " in borough " + Name);
+            Debug.Log(e.ToString());
+            return Mathf.Round(boroughPopulation).ToString();
+        }
     }
 
     public override string ToString() {
