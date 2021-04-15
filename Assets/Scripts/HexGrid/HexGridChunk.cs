@@ -13,8 +13,10 @@ public class HexGridChunk : MonoBehaviour {
         gridCanvas = GetComponentInChildren<Canvas>();
         hexMesh = GetComponentInChildren<HexMesh>();
 
+        #if UNITY_EDITOR
         SceneVisibilityManager visibilityManager = SceneVisibilityManager.instance;
         visibilityManager.DisablePicking(gameObject, false);
+        #endif
 
         cells = new HexCell[HexMetrics.chunkSizeX * HexMetrics.chunkSizeZ];
     }
