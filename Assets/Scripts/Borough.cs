@@ -13,17 +13,12 @@ public struct Borough {
 
         int cellPopulation;
 
-        try {
+        if (cells.Length > 0) {
             cellPopulation = Mathf.RoundToInt((float)population / (float)cells.Length);
         }
-        catch (System.Exception e) {
-            Debug.Log(population.ToString() + cells.Length.ToString());
-            Debug.Log(e.ToString());
+        else {
             cellPopulation = 0;
         }
-
-
-        //int cellPopulation = Mathf.RoundToInt((float)population / (float)cells.Length);
 
         foreach (HexCell cell in cells) {
             cell.borough = this;
@@ -39,14 +34,7 @@ public struct Borough {
             boroughPopulation += cell.Population.Size;
         }
 
-        try {
-            return Mathf.RoundToInt(boroughPopulation).ToString();
-        }
-        catch (System.Exception e) {
-            Debug.Log(boroughPopulation.ToString() + " in borough " + Name);
-            Debug.Log(e.ToString());
-            return Mathf.Round(boroughPopulation).ToString();
-        }
+        return Mathf.RoundToInt(boroughPopulation).ToString();
     }
 
     public override string ToString() {
