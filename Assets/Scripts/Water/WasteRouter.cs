@@ -33,11 +33,18 @@ namespace Water {
 
             waste.Volume = 0;
             waste.Quality = 1;
-            RunoffCoefficient = 0;
+            RunoffCoefficient = 0.2f;
         }
 
         public void AddWaste(Water input) {
-            waste.Quality = (waste.Quality * waste.Volume + input.Volume * input.Quality) / (waste.Volume + input.Volume); // weighted average of all wastewater qualities
+
+            if (waste.Volume + input.Volume != 0) {
+                waste.Quality = (waste.Product + input.Product) / (waste.Volume + input.Volume); // weighted average of all wastewater qualities
+            }
+            else {
+                waste.Quality = 1;
+            }
+
             waste.Volume += input.Volume;
         }
 
@@ -48,7 +55,5 @@ namespace Water {
                 return new Water(volume, quality);
             }
         }
-
     }
-
 }
