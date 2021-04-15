@@ -57,8 +57,8 @@ public class HexGrid : MonoBehaviour {
     void CreateCell(int x, int z, int i) {
         Vector3 position;
         position.x = (x + z * 0.5f - z / 2) * (HexMetrics.innerRadius * 2f);
-        position.y = 0;
-        //position.y = Elevation.GetElevation(i);
+        // position.y = 0;
+        position.y = Elevation.GetElevation(i);
         position.z = z * (HexMetrics.outerRadius * 1.5f);
 
         HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
