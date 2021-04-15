@@ -39,7 +39,7 @@ public static class GameTime {
     static private float dayFraction;
 
     static private int gameSpeed;
-    static private int baseGameSpeed = 16;
+    static private int baseGameSpeed = 2;
     static private int gameSpeedMultiplier = 1;
 
     static public void Set(int y, Month m, int d, Weekday wd) {
