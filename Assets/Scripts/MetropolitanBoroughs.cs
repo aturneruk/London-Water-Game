@@ -4,6 +4,26 @@ using UnityEngine;
 
 public class MetropolitanBoroughs : MonoBehaviour {
 
+    private List<HexCell> cells = new List<HexCell>();
+    private List<Borough> boroughs = new List<Borough>();
+
+    private void Start() {
+
+        if (boroughNames.Length != cellIndices.Length) {
+            Debug.Log("Borough name list and cell indices list lengths do not match");
+        }
+
+        for (int i = 0; i < cellIndices.Length; i++) {
+            foreach (int j in cellIndices[i]) {
+                HexCell cell = gameObject.GetComponent<HexGrid>().GetCellFromIndex(j);
+                cells.Add(cell);
+            }
+
+            boroughs.Add(new Borough(boroughNames[i], cells.ToArray(), boroughPopulations[i]));
+            cells.Clear();
+        }
+    }
+
     private string[] boroughNames = {
         "City of London",
         "Battersea",
@@ -99,24 +119,4 @@ public class MetropolitanBoroughs : MonoBehaviour {
         163828, // Westminster
         12667 // Woolwich
     };
-
-    private List<HexCell> cells = new List<HexCell>();
-    private List<Borough> boroughs = new List<Borough>();
-
-    private void Start() {
-
-        if (boroughNames.Length != cellIndices.Length) {
-            Debug.Log("Borough name list and cell indices list lengths do not match");
-        }
-
-        for (int i = 0; i < cellIndices.Length; i++) {
-            foreach (int j in cellIndices[i]) {
-                HexCell cell = gameObject.GetComponent<HexGrid>().GetCellFromIndex(j);
-                cells.Add(cell);
-            }
-
-            boroughs.Add(new Borough(boroughNames[i], cells.ToArray(), boroughPopulations[i]));
-            cells.Clear();
-        }
-    }
 }
