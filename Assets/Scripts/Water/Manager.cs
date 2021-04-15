@@ -14,7 +14,7 @@ namespace Water {
         public Water Supply;
         public float supplyRatio;
 
-        public Water Waste;
+        public Water Sewage;
 
         public Water groundwaterSupply;
         public float groundwaterLevel;
@@ -80,7 +80,7 @@ namespace Water {
 
             maxGroundwaterAbstraction = groundwater.GetMaxAbstraction;
 
-            groundwaterSupply.Quality = groundwater.Quality;
+            groundwaterSupply.Quality = groundwater.Storage.Quality;
 
             // rainfall, river data and pipe data to go here
         }
@@ -107,13 +107,21 @@ namespace Water {
             }
 
             if (Supply.Volume > 0) {
-                Supply.Quality = (groundwaterSupply.Volume * groundwaterSupply.Quality) / Supply.Volume; // weighted average of different source qualities
+                Supply.Quality = (groundwaterSupply.Product) / Supply.Volume; // weighted average of different source qualities
             }
+
+            Sewage = new Water(Supply.Volume, 0f);
+            wasteRouter.AddWaste(Sewage);
+            
         }
 
         private void Distribute() {
+
+            // groundwater.Infiltrate(wasteRouter.waste);
+
+
             groundwaterLevel = groundwater.Level;
-            groundwaterSupply.Quality = groundwater.Quality;
+            groundwaterSupply.Quality = groundwater.Storage.Quality;
         }
 
     }
