@@ -126,6 +126,6 @@ public class CellInfoBox : MonoBehaviour {
         waterDemand.text = "Demand: " + selectedCell.waterManager.FormattedDemand + " L/day";
         waterSupply.text = "Supply: " + selectedCell.waterManager.FormattedSupply + " L/day";
         groundwaterLevel.text = "Groundwater remaining: " + selectedCell.waterManager.groundwater.Level.ToString("P2");
-        groundwaterQuality.text = "Groundwater quality: " + selectedCell.waterManager.groundwater.Quality.ToString("P2");
+        groundwaterQuality.text = "Groundwater quality: " + selectedCell.waterManager.groundwater.Storage.Quality.ToString("P2");
     }
 }
