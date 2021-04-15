@@ -11,7 +11,19 @@ public struct Borough {
         Cells = cells;
         Name = name;
 
-        int cellPopulation = Mathf.RoundToInt((float)population / (float)cells.Length);
+        int cellPopulation;
+
+        try {
+            cellPopulation = Mathf.RoundToInt((float)population / (float)cells.Length);
+        }
+        catch (System.Exception e) {
+            Debug.Log(population.ToString() + cells.Length.ToString());
+            Debug.Log(e.ToString());
+            cellPopulation = 0;
+        }
+
+
+        //int cellPopulation = Mathf.RoundToInt((float)population / (float)cells.Length);
 
         foreach (HexCell cell in cells) {
             cell.borough = this;
