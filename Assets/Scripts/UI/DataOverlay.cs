@@ -60,9 +60,6 @@ namespace UI {
             else {
                 // scale to set x=1 to a convenient point for the function below
                 float val = population / 30000f;
-                if (val > 1) {
-                    Debug.Log(val);
-                }
 
                 // This function has a horiztonal asymtote at y = 1.0 :-)
                 // at x = 1, y = 0.74
