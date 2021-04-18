@@ -31,8 +31,6 @@ namespace UI {
             Overlay overlay = (Overlay)index;
             hexGrid.SetDataOverlay(overlay);
         }
-
     }
-
 }
 
