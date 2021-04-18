@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UI;
 
 public class HexGrid : MonoBehaviour {
 
@@ -132,6 +133,13 @@ public class HexGrid : MonoBehaviour {
         }
 
         return Mathf.RoundToInt(totalPopulation);
+    }
+
+    public void SetDataOverlay(UI.Overlay overlay) {
+
+        foreach (HexCell cell in cells) {
+            cell.Color = overlay.CellColor();
+        }
 
     }
 
