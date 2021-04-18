@@ -19,7 +19,7 @@ namespace Water {
             }
             private set {
                 if (value >= 0 && value <= 1) {
-                    waste.Quality = value;
+                    runoffCoefficient = value;
                 }
                 else {
                     throw new System.ArgumentException("The runoff coefficient must be between 0 and 1 inclusive, value is " + value + " in cell " + manager.hexCell.index);
@@ -36,7 +36,7 @@ namespace Water {
             RunoffCoefficient = 0.2f;
         }
 
-        public void AddWaste(Water input) {
+        public void WasteInput(Water input) {
 
             if (waste.Volume + input.Volume != 0) {
                 waste.Quality = (waste.Product + input.Product) / (waste.Volume + input.Volume); // weighted average of all wastewater qualities
@@ -48,12 +48,13 @@ namespace Water {
             waste.Volume += input.Volume;
         }
 
-        public Water Infiltration {
-            get {
-                float volume = waste.Volume * RunoffCoefficient;
-                float quality = waste.Quality;
-                return new Water(volume, quality);
-            }
+        public void DistributeWaste() {
+
+            float infiltrationVolume = waste.Volume * (1f - RunoffCoefficient);
+            Water infiltration = new Water(infiltrationVolume, waste.Quality);
+
+            groundwater.Infiltrate(infiltration);
+            waste.Volume = 0;
         }
     }
 }

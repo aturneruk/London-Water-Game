@@ -111,14 +111,13 @@ namespace Water {
             }
 
             Sewage = new Water(Supply.Volume, 0f);
-            wasteRouter.AddWaste(Sewage);
+            wasteRouter.WasteInput(Sewage);
             
         }
 
         private void Distribute() {
 
-            // groundwater.Infiltrate(wasteRouter.waste);
-
+            wasteRouter.DistributeWaste();
 
             groundwaterLevel = groundwater.Level;
             groundwaterSupply.Quality = groundwater.Storage.Quality;
