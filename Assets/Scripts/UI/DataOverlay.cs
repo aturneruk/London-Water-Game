@@ -22,7 +22,10 @@ namespace UI {
                 }
                 else {
                     float val = population / 30000;
-                    val = Mathf.Sqrt(val / (val + 1));
+                    val = Mathf.Sqrt(val / (val + 0.9f));
+                    if (val > 0) {
+                        val += 0.1f;
+                    }
                     return new Color(1f, 1 - val, 1f);
                 }
             }
@@ -41,9 +44,7 @@ namespace UI {
 
         public void ChangeOverlay() {
             int index = gameObject.GetComponent<Dropdown>().value;
-            Debug.Log(index);
             Overlay overlay = (Overlay)index;
-            Debug.Log(overlay.ToString());
             hexGrid.SetDataOverlay(overlay);
         }
     }
