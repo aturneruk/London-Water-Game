@@ -30,7 +30,10 @@ public class Population : MonoBehaviour {
         float waterSupplyRatio = hexCell.waterManager.supplyRatio;
         float waterSupplyFactor = 10.526f * (waterSupplyRatio * waterSupplyRatio) - 8.526f;
 
-        float factor = waterSupplyFactor;
+        float waterSupplyQuality = hexCell.waterManager.Supply.Quality;
+        float waterQualityFactor = Mathf.InverseLerp(-1, 1, waterSupplyQuality * waterSupplyQuality);
+
+        float factor = waterSupplyFactor * waterQualityFactor;
 
         Size += Size * GrowthRate * factor;
     }
