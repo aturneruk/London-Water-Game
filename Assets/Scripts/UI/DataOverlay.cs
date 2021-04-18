@@ -44,7 +44,7 @@ namespace UI {
                 return PopulationColor(cell);                
             }
             else if (overlay == Overlay.GroundwaterQuality) {
-                return null;
+                return GroundwaterLevelColor(cell);
             }            
             else {
                 return null;
@@ -74,9 +74,16 @@ namespace UI {
             }
         }
 
+        public static Color GroundwaterLevelColor(HexCell cell) {
+            float val = cell.waterManager.groundwaterLevel;
 
+            if (val <= 1 && val >= 0) {
+                return new Color(1f - val, 1f - val, 1f);
+            }
+            else {
+                throw new System.ArgumentOutOfRangeException("Groundwater level must be between 0 and 1");
+            }
+        }
     }
-
-
 }
 
