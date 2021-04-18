@@ -50,7 +50,6 @@ namespace Water {
             Storage.Quality = (Storage.Product + input.Product) / (Storage.Volume + input.Volume);
             Storage.Volume += input.Volume;
         }
-
     }
 }
 
