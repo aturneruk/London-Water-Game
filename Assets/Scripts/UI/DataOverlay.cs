@@ -21,11 +21,18 @@ namespace UI {
                     throw new System.ArgumentOutOfRangeException("Population is greater than 100000");
                 }
                 else {
-                    float val = population / 30000;
-                    val = Mathf.Sqrt(val / (val + 0.9f));
+                    // scale to set x=1 to a convenient point for the function below
+                    float val = Mathf.InverseLerp(0, 30000, population);
+
+                    // This function has a horiztonal asymtote at y = 1.0 :-)
+                    // at x = 1, y = 0.74
                     if (val > 0) {
-                        val += 0.1f;
+                        val = 0.1f + 0.9f * Mathf.Sqrt(val / (val + 1));                        
                     }
+                    else {
+                        val = 0;
+                    }
+
                     return new Color(1f, 1 - val, 1f);
                 }
             }
