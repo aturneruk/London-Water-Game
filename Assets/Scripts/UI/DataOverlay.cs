@@ -16,6 +16,18 @@ namespace UI {
         public void ChangeOverlay() {
             int index = gameObject.GetComponent<Dropdown>().value;
             Overlay overlay = (Overlay)index;
+
+            switch (overlay) {
+                case Overlay.None:
+                case Overlay.Population:
+                    HexMetrics.selectedColor = Color.cyan;
+                    break;
+                case Overlay.GroundwaterQuality:
+                    HexMetrics.selectedColor = Color.magenta;
+                    break;
+                default:
+                    throw new System.ArgumentException("Selected overlay is not recognised");
+            }
             hexGrid.SetDataOverlay(overlay);
         }        
         
@@ -78,7 +90,7 @@ namespace UI {
             float val = cell.waterManager.groundwaterLevel;
 
             if (val <= 1 && val >= 0) {
-                return new Color(1f - val, 1f - val, 1f);
+                return new Color(1f - val, 1f, 1f);
             }
             else {
                 throw new System.ArgumentOutOfRangeException("Groundwater level must be between 0 and 1");
