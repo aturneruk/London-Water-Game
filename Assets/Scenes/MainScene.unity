@@ -1830,6 +1830,7 @@ GameObject:
   - component: {fileID: 927702037}
   - component: {fileID: 927702036}
   - component: {fileID: 927702035}
+  - component: {fileID: 927702038}
   m_Layer: 5
   m_Name: Dropdown
   m_TagString: Untagged
@@ -1956,6 +1957,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 927702033}
   m_CullTransparentMesh: 1
+--- !u!114 &927702038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927702033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd4aa0fff9581b249be26e8df9ee8c1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hexGrid: {fileID: 158096126}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
