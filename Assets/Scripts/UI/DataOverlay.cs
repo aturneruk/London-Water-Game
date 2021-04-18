@@ -17,8 +17,7 @@ namespace UI {
             int index = gameObject.GetComponent<Dropdown>().value;
             Overlay overlay = (Overlay)index;
             hexGrid.SetDataOverlay(overlay);
-        }
-        
+        }        
         
         public void UpdateOverlay() {
             int index = gameObject.GetComponent<Dropdown>().value;
