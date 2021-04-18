@@ -8,8 +8,8 @@ public class HexMetrics {
     public static readonly Color defaultColor = Color.white;
     public static readonly Color boroughColor = Color.grey;
     public static readonly Color riverColor = Color.blue;
-    public static readonly Color selectedColor = Color.cyan;
-    public static readonly Color selectedBoroughColor = Color.yellow;
+    public static Color selectedColor = Color.cyan;
+    public static Color selectedBoroughColor = Color.yellow;
 
     public static Vector3[] corners = {
         new Vector3(0f, 0f, outerRadius),
