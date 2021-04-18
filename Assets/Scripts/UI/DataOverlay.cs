@@ -11,13 +11,26 @@ namespace UI {
 
     public static class OverlayExtensions {
 
-        public static Color CellColor(this Overlay overlay) {
+        public static Color? CellColor(this Overlay overlay, HexCell cell) {
 
-            if (overlay == Overlay.None) {
-                return Color.white;
+            if (overlay == Overlay.Population) {
+
+                float population = cell.Population.Size;
+
+                if (population > 100000) {
+                    throw new System.ArgumentOutOfRangeException("Population is greater than 100000");
+                }
+                else {
+                    float val = population / 30000;
+                    val = Mathf.Sqrt(val / (val + 1));
+                    return new Color(1f, 1 - val, 1f);
+                }
             }
+            else if (overlay == Overlay.GroundwaterQuality) {
+                return null;
+            }            
             else {
-                return Color.yellow;
+                return null;
             }
         }
     }
@@ -28,7 +41,9 @@ namespace UI {
 
         public void ChangeOverlay() {
             int index = gameObject.GetComponent<Dropdown>().value;
+            Debug.Log(index);
             Overlay overlay = (Overlay)index;
+            Debug.Log(overlay.ToString());
             hexGrid.SetDataOverlay(overlay);
         }
     }

@@ -91,21 +91,21 @@ namespace UI {
 
             if (borough.Cells != null) {
                 foreach (HexCell boroughCell in borough.Cells)
-                    boroughCell.SetDefaultColor();
+                    boroughCell.HighlightColor = null;
             }
             else {
-                cell.SetDefaultColor();
+                cell.HighlightColor = null;
             }
         }
 
         void SelectCell(HexCell cell) {
-            cell.Color = HexGrid.touchedColor;
+            cell.HighlightColor = HexMetrics.selectedColor;
             Borough borough = cell.borough;
 
             if (borough.Cells != null) {
                 foreach (HexCell boroughCell in borough.Cells) {
                     if (boroughCell != cell) {
-                        boroughCell.Color = Color.yellow;
+                        boroughCell.HighlightColor = HexMetrics.selectedBoroughColor;
                     }
                 }
             }

@@ -10,10 +10,13 @@ public class HexCell : MonoBehaviour {
     // Geometric data
     public HexCoordinates coordinates;
     public int area = 1000000;
-    
+
     public Borough borough;
 
     private Color color;
+    private Color mainColor;
+    private Color? overlayColor;
+    private Color? highlightColor;
 
     [SerializeField]
     HexCell[] neighbors;
@@ -40,8 +43,7 @@ public class HexCell : MonoBehaviour {
         get {
             return color;
         }
-        set {
-
+        private set {
             if (color == value) {
                 return;
             }
@@ -52,24 +54,79 @@ public class HexCell : MonoBehaviour {
         }
     }
 
-    private void Start() {
-        // InvokeRepeating("Population.GrowPopulation(this)", 2.0f, 0.3f);     
-
-        if (riverDistance == 0) {
-            color = HexGrid.riverColor;
+    public Color MainColor {
+        get {
+            return mainColor;
         }
+        set {
+            if (value == mainColor) {
+                return;
+            }
+            else {
+                mainColor = value;
+                if (OverlayColor == null && HighlightColor == null) {
+                    Color = mainColor;
+                }
+                else {
+                    return;
+                }
+            }
+        }
+    }
 
-        //for (int i = 0; i < 20; i += 3) {
-        //    if (riverDistance == i + 1) {
-        //        color = Color.yellow;
-        //    }
-        //    else if (riverDistance == i + 2) {
-        //        color = Color.magenta;
-        //    }
-        //    else if (riverDistance == i + 3) {
-        //        color = Color.green;
-        //    }
-        //}
+    public Color? OverlayColor {
+        get {
+            return overlayColor;
+        }
+        set {
+            if (value == overlayColor) {
+                return;
+            }
+            else if (value == null) {
+                highlightColor = null;
+                if (HighlightColor != null) {
+                    Color = (Color)HighlightColor;
+                }
+                else {
+                    Color = MainColor;
+                }
+            }
+            else {
+                overlayColor = value;
+                if (HighlightColor == null) {
+                    Color = (Color)overlayColor;
+                }
+            }
+        }
+    }
+
+    public Color? HighlightColor {
+        get {
+            return highlightColor;
+        }
+        set {
+            if (value == highlightColor) {
+                return;
+            }
+            else if (value == null) {
+                highlightColor = null;
+                if (OverlayColor != null) {
+                    Color = (Color)OverlayColor;
+                }
+                else {
+                    Color = MainColor;
+                }
+            }
+            else {
+                highlightColor = value;
+                Color = (Color)HighlightColor;
+            }
+        }
+    }
+
+
+    private void Start() {
+        SetDefaultColor();
     }
 
     private void OnDrawGizmosSelected() {
@@ -79,7 +136,7 @@ public class HexCell : MonoBehaviour {
             Gizmos.color = Color.black;
             Gizmos.DrawLine(cell.transform.position, cell.dischargeCell.transform.position);
             cell = cell.dischargeCell;
-        }        
+        }
     }
 
     public HexCell GetNeighbor(HexDirection direction) {
@@ -104,14 +161,14 @@ public class HexCell : MonoBehaviour {
     }
 
     public void SetDefaultColor() {
-        if (isThames) {
-            Color = HexGrid.riverColor;
+        if (riverDistance == 0) {
+            MainColor = HexMetrics.riverColor;
         }
         else if (borough.Name != null) {
-            Color = Color.grey;
+            MainColor = HexMetrics.boroughColor;
         }
         else {
-            Color = HexGrid.defaultColor;
+            MainColor = HexMetrics.defaultColor;
         }
     }
 }

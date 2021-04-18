@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UI;
 
 public class HexGrid : MonoBehaviour {
@@ -18,11 +17,6 @@ public class HexGrid : MonoBehaviour {
 
     // Set up cell labels
     public UnityEngine.UI.Text cellLabelPrefab;
-
-    // Set up colours
-    static public Color defaultColor = Color.white;
-    static public Color touchedColor = Color.magenta;
-    static public Color riverColor = Color.blue;
 
     private void Awake() {
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
@@ -65,7 +59,6 @@ public class HexGrid : MonoBehaviour {
         HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
-        cell.Color = defaultColor;
         cell.index = i;
 
         cell.Population = cell.gameObject.AddComponent<Population>();
@@ -135,12 +128,13 @@ public class HexGrid : MonoBehaviour {
         return Mathf.RoundToInt(totalPopulation);
     }
 
-    public void SetDataOverlay(UI.Overlay overlay) {
+    public void SetDataOverlay(Overlay overlay) {
 
         foreach (HexCell cell in cells) {
-            cell.Color = overlay.CellColor();
+
+            if (cell.riverDistance != 0) {
+                cell.OverlayColor = overlay.CellColor(cell);
+            }
         }
-
     }
-
 }

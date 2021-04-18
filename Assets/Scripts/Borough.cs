@@ -22,7 +22,7 @@ public struct Borough {
 
         foreach (HexCell cell in cells) {
             cell.borough = this;
-            cell.Color = Color.grey;
+            cell.MainColor = Color.grey;
             cell.Population.Size = cellPopulation;
         }
     }
