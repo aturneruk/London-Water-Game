@@ -22,8 +22,10 @@ namespace UI {
         
         public void UpdateOverlay() {
             int index = gameObject.GetComponent<Dropdown>().value;
-            Overlay overlay = (Overlay)index;
-            hexGrid.SetDataOverlay(overlay);
+            if (index > 0) {
+                Overlay overlay = (Overlay)index;
+                hexGrid.SetDataOverlay(overlay);
+            }
         }
 
         private void OnEnable() {
