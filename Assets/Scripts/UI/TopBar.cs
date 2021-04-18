@@ -4,10 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI {
-    public class TimeControl : MonoBehaviour {
+    public class TopBar : MonoBehaviour {
+
         public Text date;
+        public Text population;
+
         public Button speedControl;
 
+        public HexGrid grid;
 
         // Start is called before the first frame update
         void Start() {
@@ -21,6 +25,8 @@ namespace UI {
         void Update() {
             GameTime.UpdateTime();
             date.text = GameTime.GetLongForm();
+
+            population.text = "Population: " + grid.GetTotalPopulation().ToString();
         }
 
         public void SpeedChange() {
