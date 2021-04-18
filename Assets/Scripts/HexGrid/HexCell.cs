@@ -124,9 +124,8 @@ public class HexCell : MonoBehaviour {
         }
     }
 
-
     private void Start() {
-        SetDefaultColor();
+        SetMainColor();
     }
 
     private void OnDrawGizmosSelected() {
@@ -160,7 +159,7 @@ public class HexCell : MonoBehaviour {
         }
     }
 
-    public void SetDefaultColor() {
+    public void SetMainColor() {
         if (riverDistance == 0) {
             MainColor = HexMetrics.riverColor;
         }
