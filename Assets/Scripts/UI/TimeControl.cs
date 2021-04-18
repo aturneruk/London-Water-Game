@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TopBar {
+namespace UI {
     public class TimeControl : MonoBehaviour {
         public Text date;
         public Button speedControl;
