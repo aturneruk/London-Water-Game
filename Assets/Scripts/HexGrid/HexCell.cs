@@ -83,7 +83,7 @@ public class HexCell : MonoBehaviour {
                 return;
             }
             else if (value == null) {
-                highlightColor = null;
+                overlayColor = null;
                 if (HighlightColor != null) {
                     Color = (Color)HighlightColor;
                 }
