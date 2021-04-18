@@ -13,6 +13,13 @@ namespace UI {
 
         public HexGrid hexGrid;
 
+        public void ChangeOverlay() {
+            int index = gameObject.GetComponent<Dropdown>().value;
+            Overlay overlay = (Overlay)index;
+            hexGrid.SetDataOverlay(overlay);
+        }
+        
+        
         public void UpdateOverlay() {
             int index = gameObject.GetComponent<Dropdown>().value;
             Overlay overlay = (Overlay)index;
@@ -33,7 +40,7 @@ namespace UI {
         public static Color? CellColor(this Overlay overlay, HexCell cell) {
 
             if (overlay == Overlay.Population) {
-                PopulationColor(cell);                
+                return PopulationColor(cell);                
             }
             else if (overlay == Overlay.GroundwaterQuality) {
                 return null;
