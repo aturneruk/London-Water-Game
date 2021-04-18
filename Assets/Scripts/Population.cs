@@ -20,7 +20,6 @@ public class Population : MonoBehaviour {
 
     private void OnDisable() {
         GameTime.NewWeek -= UpdatePopulation;
-
     }
 
     public override string ToString() {
