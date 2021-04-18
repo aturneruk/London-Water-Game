@@ -33,7 +33,15 @@ public class Population : MonoBehaviour {
         float waterSupplyQuality = hexCell.waterManager.Supply.Quality;
         float waterQualityFactor = Mathf.InverseLerp(-1, 1, waterSupplyQuality * waterSupplyQuality);
 
-        float factor = waterSupplyFactor * waterQualityFactor;
+        float factor;
+
+        if (waterSupplyFactor < 0 && waterQualityFactor < 0) {
+            factor = -Mathf.Abs(waterSupplyFactor) * Mathf.Abs(waterQualityFactor);
+        }
+        else {
+            factor = waterSupplyFactor * waterQualityFactor;
+        }
+
 
         Size += Size * GrowthRate * factor;
     }
