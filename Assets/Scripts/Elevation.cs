@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Elevation {
 
-    public static float GetElevation(int i) {
+    public static int GetElevation(int i) {
         return intElevation[i] * HexMetrics.elevationStep;
     }
 

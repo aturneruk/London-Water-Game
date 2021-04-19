@@ -50,6 +50,21 @@ public class HexMetrics {
         return Color.Lerp(a, b, h);
     }
 
+    public static HexEdgeType GetEdgeType(int elevation1, int elevation2) {
+
+        int delta = elevation1 - elevation2;
+
+        switch (delta) {
+            case 0:
+                return HexEdgeType.Flat;
+            case 1:
+            case -1:
+                return HexEdgeType.Slope;
+            default:
+                return HexEdgeType.Cliff;
+        }
+    }
+
     // Methods used in triangulation
     //public static Vector3 GetFirstCorner(HexDirection direction) {
     //    return corners[(int)direction];

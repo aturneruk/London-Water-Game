@@ -37,9 +37,9 @@ public class HexCell : MonoBehaviour {
 
     public Water.Manager waterManager;
 
-    public float Elevation {
+    public int Elevation {
         get {
-            return gameObject.transform.position.y;
+            return global::Elevation.GetElevation(index);
         }
     }
 
@@ -174,4 +174,9 @@ public class HexCell : MonoBehaviour {
             MainColor = HexMetrics.defaultColor;
         }
     }
+
+    public HexEdgeType GetEdgeType(HexDirection direction) {
+        return HexMetrics.GetEdgeType(Elevation, GetNeighbor(direction).Elevation);
+    }
+
 }
