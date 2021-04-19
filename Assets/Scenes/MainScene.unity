@@ -1915,6 +1915,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Groundwater Level
       m_Image: {fileID: 0}
+    - m_Text: Groundwater Quality
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
