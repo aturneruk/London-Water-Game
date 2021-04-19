@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace UI {
 
     public enum Overlay {
-        None, Population, GroundwaterQuality
+        None, Population, GroundwaterLevel, GroundwaterQuality
     }
 
     public class DataOverlay : MonoBehaviour {
@@ -22,6 +22,7 @@ namespace UI {
                 case Overlay.Population:
                     HexMetrics.selectedColor = Color.cyan;
                     break;
+                case Overlay.GroundwaterLevel:
                 case Overlay.GroundwaterQuality:
                     HexMetrics.selectedColor = Color.magenta;
                     break;
@@ -52,14 +53,14 @@ namespace UI {
 
         public static Color? CellColor(this Overlay overlay, HexCell cell) {
 
-            if (overlay == Overlay.Population) {
-                return PopulationColor(cell);                
-            }
-            else if (overlay == Overlay.GroundwaterQuality) {
-                return GroundwaterLevelColor(cell);
-            }            
-            else {
-                return null;
+            switch (overlay) {
+                case Overlay.Population:
+                    return PopulationColor(cell);
+                case Overlay.GroundwaterLevel:
+                    return GroundwaterLevelColor(cell);
+                case Overlay.GroundwaterQuality:
+                    return GroundwaterQualityColor(cell);
+                default: return null;
             }
         }
 
@@ -87,7 +88,7 @@ namespace UI {
         }
 
         public static Color GroundwaterLevelColor(HexCell cell) {
-            float val = cell.waterManager.groundwaterLevel;
+            float val = cell.waterManager.groundwater.Storage.Level;
 
             if (val <= 1 && val >= 0) {
                 return new Color(1f - val, 1f, 1f);
@@ -96,6 +97,18 @@ namespace UI {
                 throw new System.ArgumentOutOfRangeException("Groundwater level must be between 0 and 1");
             }
         }
+
+        public static Color GroundwaterQualityColor(HexCell cell) {
+            float val = cell.waterManager.groundwater.Storage.Quality;
+
+            if (val <= 1 && val >= 0) {
+                return new Color(1f - val, 1f, 1f);
+            }
+            else {
+                throw new System.ArgumentOutOfRangeException("Groundwater level must be between 0 and 1");
+            }
+        }
+
     }
 }
 
