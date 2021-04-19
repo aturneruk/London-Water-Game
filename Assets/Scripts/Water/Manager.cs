@@ -17,7 +17,6 @@ namespace Water {
         public Water Sewage;
 
         public Water groundwaterSupply;
-        public float groundwaterLevel;
         private float maxGroundwaterAbstraction;
 
         public string FormattedDemand {
@@ -115,10 +114,8 @@ namespace Water {
         }
 
         private void Distribute() {
-
             wasteRouter.DistributeWaste();
 
-            groundwaterLevel = groundwater.Level;
             groundwaterSupply.Quality = groundwater.Storage.Quality;
         }
     }

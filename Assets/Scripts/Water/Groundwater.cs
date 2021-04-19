@@ -10,27 +10,14 @@ namespace Water {
         public Water Storage;
         private float maxAbstraction = 600000;
 
-        public float Level {
-            get {
-                float level = 0.0002f * Storage.Volume / (float)manager.hexCell.area;
-
-                if (level >= 0 && level <= 1) {
-                    return level;
-                }
-                else {
-                    throw new System.ArgumentException("The groundwater level must be between 0 and 1 inclusive, value is " + level + " in cell " + manager.hexCell.index);
-                }
-            }
-        }
-
         public Groundwater(Manager manager) {
             this.manager = manager;
-            Storage = new Water(5000000000, 1, true);
+            Storage = new Water(5000000000, 1, 5000000000);
         }
 
         public float GetMaxAbstraction {
             get {
-                return maxAbstraction * Level * Level;
+                return maxAbstraction * Storage.Level * Storage.Level;
             }
         }
 

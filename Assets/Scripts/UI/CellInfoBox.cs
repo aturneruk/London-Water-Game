@@ -126,7 +126,7 @@ namespace UI {
 
             waterDemand.text = "Demand: " + selectedCell.waterManager.FormattedDemand + " L/day";
             waterSupply.text = "Supply: " + selectedCell.waterManager.FormattedSupply + " L/day";
-            groundwaterLevel.text = "Groundwater remaining: " + selectedCell.waterManager.groundwater.Level.ToString("P2");
+            groundwaterLevel.text = "Groundwater remaining: " + selectedCell.waterManager.groundwater.Storage.Level.ToString("P2");
             groundwaterQuality.text = "Groundwater quality: " + selectedCell.waterManager.groundwater.Storage.Quality.ToString("P2");
         }
     }

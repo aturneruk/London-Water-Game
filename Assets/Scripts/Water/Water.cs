@@ -6,7 +6,6 @@ namespace Water {
     public struct Water {
         private float volume;
         private float quality;
-        private bool groundwater;
 
         public float Volume {
             get {
@@ -15,9 +14,9 @@ namespace Water {
             set {
                 volume = value;
 
-                if (groundwater == true) {
-                    if (volume > 5000000000) {
-                        throw new System.ArgumentException("Maximum volume is 5e9 L");
+                if (MaxCapacity != null) {
+                    if (volume > MaxCapacity) {
+                        throw new System.ArgumentException("Maximum volume is " + MaxCapacity.ToString());
                     }
                 }
             }
@@ -37,6 +36,21 @@ namespace Water {
             }
         }
 
+        public float Level {
+            get {
+                float level = Volume / (float)MaxCapacity;
+
+                if (level >= 0 && level <= 1) {
+                    return level;
+                }
+                else {
+                    throw new System.ArgumentException("The storage level must be between 0 and 1 inclusive, value is " + level);
+                }
+            }
+        }
+
+        public float? MaxCapacity { get; private set; }
+
         public Water(float volume, float quality) {
 
             if (quality >= 0 && quality <= 1) {
@@ -46,11 +60,11 @@ namespace Water {
                 throw new System.ArgumentException("The quality must be between 0 and 1 inclusive, value is " + quality);
             }
 
-            groundwater = false;
+            MaxCapacity = null;
             this.volume = volume;
         }
 
-        public Water(float volume, float quality, bool groundwater) {
+        public Water(float volume, float quality, float maxCapacity) {
 
             if (quality >= 0 && quality <= 1) {
                 this.quality = quality;
@@ -59,16 +73,11 @@ namespace Water {
                 throw new System.ArgumentException("The quality must be between 0 and 1 inclusive, value is " + quality);
             }
 
-            if (groundwater == true) {
-                if (volume > 5000000000) {
-                    throw new System.ArgumentException("Maximum volume is 5e9 L");
-                }
-                this.groundwater = true;
-            }
-            else {
-                this.groundwater = false;
-            }
+            MaxCapacity = maxCapacity;
 
+            if (volume > maxCapacity) {
+                throw new System.ArgumentException("Maximum volume is " + MaxCapacity.ToString());
+            }
             this.volume = volume;
         }
 
