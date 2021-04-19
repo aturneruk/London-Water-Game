@@ -37,6 +37,12 @@ public class HexCell : MonoBehaviour {
 
     public Water.Manager waterManager;
 
+    public float Elevation {
+        get {
+            return gameObject.transform.position.y;
+        }
+    }
+
     public Color Color {
         get {
             return color;
