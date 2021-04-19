@@ -147,6 +147,16 @@ public class HexMesh : MonoBehaviour {
                 TriangulateCornerTerrace(bottomCell, bottom, leftCell, left, rightCell, right);
                 return;
             }
+            else if (rightEdgeType == HexEdgeType.Flat) {
+                TriangulateCornerTerrace(leftCell, left, rightCell, right, bottomCell, bottom);
+                return;
+            }
+        }
+        else if (leftEdgeType == HexEdgeType.Flat) {
+            if (rightEdgeType == HexEdgeType.Slope) {
+                TriangulateCornerTerrace(rightCell, right, bottomCell, bottom, leftCell, left);
+                return;
+            }
         }
 
         AddTriangle(bottom, left, right);
@@ -178,9 +188,6 @@ public class HexMesh : MonoBehaviour {
 
         AddQuad(v3, v4, left, right);
         AddQuadColor(c3, c4, leftCell.Color, rightCell.Color);
-
-
-
     }
 
     private void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3) {
