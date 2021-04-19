@@ -80,8 +80,15 @@ public class HexMesh : MonoBehaviour {
         // Override the height for the other end of the bridge
         v3.y = v4.y = neighbor.Elevation;
 
-        // Triangulate the "bridge" terraces
-        TriangulateEdgeTerraces(cell, v1, v2, neighbor, v3, v4);
+        // Add terraces for "slope" type bridges
+        if (cell.GetEdgeType(direction) == HexEdgeType.Slope) {
+            TriangulateEdgeTerraces(cell, v1, v2, neighbor, v3, v4);
+        }
+        else {
+            AddQuad(v1, v2, v3, v4);
+            AddQuadColor(cell.Color, neighbor.Color);
+        }
+
 
         // Deal with the 3-way corners
         HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
