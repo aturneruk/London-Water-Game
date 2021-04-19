@@ -80,10 +80,10 @@ public class HexMesh : MonoBehaviour {
         // Override the height for the other end of the bridge
         v3.y = v4.y = neighbor.transform.position.y;
 
-        // Add the bridge quad
-        AddQuad(v1, v2, v3, v4);
-        AddQuadColor(cell.Color, neighbor.Color);
+        // Triangulate the "bridge" terraces
+        TriangulateEdgeTerraces(cell, v1, v2, neighbor, v3, v4);
 
+        // Deal with the 3-way corners
         HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
         if (direction <= HexDirection.E && nextNeighbor != null) {
             Vector3 v5 = v2 + HexMetrics.GetBridge(direction.Next());
@@ -93,6 +93,29 @@ public class HexMesh : MonoBehaviour {
         }
     }
 
+    private void TriangulateEdgeTerraces(HexCell startCell, Vector3 startLeft, Vector3 startRight, HexCell endCell, Vector3 endLeft, Vector3 endRight) {
+
+        Vector3 v3 = HexMetrics.TerraceLerp(startLeft, endLeft, 1);
+        Vector3 v4 = HexMetrics.TerraceLerp(startRight, endRight, 1);
+        Color c2 = HexMetrics.TerraceLerp(startCell.Color, endCell.Color, 1);
+
+        AddQuad(startLeft, startRight, v3, v4);
+        AddQuadColor(startCell.Color, c2);
+
+        for (int i = 2; i < HexMetrics.terraceSteps; i++) {
+            Vector3 v1 = v3;
+            Vector3 v2 = v4;
+            Color c1 = c2;
+            v3 = HexMetrics.TerraceLerp(startLeft, endLeft, i);
+            v4 = HexMetrics.TerraceLerp(startRight, endRight, i);
+            c2 = HexMetrics.TerraceLerp(startCell.Color, endCell.Color, i);
+            AddQuad(v1, v2, v3, v4);
+            AddQuadColor(c1, c2);
+        }
+
+        AddQuad(v3, v4, endLeft, endRight);
+        AddQuadColor(c2, endCell.Color);
+    }
 
     private void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3) {
         int vertexIndex = vertices.Count;
