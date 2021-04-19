@@ -19,10 +19,10 @@ public class HexMesh : MonoBehaviour {
         meshCollider = gameObject.AddComponent<MeshCollider>();
         hexMesh.name = "Hex Mesh";
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         SceneVisibilityManager visibilityManager = SceneVisibilityManager.instance;
         visibilityManager.DisablePicking(gameObject, false);
-#endif
+        #endif
     }
 
     public void Triangulate(HexCell[] cells) {
