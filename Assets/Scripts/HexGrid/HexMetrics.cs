@@ -28,6 +28,8 @@ public class HexMetrics {
     public const float solidFactor = 0.75f;
     public const float blendFactor = 1f - solidFactor;
 
+    public const int elevationStep = 1;
+
     // Terrace options and methods
     public const int terracesPerSlope = 2;
     public const int terraceSteps = terracesPerSlope * 2 + 1;
