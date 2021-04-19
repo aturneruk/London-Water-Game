@@ -179,4 +179,8 @@ public class HexCell : MonoBehaviour {
         return HexMetrics.GetEdgeType(Elevation, GetNeighbor(direction).Elevation);
     }
 
+    public HexEdgeType GetEdgeType(HexCell cell) {
+        return HexMetrics.GetEdgeType(Elevation, cell.Elevation);
+    }
+
 }
