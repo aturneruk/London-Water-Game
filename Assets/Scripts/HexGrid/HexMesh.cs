@@ -61,27 +61,38 @@ public class HexMesh : MonoBehaviour {
         AddTriangle(centre, v1, v2);
         AddTriangleColor(cell.Color); // Set color of this triangle
 
+        if (direction <= HexDirection.SE) {
+            TriangulateConnection(direction, cell, v1, v2);
+        }
+    }
+
+    private void TriangulateConnection(HexDirection direction, HexCell cell, Vector3 v1, Vector3 v2) {
+
+        HexCell neighbor = cell.GetNeighbor(direction);
+
+        if (neighbor == null) {
+            return;
+        }
+
         Vector3 bridge = HexMetrics.GetBridge(direction);
         Vector3 v3 = v1 + bridge;
         Vector3 v4 = v2 + bridge;
-
-        HexCell prevNeighbor = cell.GetNeighbor(direction.Previous()) ?? cell;
-        HexCell neighbor = cell.GetNeighbor(direction) ?? cell;
-        HexCell nextNeighbor = cell.GetNeighbor(direction.Next()) ?? cell;
-
-        Color bridgeColor = (cell.Color + neighbor.Color) * 0.5f;
+        // Override the height for the other end of the bridge
+        v3.y = v4.y = neighbor.transform.position.y;
 
         // Add the bridge quad
         AddQuad(v1, v2, v3, v4);
-        AddQuadColor(cell.Color, bridgeColor);
+        AddQuadColor(cell.Color, neighbor.Color);
 
-        // Add the two 3-way triangles
-        AddTriangle(v1, centre + HexMetrics.GetFirstCorner(direction), v3);
-        AddTriangleColor(cell.Color, (cell.Color + prevNeighbor.Color + neighbor.Color) / 3f, bridgeColor);
-        AddTriangle(v2, v4, centre + HexMetrics.GetSecondCorner(direction));
-        AddTriangleColor(cell.Color, bridgeColor, (cell.Color + neighbor.Color + nextNeighbor.Color) / 3f);
-
+        HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
+        if (direction <= HexDirection.E && nextNeighbor != null) {
+            Vector3 v5 = v2 + HexMetrics.GetBridge(direction.Next());
+            v5.y = nextNeighbor.transform.position.y;
+            AddTriangle(v2, v4, v5);
+            AddTriangleColor(cell.Color, neighbor.Color, nextNeighbor.Color);
+        }
     }
+
 
     private void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3) {
         int vertexIndex = vertices.Count;
