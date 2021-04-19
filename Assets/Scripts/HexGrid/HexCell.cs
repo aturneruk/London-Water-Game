@@ -23,8 +23,6 @@ public class HexCell : MonoBehaviour {
 
     public HexGridChunk chunk;
 
-    public RectTransform uiRect;
-
     public Population Population;
 
     // Network data

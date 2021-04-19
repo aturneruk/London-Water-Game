@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UI;
 
 public class HexGrid : MonoBehaviour {
@@ -14,9 +15,6 @@ public class HexGrid : MonoBehaviour {
     // Set up cells
     public HexCell cellPrefab;
     HexCell[] cells;
-
-    // Set up cell labels
-    public UnityEngine.UI.Text cellLabelPrefab;
 
     private void Awake() {
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
@@ -82,12 +80,6 @@ public class HexGrid : MonoBehaviour {
                 }
             }
         }
-
-        //Text label = Instantiate<Text>(cellLabelPrefab);
-        //label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
-        //label.text = cell.coordinates.ToStringOnSeparateLines();
-        //cell.uiRect = label.rectTransform;
-
         AddCellToChunk(x, z, cell);
     }
 
