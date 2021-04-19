@@ -103,9 +103,7 @@ namespace UI {
 
             if (val <= 1 && val >= 0) {
                 val = val * val;
-                return new Color32((byte)(75), (byte)(54), (byte)(33), (byte)(0));
-                //return new Color32((byte)(75 + val * 180), (byte)(54 + val * 201), (byte)(33 + val * 222), 255);
-
+                return new Color(1 - val, val, 0f);
             }
             else {
                 throw new System.ArgumentOutOfRangeException("Groundwater quality must be between 0 and 1");
