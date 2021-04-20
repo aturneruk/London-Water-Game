@@ -5,51 +5,94 @@ using UnityEngine;
 public class RiverThames : MonoBehaviour {
 
     private HexGrid hexGrid;
-
-    public static List<HexCell> riverCells = new List<HexCell>();
-
-    public int riverLength;
-
-    public float[] flows;
-    public float[] quality;
-    public float totalQuality;
+    private List<HexCell> riverCells = new List<HexCell>();
+    public int RiverLength { get; private set; }
 
     private void Start() {
         hexGrid = gameObject.GetComponent<HexGrid>();
 
-        foreach (int i in cellIndices) {
-            HexCell cell = hexGrid.GetCellFromIndex(i);
+        for (int i = 0; i < cellIndices.Length; i++) {
 
-            cell.gameObject.AddComponent<Water.RiverCell>();
+            int hexCellIndex = cellIndices[i];
+            HexCell cell = hexGrid.GetCellFromIndex(hexCellIndex);
+            cell.riverDistance = 0;
+
+            Water.RiverCell riverCell = cell.gameObject.AddComponent<Water.RiverCell>();
+            riverCell.index = i;
 
             riverCells.Add(cell);
         }
 
-        riverLength = riverCells.Count;
+        RiverLength = riverCells.Count;
 
-        Water.FlowNetwork.GenerateNetwork();
-        AssignRiversideCells();
+        GenerateNetwork();
     }
 
-    //private void Start() {
-    //    // StartCoroutine(ShowFlow());
-    //}
+    public void GenerateNetwork() {
 
-    private void AssignRiversideCells() {
+        List<HexCell> cells = new List<HexCell>(riverCells);
+        List<HexCell> nextCells = new List<HexCell>();
+
+        System.Random rng = new System.Random();
+
+        bool complete = false;
+        int level = 1;
+        int changed = 0;
+
+        while (!complete) {
+
+            foreach (HexCell cell in cells) {
+
+                for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+
+                    HexCell neighbor = cell.GetNeighbor(d);
+
+                    if (neighbor && neighbor.riverDistance == null) {
+                        neighbor.riverDistance = level;
+                        changed++;
+                        nextCells.Add(neighbor);
+
+                        if (level > 1) {
+                            bool set = false;
+
+                            while (!set) {
+                                int random = rng.Next(6);
+                                HexCell neighbor1 = neighbor.GetNeighbor((HexDirection)random);
+                                if (neighbor1 && neighbor1.riverDistance == level - 1) {
+                                    neighbor.dischargeCell = neighbor1;
+                                    set = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (changed == 0) {
+                complete = true;
+            }
+
+            level++;
+            changed = 0;
+            cells.Clear();
+            cells.AddRange(nextCells);
+            nextCells.Clear();
+        }
+
         // Set discharge cell
-        for (int i = 0; i < riverLength; i++) {
+        for (int i = 0; i < RiverLength; i++) {
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
 
                 HexCell neighbor = riverCells[i].GetNeighbor(d);
 
                 if (neighbor && neighbor.riverDistance == 1) {
-                    neighbor.dischargeCell = riverCells[i];
+                    neighbor.dischargeCell = riverCells[i];                                        
                 }
             }
         }
 
         // Set abstraction cell
-        for (int i = riverLength - 1; i >= 0; i--) {
+        for (int i = RiverLength - 1; i >= 0; i--) {
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
 
                 HexCell neighbor = riverCells[i].GetNeighbor(d);
@@ -58,7 +101,7 @@ public class RiverThames : MonoBehaviour {
                     neighbor.abstractionCell = riverCells[i];
                 }
             }
-        }
+        }        
     }
 
     private int[] cellIndices = {
