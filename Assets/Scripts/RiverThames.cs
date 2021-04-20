@@ -6,9 +6,9 @@ public class RiverThames : MonoBehaviour {
 
     private HexGrid hexGrid;
 
-    public static HexCell[] riverCells;
+    public static List<HexCell> riverCells = new List<HexCell>();
 
-    private int riverLength;
+    public int riverLength;
 
     public float[] flows;
     public float[] quality;
@@ -16,7 +16,17 @@ public class RiverThames : MonoBehaviour {
 
     private void Start() {
         hexGrid = gameObject.GetComponent<HexGrid>();
-        SetupRiverCells();
+
+        foreach (int i in cellIndices) {
+            HexCell cell = hexGrid.GetCellFromIndex(i);
+
+            cell.gameObject.AddComponent<Water.RiverCell>();
+
+            riverCells.Add(cell);
+        }
+
+        riverLength = riverCells.Count;
+
         Water.FlowNetwork.GenerateNetwork();
         AssignRiversideCells();
     }
@@ -24,20 +34,6 @@ public class RiverThames : MonoBehaviour {
     //private void Start() {
     //    // StartCoroutine(ShowFlow());
     //}
-
-    private void SetupRiverCells() {
-        
-        riverLength = cellIndices.Length;
-        riverCells = new HexCell[riverLength];
-
-        for (int i = 0; i < riverLength; i++) {
-            HexCell cell = hexGrid.GetCellFromIndex(cellIndices[i]);
-            riverCells[i] = cell;
-            cell.isThames = true;
-            cell.hasRiver = true;
-            // cell.Color = Color.blue;
-        }
-    }
 
     private void AssignRiversideCells() {
         // Set discharge cell
@@ -63,14 +59,6 @@ public class RiverThames : MonoBehaviour {
                 }
             }
         }
-    }
-
-    public void Discharge(float flow, float quality) {
-
-    }
-
-    public void Abstract(float flow, HexCell cell) {
-
     }
 
     private int[] cellIndices = {
