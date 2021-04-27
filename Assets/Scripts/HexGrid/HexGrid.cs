@@ -20,6 +20,8 @@ public class HexGrid : MonoBehaviour {
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
 
+        Application.targetFrameRate = 60;
+
         CreateChunks();
         CreateCells();
     }
