@@ -21,14 +21,6 @@ namespace Water {
             GenerateNetwork();
         }
 
-        private void OnEnable() {
-            GameTime.NewDay += DailyRefresh;
-        }
-
-        private void OnDisable() {
-            GameTime.NewDay -= DailyRefresh;
-        }
-
         private void CreateRiverCells() {
 
             for (int i = 0; i < cellIndices.Length; i++) {
@@ -54,36 +46,11 @@ namespace Water {
 
         public void GenerateNetwork() {
 
-            GenerateNetwork2();
-
-            // Set discharge cell
-            for (int i = 0; i < RiverLength; i++) {
-
-                for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
-
-                    HexCell neighbor = hexCells[i].GetNeighbor(d);
-
-                    if (neighbor && neighbor.riverDistance == 1) {
-                        neighbor.dischargeCell = hexCells[i];
-                    }
-                }
-            }
-
-            // Set abstraction cell
-            for (int i = RiverLength - 1; i >= 0; i--) {
-
-                for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
-
-                    HexCell neighbor = hexCells[i].GetNeighbor(d);
-
-                    if (neighbor && neighbor.riverDistance == 1) {
-                        neighbor.abstractionCell = hexCells[i];
-                    }
-                }
-            }
+            SetOverlandFlowCell();
+            SetDischargeAndAbstractionCell();                     
         }
 
-        private void GenerateNetwork2() {
+        private void SetOverlandFlowCell() {
 
             List<HexCell> currentCells = new List<HexCell>(hexCells);
             List<HexCell> nextCells = new List<HexCell>();
@@ -113,7 +80,7 @@ namespace Water {
                                     int random = rng.Next(6);
                                     HexCell neighbor1 = neighbor.GetNeighbor((HexDirection)random);
                                     if (neighbor1 && neighbor1.riverDistance == level - 1) {
-                                        neighbor.dischargeCell = neighbor1;
+                                        neighbor.overlandFlowCell = neighbor1;
                                         set = true;
                                     }
                                 }
@@ -134,13 +101,41 @@ namespace Water {
             }
         }
 
+        private void SetDischargeAndAbstractionCell() {
+            // Discharge cell
+            for (int i = 0; i < RiverLength; i++) {
+
+                for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+
+                    HexCell neighbor = hexCells[i].GetNeighbor(d);
+
+                    if (neighbor && neighbor.riverDistance == 1) {
+                        neighbor.dischargeCell = riverCells[i];
+                    }
+                }
+            }
+
+            // Abstraction cell
+            for (int i = RiverLength - 1; i >= 0; i--) {
+
+                for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+
+                    HexCell neighbor = hexCells[i].GetNeighbor(d);
+
+                    if (neighbor && neighbor.riverDistance == 1) {
+                        neighbor.abstractionCell = riverCells[i];
+                    }
+                }
+            }
+        }
+
         private float inflowValueScalar = 1;
 
         public Water GetInflow(RiverCell riverCell) {
 
             switch (riverCell.index) {
                 case 0:
-                    return new Water(5200000000 * inflowValueScalar, 1);
+                    return new Water(5200000000 * 30 * inflowValueScalar, 1);
                 default:
                     return new Water(0, 1);
             }
@@ -150,14 +145,11 @@ namespace Water {
             inflowValueScalar = inflowSlider.value;
         }
 
-        bool toggle = false;
 
-        private void DailyRefresh() {
+        public void DailyRefresh() {
 
-            toggle ^= true;
-
-            foreach (RiverCell riverCell in riverCells) {
-                riverCell.UpdateFlow(toggle);
+            for (int i = riverCells.Count - 1; i >= 0; i-- ) {
+                riverCells[i].UpdateFlow();
             }
 
         }

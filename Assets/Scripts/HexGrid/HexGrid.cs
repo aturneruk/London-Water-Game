@@ -46,7 +46,6 @@ public class HexGrid : MonoBehaviour {
         }
     }
 
-
     void CreateCell(int x, int z, int i) {
         Vector3 position;
         position.x = (x + z * 0.5f - z / 2) * (HexMetrics.innerRadius * 2f);
@@ -60,7 +59,8 @@ public class HexGrid : MonoBehaviour {
         cell.index = i;
 
         cell.Population = cell.gameObject.AddComponent<Population>();
-        cell.waterManager = cell.gameObject.AddComponent<Water.Manager>();
+
+        gameObject.GetComponent<Water.GridManager>().AddCellManager(cell);
 
         if (x > 0) {
             cell.SetNeighbor(HexDirection.W, cells[i - 1]);

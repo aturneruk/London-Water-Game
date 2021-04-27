@@ -32,10 +32,13 @@ public class HexCell : MonoBehaviour {
     public bool hasRiver;
     public bool isThames;
     public bool isRiverside;
-    public HexCell abstractionCell;
-    public HexCell dischargeCell;
+    public HexCell overlandFlowCell;
+    public Water.RiverCell abstractionCell;
+    public Water.RiverCell dischargeCell;
 
-    public Water.Manager waterManager;
+    public Water.CellManager waterManager;
+
+    private Water.Reservoir reservoir;
 
     public int Elevation {
         get {
@@ -137,9 +140,17 @@ public class HexCell : MonoBehaviour {
 
         for (int? i = riverDistance; i > 0; i--) {
             Gizmos.color = Color.black;
-            Gizmos.DrawLine(cell.transform.position, cell.dischargeCell.transform.position);
-            cell = cell.dischargeCell;
+            if (cell.overlandFlowCell) {
+                Gizmos.DrawLine(cell.transform.position, cell.overlandFlowCell.transform.position);
+                cell = cell.overlandFlowCell;
+            }
         }
+
+        if (abstractionCell && dischargeCell) {
+            //Gizmos.DrawLine(transform.position, abstractionCell.transform.position);
+            Gizmos.DrawLine(transform.position, dischargeCell.transform.position);
+        }
+
     }
 
     public HexCell GetNeighbor(HexDirection direction) {
@@ -167,6 +178,9 @@ public class HexCell : MonoBehaviour {
         if (riverDistance == 0) {
             MainColor = HexMetrics.riverColor;
         }
+        else if (gameObject.GetComponent<Water.Reservoir>() != null) {
+            MainColor = HexMetrics.reservoirColor;
+        }
         else if (borough.Name != null) {
             MainColor = HexMetrics.boroughColor;
         }
@@ -181,6 +195,12 @@ public class HexCell : MonoBehaviour {
 
     public HexEdgeType GetEdgeType(HexCell cell) {
         return HexMetrics.GetEdgeType(Elevation, cell.Elevation);
+    }
+
+    public void BuildReservoir() {
+
+        gameObject.AddComponent<Water.Reservoir>();
+
     }
 
 }

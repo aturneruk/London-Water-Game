@@ -6,28 +6,73 @@ namespace Water {
 
     public class Groundwater {
 
-        private readonly Manager manager;
+        private readonly CellManager manager;
         public Water Storage;
-        private float maxAbstraction = 600000;
+        private float maxAbstraction = 600000; // L/day
+        private float maxInfiltration = 600000; // L/day
 
-        public Groundwater(Manager manager) {
+        public Groundwater(CellManager manager) {
             this.manager = manager;
-            Storage = new Water(5000000000, 1, 5000000000);
+            Storage = new Water(1000000000, 1, 5000000000);
         }
 
-        public float GetMaxAbstraction {
+        public float MaxDailyAbstraction {
             get {
-                return maxAbstraction * Storage.Level * Storage.Level;
+
+                if (maxAbstraction * Storage.Level * Storage.Level >= Storage.Volume) {
+                    return maxAbstraction * Storage.Level * Storage.Level;
+                }
+                else {
+                    return Storage.Volume;
+                }
+            }
+        }
+
+        public float MaxMonthlyAbstraction {
+            get {
+                return MaxDailyAbstraction * 30;
+            }
+        }
+
+        private float MaxDailyInfiltration {
+            get {
+                return maxInfiltration;
+
+            }
+        }
+
+        private float MaxMonthlyInfiltration {
+            get {
+                return MaxDailyInfiltration * 30;
+
+            }
+        }
+
+        public float MaxInfiltration {
+            get {
+
+                if (Storage.RemainingCapacity == null) {
+                    return 0;
+                }
+                else {
+                    if (MaxMonthlyInfiltration <= Storage.RemainingCapacity) {
+                        return MaxMonthlyInfiltration;
+                    }
+                    else {
+                        return (float)Storage.RemainingCapacity;
+                    }
+                }
             }
         }
 
         public Water Abstract(float abstraction) {
-            if (abstraction <= GetMaxAbstraction) {
+            if (abstraction <= MaxMonthlyAbstraction) {
+
                 Storage.Volume -= abstraction;
                 return new Water(abstraction, Storage.Quality);
                 }
             else {
-                abstraction = GetMaxAbstraction;
+                abstraction = MaxMonthlyAbstraction;
                 Storage.Volume -= abstraction;
                 return new Water(abstraction, Storage.Quality);
             }

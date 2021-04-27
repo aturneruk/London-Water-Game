@@ -8,16 +8,22 @@ namespace Water {
 
         private int demandPerCapita;
 
-        private readonly Manager manager;
+        private readonly CellManager manager;
 
-        public Demand(Manager manager) {
+        public Demand(CellManager manager) {
             this.manager = manager;
             demandPerCapita = 20; // L/day
         }
 
-        public float GetDemand {
+        public float GetDailyDemand {
             get {
                 return demandPerCapita * manager.hexCell.Population.Size;
+            }            
+        }
+
+        public float GetMonthlyDemand {
+            get {
+                return GetDailyDemand * 30;
             }
         }
     }

@@ -6,7 +6,7 @@ namespace Water {
 
     public class WasteRouter {
 
-        private readonly Manager manager;
+        private readonly CellManager manager;
         private readonly Groundwater groundwater;
 
         public Water waste;
@@ -27,7 +27,7 @@ namespace Water {
             }
         }
 
-        public WasteRouter(Manager manager) {
+        public WasteRouter(CellManager manager) {
             this.manager = manager;
             groundwater = manager.groundwater;
 
@@ -46,11 +46,22 @@ namespace Water {
             }
 
             waste.Volume += input.Volume;
+
+            if (input.Volume != waste.Volume) {
+                Debug.Log("error in cell " + manager.hexCell.index);
+            }
         }
 
         public void DistributeWaste() {
 
+
             float infiltrationVolume = waste.Volume * (1f - RunoffCoefficient);
+            float maxInfiltration = groundwater.MaxInfiltration;
+
+            if (infiltrationVolume > maxInfiltration) {
+                infiltrationVolume = maxInfiltration;
+            }
+
             Water infiltration = new Water(infiltrationVolume, waste.Quality);
 
             groundwater.Infiltrate(infiltration);

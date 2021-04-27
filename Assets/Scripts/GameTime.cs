@@ -39,7 +39,7 @@ public static class GameTime {
     static private float dayFraction;
 
     static private int gameSpeed;
-    static private int baseGameSpeed = 2;
+    static private int baseGameSpeed = 60;
     static private int gameSpeedMultiplier = 1;
 
     static public void Set(int y, Month m, int d, Weekday wd) {
@@ -184,21 +184,35 @@ public static class GameTime {
 
     static public string GetLongForm() {
 
-        switch(day) {
+        switch (gameSpeedMultiplier) {
             case 1:
-            case 21:
-            case 31:
-                return day.ToString() + "st " + month.ToString() + " " + year.ToString();
-
             case 2:
-            case 22:
-                return day.ToString() + "nd " + month.ToString() + " " + year.ToString();
-
-            case 3:
-                return day.ToString() + "rd " + month.ToString() + " " + year.ToString();
-
+            case 4:
+                return month.ToString() + " " + year.ToString();
+            case 8:
+                return year.ToString();
             default:
-                return day.ToString() + "th " + month.ToString() + " " + year.ToString();
+                return year.ToString();
         }
+        
+
+
+
+        //switch (day) {
+        //    case 1:
+        //    case 21:
+        //    case 31:
+        //        return day.ToString() + "st " + month.ToString() + " " + year.ToString();
+
+        //    case 2:
+        //    case 22:
+        //        return day.ToString() + "nd " + month.ToString() + " " + year.ToString();
+
+        //    case 3:
+        //        return day.ToString() + "rd " + month.ToString() + " " + year.ToString();
+
+        //    default:
+        //        return day.ToString() + "th " + month.ToString() + " " + year.ToString();
+        //}
     }
 }

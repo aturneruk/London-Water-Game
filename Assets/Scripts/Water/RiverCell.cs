@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Water {
+
     public class RiverCell : MonoBehaviour {
 
         public int index;
@@ -12,87 +13,79 @@ namespace Water {
         public RiverCell PreviousCell { get; set; }
         public RiverCell NextCell { get; set; }
 
-        private Water[] flow = new Water[2];
+        public Water DischargeWater = new Water(0, 1);
+        public Water AbstractionWater = new Water(0, 1);
 
-        private Water inflow;
+        public Water Flow { get; private set; }
 
-        public Water Flow {
+        public float MaxAbstraction {
             get {
-                if (flow[0].Volume != 0) {
-                    return flow[0];
-                }
-                else if (flow[1].Volume != 0) {
-                    return flow[1];
+                float maxAbstraction = 600000 * 30;
+
+                if (index == 0) {
+                    if (maxAbstraction > river.GetInflow(this).Volume) {
+                        maxAbstraction = river.GetInflow(this).Volume;
+                    }
                 }
                 else {
-                    return new Water(0, 0);
-                }
+                    if (maxAbstraction > PreviousCell.Flow.Volume) {
+                        maxAbstraction = PreviousCell.Flow.Volume;
+                    }
+                }                
+
+                return maxAbstraction;
             }
         }
 
         private void Awake() {
-
-            flow[0] = new Water(5200000000, 1);
-            flow[1] = new Water(0, 1);
-
+            Flow = new Water(5200000000 * 30, 1);
         }
 
-        public void UpdateFlow(bool toggle) {
+        public void UpdateFlow() {
 
-            Discharge(river.GetInflow(this));
+            Flow = river.GetInflow(this);
 
-            if (toggle == true) {
-                if (index > 0) {
-                    flow[1] = PreviousCell.flow[0];
-                    PreviousCell.flow[0] = new Water(0, 1);
-                }
-                flow[1].Volume += inflow.Volume;
-                if (flow[1].Volume + inflow.Volume > 0) {
-                    flow[1].Quality = (flow[1].Product + inflow.Product) / (flow[1].Volume + inflow.Volume);
-                }
+            if (PreviousCell) {
+                Flow += PreviousCell.Flow;
             }
-            else if (toggle == false) {
-                if (index > 0) {
-                    flow[0] = PreviousCell.flow[1];
-                    PreviousCell.flow[1] = new Water(0, 1);
-                }
-                flow[0].Volume += inflow.Volume;
-                if (flow[0].Volume + inflow.Volume > 0) {
-                    flow[0].Quality = (flow[0].Product + inflow.Product) / (flow[0].Volume + inflow.Volume);
-                }
-            }
-            else {
-                throw new System.ArgumentNullException("The toggle must be either true or false;");
-            }            
 
-            inflow.Volume = 0;
+            Flow += DischargeWater;
+            Flow -= AbstractionWater;
 
-            if (flow[0].Volume == 0 && flow[1].Volume == 0) {
+            DischargeWater.Volume = 0;
+            AbstractionWater.Volume = 0;
+
+            if (Flow.Volume < 0) {
                 hexCell.MainColor = Color.white;
+                throw new System.ArgumentOutOfRangeException("Negative river flow in river cell " + index + ". Flow is " + Flow.Volume);
             }
         }
 
-        public void Discharge(Water discharge) {           
+        public void Discharge(Water discharge) {
 
-
-            if (inflow.Volume + discharge.Volume > 0) {
-                inflow.Quality = (inflow.Product + discharge.Product) / (inflow.Volume + discharge.Volume);
+            if (DischargeWater.Volume + discharge.Volume > 0) {
+                DischargeWater.Quality = (DischargeWater.Product + discharge.Product) / (DischargeWater.Volume + discharge.Volume);
             }
             else {
-                inflow.Quality = 1;
+                DischargeWater.Quality = 1;
             }
 
-            inflow.Volume += discharge.Volume;
+            DischargeWater.Volume += discharge.Volume;
         }
 
-        //public Water Abstract(float demand) {
+        public Water Abstract(float demand) {
 
-        //    if (demand <= Water.Volume) {
-        //        return new Water(demand, Water.Quality);
-        //    }
-        //    else {
-        //        return new Water(Water.Volume, Water.Quality);
-        //    }
-        //}
+            if (demand <= MaxAbstraction) {
+                AbstractionWater.Volume += demand;
+                return new Water(demand, Flow.Quality);
+            }
+            else {
+
+                AbstractionWater.Volume += MaxAbstraction;
+                return new Water(MaxAbstraction, Flow.Quality);
+            }
+
+            // return new Water(0, 1);
+        }
     }
 }

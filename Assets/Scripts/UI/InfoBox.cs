@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,22 +9,37 @@ namespace UI {
 
         public HexGrid hexGrid;
 
+        CanvasGroup activeInfoBox;
+
         [SerializeField]
         CanvasGroup CellInfoBox;
         [SerializeField]
-        Text hexCellIndex, cellPopulation, cellBorough, boroughPopulation, waterDemand, waterSupply, groundwaterLevel, groundwaterQuality;
+        Text hexCellIndex, cellPopulation, cellBorough, boroughPopulation, waterDemand, groundwaterSupply, groundwaterLevel, groundwaterQuality, riverSupply, reservoirSupply,  waterSupply;
 
         [SerializeField]
         CanvasGroup RiverInfoBox;
         [SerializeField]
         Text hexCellIndexRiver, riverCellIndex, riverFlow, riverQuality, riverAbstraction, riverDischarge, dischargeQuality;
 
+        [SerializeField]
+        CanvasGroup EmptyInfoBox;
+        [SerializeField]
+        Text emptyCellIndex, emptyCellPopulation, newReservoir, newWWTP;
+
+        [SerializeField]
+        CanvasGroup ReservoirInfoBox;
+        [SerializeField]
+        Text reservoirCellIndex, reservoirLevel, reservoirCapacity, reservoirUpgrade;
+
+        [SerializeField]
+        CanvasGroup WWTPInfoBox;
+        [SerializeField]
+        Text wwtpCellIndex, wwtpLevel, wwtpCapacity, wwtpUpgrade;
 
         private HexCell selectedCell;
 
         void Start() {
-            HideCellWindow();
-            HideRiverWindow();
+            CloseAllWindows();
         }
 
         // Update is called once per frame
@@ -47,20 +62,39 @@ namespace UI {
                 if (selectedCell != newCell) {
 
                     if (selectedCell) {
-                        HideCellWindow();
-                        HideRiverWindow();
                         DeselectCell(selectedCell);
+                        HideWindow(activeInfoBox);
                     }
 
                     selectedCell = newCell;
 
                     if (selectedCell.riverDistance != 0) {
-                        SelectCell(selectedCell);
-                        ShowCellWindow();
+                        if (selectedCell.Population.Size != 0) {
+                            activeInfoBox = CellInfoBox;
+                            SelectCell(selectedCell);
+                            ShowWindow();
+                        }
+                        else if (selectedCell.GetComponent<Water.Reservoir>() != null) {
+                            activeInfoBox = ReservoirInfoBox;
+                            SelectCell(selectedCell);
+                            ShowWindow();
+                        }
+                        else if (selectedCell.GetComponent<Water.WWTP>() != null) {
+                            activeInfoBox = WWTPInfoBox;
+                            SelectCell(selectedCell);
+                            ShowWindow();
+                        }
+                        else {
+                            activeInfoBox = EmptyInfoBox;
+                            SelectCell(selectedCell);
+                            ShowWindow();
+                        }
+
                     }
                     else if (selectedCell.riverDistance == 0) {
+                        activeInfoBox = RiverInfoBox;
                         SelectCell(selectedCell);
-                        ShowRiverWindow();
+                        ShowWindow();
                     }
                     else {
                         throw new System.NullReferenceException("The selected cell does not have a river distance set");
@@ -72,70 +106,118 @@ namespace UI {
                     DeselectCell(selectedCell);
                 }
                 selectedCell = null;
-                HideCellWindow();
-                HideRiverWindow();
+                HideWindow(activeInfoBox);
             }
         }
 
         public void CloseButton() {
-            HideCellWindow();
-            HideRiverWindow();
             DeselectCell(selectedCell);
+            HideWindow(activeInfoBox);
+            selectedCell = null;
         }
 
-        private void ShowCellWindow() {
-            CellInfoBox.alpha = 1f;
-            CellInfoBox.interactable = true;
-            CellInfoBox.blocksRaycasts = true;
+        public void BuildReservoir() {
+            HideWindow(EmptyInfoBox);
+            activeInfoBox = ReservoirInfoBox;
+            selectedCell.BuildReservoir();
+            SelectCell(selectedCell);
+            ShowWindow();
         }
 
-        private void HideCellWindow() {
-            CellInfoBox.alpha = 0f;
-            CellInfoBox.interactable = false;
-            CellInfoBox.blocksRaycasts = false;
+        public void UpgradeReservoir() {
+            selectedCell.GetComponent<Water.Reservoir>().UpgradeReservoir();
+            SelectCell(selectedCell);
         }
 
-        private void ShowRiverWindow() {
-            RiverInfoBox.alpha = 1f;
-            RiverInfoBox.interactable = true;
-            RiverInfoBox.blocksRaycasts = true;
+        public void BuildWWTP() {
+            HideWindow(EmptyInfoBox);
+            activeInfoBox = WWTPInfoBox;
+            ShowWindow();
         }
 
-        private void HideRiverWindow() {
-            RiverInfoBox.alpha = 0f;
-            RiverInfoBox.interactable = false;
-            RiverInfoBox.blocksRaycasts = false;
+        public void UpgradeWWTP() {
+            //TODO
+        }
+
+        private void CloseAllWindows() {
+            HideWindow(CellInfoBox);
+            HideWindow(RiverInfoBox);
+            HideWindow(EmptyInfoBox);
+            HideWindow(ReservoirInfoBox);
+            HideWindow(WWTPInfoBox);
+        }
+
+        private void ShowWindow() {
+            activeInfoBox.alpha = 1f;
+            activeInfoBox.interactable = true;
+            activeInfoBox.blocksRaycasts = true;
+        }
+
+        private void HideWindow(CanvasGroup canvasGroup) {
+            if (canvasGroup == activeInfoBox) {
+                activeInfoBox = null;
+            }
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
+
+        void SelectCell(HexCell cell) {
+
+            if (activeInfoBox == CellInfoBox) {
+                cell.HighlightColor = HexMetrics.selectedColor;
+                Borough borough = cell.borough;
+
+                if (borough.Cells != null) {
+                    foreach (HexCell boroughCell in borough.Cells) {
+                        if (boroughCell != cell) {
+                            boroughCell.HighlightColor = HexMetrics.selectedBoroughColor;
+                        }
+                    }
+                }
+            }
+            else if (activeInfoBox == ReservoirInfoBox) {
+                cell.HighlightColor = HexMetrics.selectedColor;
+                Water.Reservoir reservoir = selectedCell.gameObject.GetComponent<Water.Reservoir>();
+                foreach (HexCell areaCell in reservoir.serviceArea) {
+                    areaCell.HighlightColor = Color.red;
+                }
+            }
+            else {
+                cell.HighlightColor = HexMetrics.selectedColor;
+            }
         }
 
         void DeselectCell(HexCell cell) {
 
-            Borough borough = cell.borough;
+            if (activeInfoBox == CellInfoBox) {
+                Borough borough = cell.borough;
 
-            if (borough.Cells != null) {
-                foreach (HexCell boroughCell in borough.Cells)
-                    boroughCell.HighlightColor = null;
+                if (borough.Cells != null) {
+                    foreach (HexCell boroughCell in borough.Cells)
+                        boroughCell.HighlightColor = null;
+                }
+                else {
+                    cell.HighlightColor = null;
+                }
+            }
+            else if (activeInfoBox == ReservoirInfoBox) {
+                cell.HighlightColor = null;
+                Water.Reservoir reservoir = selectedCell.gameObject.GetComponent<Water.Reservoir>();
+                foreach (HexCell areaCell in reservoir.serviceArea) {
+                    areaCell.HighlightColor = null;
+                }
             }
             else {
                 cell.HighlightColor = null;
             }
-        }
 
-        void SelectCell(HexCell cell) {
-            cell.HighlightColor = HexMetrics.selectedColor;
-            Borough borough = cell.borough;
 
-            if (borough.Cells != null) {
-                foreach (HexCell boroughCell in borough.Cells) {
-                    if (boroughCell != cell) {
-                        boroughCell.HighlightColor = HexMetrics.selectedBoroughColor;
-                    }
-                }
-            }
         }
 
         void UpdateInfo() {
 
-            if (selectedCell.riverDistance != 0) {
+            if (activeInfoBox == CellInfoBox) {
                 hexCellIndex.text = "Cell " + selectedCell.index.ToString();
                 cellPopulation.text = "Population: " + selectedCell.Population.ToString();
 
@@ -148,26 +230,54 @@ namespace UI {
                     boroughPopulation.text = null;
                 }
 
-                waterDemand.text = "Demand: " + selectedCell.waterManager.FormattedDemand + " L/day";
-                waterSupply.text = "Supply: " + selectedCell.waterManager.FormattedSupply + " L/day";
-                groundwaterLevel.text = "Groundwater remaining: " + selectedCell.waterManager.groundwater.Storage.Level.ToString("P2");
-                groundwaterQuality.text = "Groundwater quality: " + selectedCell.waterManager.groundwater.Storage.Quality.ToString("P2");
+                waterDemand.text = "Demand: " + selectedCell.waterManager.Demand.FormattedVolume;
+
+                groundwaterSupply.text = "Supplied:" + selectedCell.waterManager.groundwaterSupply.FormattedVolume;
+                groundwaterLevel.text = "Remaining: " + selectedCell.waterManager.groundwater.Storage.FormattedLevel;
+                groundwaterQuality.text = "Quality: " + selectedCell.waterManager.groundwater.Storage.FormattedQuality;
+                riverSupply.text = "Supplied: " + selectedCell.waterManager.riverSupply.FormattedVolume;
+
+                reservoirSupply.text = "Supplied: " + selectedCell.waterManager.reservoirSupply.FormattedVolume;
+
+                waterSupply.text = "Total supplied: " + selectedCell.waterManager.Supply.FormattedVolume;
             }
-            else if (selectedCell.riverDistance == 0) {
+            else if (activeInfoBox == EmptyInfoBox) {
+                emptyCellIndex.text = "Cell " + selectedCell.index.ToString();
+                emptyCellPopulation.text = "Population: " + selectedCell.Population.ToString();
+                if (selectedCell.GetComponent<Water.Reservoir>() == null) {
+                    newReservoir.text = "0 → 1";
+                }
+
+                if (selectedCell.GetComponent<Water.WWTP>() == null) {
+                    newWWTP.text = "0 → 1";
+                }
+            }
+            else if (activeInfoBox == RiverInfoBox) {
 
                 Water.RiverCell riverCell = selectedCell.gameObject.GetComponent<Water.RiverCell>();
 
                 hexCellIndexRiver.text = "Cell " + selectedCell.index.ToString();
                 riverCellIndex.text = "River cell: " + riverCell.index.ToString();
 
-                riverFlow.text = "Flow: " + riverCell.Flow.Volume.ToString();
-                riverQuality.text = "River Quality: " + riverCell.Flow.Quality.ToString("P2");
+                riverFlow.text = "Flow: " + riverCell.Flow.FormattedVolume; ;
+                riverQuality.text = "River Quality: " + riverCell.Flow.FormattedQuality;
 
-                riverAbstraction.text = "Not implemented yet";
-                riverDischarge.text = "Not implemented yet";
-                dischargeQuality.text = "Not Implemented yet";
+                riverAbstraction.text = "Abstraction: " + riverCell.AbstractionWater.FormattedVolume;
+                riverDischarge.text = "Discharge: " + riverCell.DischargeWater.FormattedVolume;
+                dischargeQuality.text = "Discharge quality: " + riverCell.DischargeWater.FormattedQuality;
             }
+            else if (activeInfoBox == ReservoirInfoBox) {
 
+                Water.Reservoir reservoir = selectedCell.gameObject.GetComponent<Water.Reservoir>();
+
+                reservoirCellIndex.text = "Cell " + selectedCell.index.ToString();
+                reservoirLevel.text = "Level " + reservoir.Grade + " reservoir";
+                reservoirCapacity.text = "Capacity: " + reservoir.Supply.FormattedMaxCapacity;
+                reservoirUpgrade.text = reservoir.Grade + " → " + (reservoir.Grade + 1);
+            }
+            else if (activeInfoBox == WWTPInfoBox) {
+
+            }
         }
     }
 }

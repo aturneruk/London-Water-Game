@@ -15,11 +15,11 @@ public class Population : MonoBehaviour {
     }
 
     private void OnEnable() {
-        GameTime.NewWeek += UpdatePopulation;
+        GameTime.NewYear += UpdatePopulation;
     }
 
     private void OnDisable() {
-        GameTime.NewWeek -= UpdatePopulation;
+        GameTime.NewYear -= UpdatePopulation;
     }
 
     public override string ToString() {

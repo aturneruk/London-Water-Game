@@ -5,9 +5,10 @@ public class HexMetrics {
     public const float outerRadius = 10f;
     public const float innerRadius = outerRadius * 0.866025404f;
 
-    public static readonly Color defaultColor = Color.white;
+    public static readonly Color defaultColor = new Color(0.8f,0.8f,0.8f,1);
     public static readonly Color boroughColor = Color.grey;
     public static readonly Color riverColor = Color.blue;
+    public static readonly Color reservoirColor = Color.cyan;
     public static Color selectedColor = Color.cyan;
     public static Color selectedBoroughColor = Color.yellow;
 
