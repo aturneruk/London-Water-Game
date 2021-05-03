@@ -29,6 +29,10 @@ namespace Water {
                 HexCell hexCell = hexGrid.GetCellFromIndex(hexCellIndex);
                 hexCells.Add(hexCell);
                 hexCell.riverDistance = 0;
+                hexCell.riverDistanceSet = true;
+
+                hexGrid.GetComponent<GridManager>().RemoveCellManager(hexCell.GetComponent<CellManager>());
+                Destroy(hexCell.GetComponent<Population>());
 
                 RiverCell riverCell = hexCell.gameObject.AddComponent<RiverCell>();
                 riverCells.Add(riverCell);
@@ -68,8 +72,9 @@ namespace Water {
 
                         HexCell neighbor = cell.GetNeighbor(d);
 
-                        if (neighbor && neighbor.riverDistance == null) {
+                        if (neighbor && neighbor.riverDistanceSet == false) {
                             neighbor.riverDistance = level;
+                            neighbor.riverDistanceSet = true;
                             changed++;
                             nextCells.Add(neighbor);
 
@@ -80,7 +85,8 @@ namespace Water {
                                     int random = rng.Next(6);
                                     HexCell neighbor1 = neighbor.GetNeighbor((HexDirection)random);
                                     if (neighbor1 && neighbor1.riverDistance == level - 1) {
-                                        neighbor.overlandFlowCell = neighbor1;
+                                        neighbor.waterManager.overlandFlowNext = neighbor1.waterManager;
+                                        neighbor1.waterManager.overlandFlowPrevious.Add(neighbor.waterManager);
                                         set = true;
                                     }
                                 }
@@ -93,11 +99,13 @@ namespace Water {
                     return;
                 }
 
-                level++;
-                changed = 0;
+                gameObject.GetComponent<GridManager>().AddCellManagerLevel(level, currentCells);
+
                 currentCells.Clear();
                 currentCells.AddRange(nextCells);
                 nextCells.Clear();
+                changed = 0;
+                level++;
             }
         }
 
@@ -110,7 +118,18 @@ namespace Water {
                     HexCell neighbor = hexCells[i].GetNeighbor(d);
 
                     if (neighbor && neighbor.riverDistance == 1) {
-                        neighbor.dischargeCell = riverCells[i];
+
+                        CellManager manager = neighbor.waterManager;
+
+                        if (manager.riverDischargeCell == null) {
+                            manager.riverDischargeCell = riverCells[i];
+                            riverCells[i].DischargeCells.Add(manager);
+                        }
+                        else {
+                            manager.riverDischargeCell.DischargeCells.Remove(manager);
+                            manager.riverDischargeCell = riverCells[i];
+                            riverCells[i].DischargeCells.Add(manager);
+                        }
                     }
                 }
             }
@@ -123,7 +142,20 @@ namespace Water {
                     HexCell neighbor = hexCells[i].GetNeighbor(d);
 
                     if (neighbor && neighbor.riverDistance == 1) {
-                        neighbor.abstractionCell = riverCells[i];
+
+                        CellManager manager = neighbor.waterManager;
+
+                        if (manager.riverAbstractionCell == null) {
+                            manager.riverAbstractionCell = riverCells[i];
+                            riverCells[i].AbstractionCells.Add(manager);
+                        }
+                        else {
+                            manager.riverAbstractionCell.AbstractionCells.Remove(manager);
+                            manager.riverAbstractionCell = riverCells[i];
+                            riverCells[i].AbstractionCells.Add(manager);
+                        }
+
+
                     }
                 }
             }

@@ -14,30 +14,43 @@ namespace Water {
         public Groundwater(CellManager manager) {
             this.manager = manager;
             Storage = new Water(1000000000, 1, 5000000000);
+            Storage = new Water(1000000000, 1, 5000000000);
         }
 
-        public float MaxDailyAbstraction {
+        private float MaxDailyAbstraction {
             get {
-
-                if (maxAbstraction * Storage.Level * Storage.Level >= Storage.Volume) {
-                    return maxAbstraction * Storage.Level * Storage.Level;
+                if (Storage.Level < 1e-6) {
+                    return Storage.Volume;
                 }
                 else {
-                    return Storage.Volume;
+                    return maxAbstraction * Storage.Level * Storage.Level;
                 }
             }
         }
 
-        public float MaxMonthlyAbstraction {
+        private float MaxMonthlyAbstraction {
             get {
                 return MaxDailyAbstraction * 30;
+            }
+        }
+
+        public float MaxAbstraction {
+            get {
+                if (Storage.Volume == 0) {
+                    return 0;
+                }
+                else if (MaxMonthlyAbstraction > Storage.Volume) {
+                    return Storage.Volume;
+                }
+                else {
+                    return MaxMonthlyAbstraction;
+                }
             }
         }
 
         private float MaxDailyInfiltration {
             get {
                 return maxInfiltration;
-
             }
         }
 
@@ -66,13 +79,12 @@ namespace Water {
         }
 
         public Water Abstract(float abstraction) {
-            if (abstraction <= MaxMonthlyAbstraction) {
-
+            if (abstraction <= MaxAbstraction) {
                 Storage.Volume -= abstraction;
                 return new Water(abstraction, Storage.Quality);
-                }
+            }
             else {
-                abstraction = MaxMonthlyAbstraction;
+                abstraction = MaxAbstraction;
                 Storage.Volume -= abstraction;
                 return new Water(abstraction, Storage.Quality);
             }

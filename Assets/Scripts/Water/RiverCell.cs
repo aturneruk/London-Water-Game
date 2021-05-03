@@ -13,6 +13,9 @@ namespace Water {
         public RiverCell PreviousCell { get; set; }
         public RiverCell NextCell { get; set; }
 
+        public List<CellManager> DischargeCells = new List<CellManager>();
+        public List<CellManager> AbstractionCells = new List<CellManager>();
+
         public Water DischargeWater = new Water(0, 1);
         public Water AbstractionWater = new Water(0, 1);
 
@@ -23,15 +26,21 @@ namespace Water {
                 float maxAbstraction = 600000 * 30;
 
                 if (index == 0) {
-                    if (maxAbstraction > river.GetInflow(this).Volume) {
-                        maxAbstraction = river.GetInflow(this).Volume;
+                    if ((river.GetInflow(this).Volume - AbstractionWater.Volume) == 0) {
+                        maxAbstraction = 0;
+                    }
+                    else if (maxAbstraction > (river.GetInflow(this).Volume - AbstractionWater.Volume)) {
+                        maxAbstraction = river.GetInflow(this).Volume - AbstractionWater.Volume;
                     }
                 }
                 else {
-                    if (maxAbstraction > PreviousCell.Flow.Volume) {
-                        maxAbstraction = PreviousCell.Flow.Volume;
+                    if ((PreviousCell.Flow.Volume - AbstractionWater.Volume) == 0) {
+                        maxAbstraction = 0;
                     }
-                }                
+                    else if (maxAbstraction > (PreviousCell.Flow.Volume - AbstractionWater.Volume)) {
+                        maxAbstraction = PreviousCell.Flow.Volume - AbstractionWater.Volume;
+                    }
+                }
 
                 return maxAbstraction;
             }
@@ -43,10 +52,16 @@ namespace Water {
 
         public void UpdateFlow() {
 
-            Flow = river.GetInflow(this);
+            Flow = new Water(0, 1);
 
             if (PreviousCell) {
                 Flow += PreviousCell.Flow;
+            }
+
+            Flow += river.GetInflow(this);
+
+            foreach (CellManager manager in DischargeCells) {
+                Flow += manager.wasteRouter.GetOverlandFlow();
             }
 
             Flow += DischargeWater;
@@ -80,7 +95,6 @@ namespace Water {
                 return new Water(demand, Flow.Quality);
             }
             else {
-
                 AbstractionWater.Volume += MaxAbstraction;
                 return new Water(MaxAbstraction, Flow.Quality);
             }

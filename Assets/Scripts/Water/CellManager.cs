@@ -9,12 +9,15 @@ namespace Water {
         public HexCell hexCell;
         private HexGrid hexGrid;
 
-        private RiverCell riverAbstractionCell;
-        private RiverCell riverDischargeCell;
+        public List<CellManager> overlandFlowPrevious = new List<CellManager>();
+        public CellManager overlandFlowNext;
+
+        public RiverCell riverAbstractionCell;
+        public RiverCell riverDischargeCell;
 
         public Groundwater groundwater;
         private Demand waterDemand;
-        private WasteRouter wasteRouter;
+        public WasteRouter wasteRouter;
 
         public List<Reservoir> reservoirs = new List<Reservoir>();
 
@@ -36,9 +39,6 @@ namespace Water {
         private void Start() {
             hexCell = gameObject.GetComponent<HexCell>();
             hexGrid = hexCell.GetComponentInParent<HexGrid>();
-
-            riverAbstractionCell = hexCell.abstractionCell;
-            riverDischargeCell = hexCell.dischargeCell;
 
             groundwater = new Groundwater(this);
             waterDemand = new Demand(this);
@@ -63,7 +63,7 @@ namespace Water {
             Demand = new Water(waterDemand.GetMonthlyDemand, 1);
             reducedDemand = Demand;
 
-            maxGroundwaterAbstraction = groundwater.MaxMonthlyAbstraction;
+            maxGroundwaterAbstraction = groundwater.MaxAbstraction;
             groundwaterSupply.Quality = groundwater.Storage.Quality;
 
             if (hexCell.riverDistance == 1 && riverAbstractionCell) {
@@ -80,8 +80,10 @@ namespace Water {
             groundwaterSupply.Volume = 0;
             riverSupply.Volume = 0;
 
-            // stop if demand is met
-            while (reducedDemand.Volume > 0) {
+            bool complete = false;
+
+            // stop if demand is met or allocation reaches end
+            while (reducedDemand.Volume > 0 && !complete) {
 
                 // Do reservoirs first
                 foreach (Reservoir reservoir in reservoirs) {
@@ -91,7 +93,7 @@ namespace Water {
                 }
 
                 // Then prefer river vs groundwater based on quality (but prefer river)
-                if (riverSupply.Quality >= groundwaterSupply.Quality) {
+                if (riverSupply.Quality >= groundwaterSupply.Quality && riverAbstractionCell) {
 
                     Water supplied = riverAbstractionCell.Abstract(reducedDemand.Volume);
                     riverSupply += supplied;
@@ -119,6 +121,8 @@ namespace Water {
                         reducedDemand.Volume -= supplied.Volume;
                     }
                 }
+
+                complete = true;
             }
 
             Supply = reservoirSupply + groundwaterSupply + riverSupply;

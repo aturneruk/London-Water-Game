@@ -26,15 +26,13 @@ public class HexCell : MonoBehaviour {
     public Population Population;
 
     // Network data
-    public int? riverDistance;
+    public bool riverDistanceSet = false;
+    public int riverDistance;
 
     // River data
     public bool hasRiver;
     public bool isThames;
     public bool isRiverside;
-    public HexCell overlandFlowCell;
-    public Water.RiverCell abstractionCell;
-    public Water.RiverCell dischargeCell;
 
     public Water.CellManager waterManager;
 
@@ -136,19 +134,19 @@ public class HexCell : MonoBehaviour {
     }
 
     private void OnDrawGizmosSelected() {
-        HexCell cell = this;
+        Water.CellManager manager = this.waterManager;
 
         for (int? i = riverDistance; i > 0; i--) {
             Gizmos.color = Color.black;
-            if (cell.overlandFlowCell) {
-                Gizmos.DrawLine(cell.transform.position, cell.overlandFlowCell.transform.position);
-                cell = cell.overlandFlowCell;
+            if (manager.overlandFlowNext) {
+                Gizmos.DrawLine(manager.transform.position, manager.overlandFlowNext.transform.position);
+                manager = manager.overlandFlowNext;
             }
         }
 
-        if (abstractionCell && dischargeCell) {
+        if (manager.riverAbstractionCell && manager.riverDischargeCell) {
             //Gizmos.DrawLine(transform.position, abstractionCell.transform.position);
-            Gizmos.DrawLine(transform.position, dischargeCell.transform.position);
+            Gizmos.DrawLine(manager.transform.position, manager.riverDischargeCell.transform.position);
         }
 
     }

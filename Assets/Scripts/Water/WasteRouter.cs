@@ -47,13 +47,12 @@ namespace Water {
 
             waste.Volume += input.Volume;
 
-            if (input.Volume != waste.Volume) {
-                Debug.Log("error in cell " + manager.hexCell.index);
-            }
+            //if (input.Volume != waste.Volume) {
+            //    Debug.Log("error in cell " + manager.hexCell.index);
+            //}
         }
 
         public void DistributeWaste() {
-
 
             float infiltrationVolume = waste.Volume * (1f - RunoffCoefficient);
             float maxInfiltration = groundwater.MaxInfiltration;
@@ -62,10 +61,18 @@ namespace Water {
                 infiltrationVolume = maxInfiltration;
             }
 
-            Water infiltration = new Water(infiltrationVolume, waste.Quality);
+            if (infiltrationVolume != 0) {
+                Water infiltration = new Water(infiltrationVolume, waste.Quality);
+                groundwater.Infiltrate(infiltration);
+                waste.Volume -= infiltration.Volume;
+            }
+        }
 
-            groundwater.Infiltrate(infiltration);
+        public Water GetOverlandFlow() {
+
+            Water flow = new Water(waste.Volume, waste.Quality);
             waste.Volume = 0;
+            return flow;
         }
     }
 }
