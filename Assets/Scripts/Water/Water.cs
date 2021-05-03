@@ -140,7 +140,6 @@ namespace Water {
 
         public static Water operator -(Water source, Water abstraction) {
 
-
             if (abstraction.Quality == 1) {
                 return new Water(source.Volume - abstraction.Volume, source.Quality);
             }
@@ -150,6 +149,11 @@ namespace Water {
             else {
                 throw new System.ArgumentOutOfRangeException("One of the water qualities when doing an abstraction should be 1");
             }
+        }
+
+        public static Water operator -(Water source, float abstraction) {
+
+            return new Water(source.Volume - abstraction, source.Quality);
         }
 
         // Constructors
