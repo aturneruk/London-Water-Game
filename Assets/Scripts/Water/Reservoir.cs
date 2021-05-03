@@ -71,7 +71,7 @@ namespace Water {
             List<HexCell> cells = new List<HexCell> { hexCell };
             List<HexCell> newCells = new List<HexCell>();
 
-            for (int i = 0; i < Grade; i++) {
+            for (int i = 0; i < Grade * 2; i++) {
                 foreach (HexCell cell in cells) {
                     for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
                         HexCell neighbor = cell.GetNeighbor(d);
