@@ -29,7 +29,9 @@ namespace UI {
         [SerializeField]
         CanvasGroup ReservoirInfoBox;
         [SerializeField]
-        Text reservoirCellIndex, reservoirLevel, reservoirStorageCapacity, reservoirStorageLevel, reservoirStorageQuality, reservoirUpgrade;
+        Text reservoirCellIndex, reservoirLevel, reservoirStorageCapacity, reservoirStorageLevel, reservoirStorageQuality, reservoirAbstractionVolume, reservoirSupplyVolume, reservoirUpgrade;
+        [SerializeField]
+        Slider supplyMultiplierSlider;
 
         [SerializeField]
         CanvasGroup WWTPInfoBox;
@@ -274,7 +276,12 @@ namespace UI {
                 reservoirStorageCapacity.text = "Capacity: " + reservoir.Storage.FormattedMaxCapacity;
                 reservoirStorageLevel.text = "Remaining: " + reservoir.Storage.FormattedLevel;
                 reservoirStorageQuality.text = "Quality: " + reservoir.Storage.FormattedQuality;
+                reservoirAbstractionVolume.text = "Abstraction: " + reservoir.RiverAbstraction.FormattedVolume;
+                reservoirSupplyVolume.text = "Supply: " + reservoir.CellSupply.FormattedVolume;
                 reservoirUpgrade.text = reservoir.Level + " → " + (reservoir.Level + 1);
+
+                reservoir.supplyMultiplier = supplyMultiplierSlider.value;
+
             }
             else if (activeInfoBox == WWTPInfoBox) {
 
