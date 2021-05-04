@@ -24,15 +24,15 @@ namespace Water {
         public Water Demand;
         private Water reducedDemand;
         public Water Supply;
-        public float supplyRatio;
+        public double supplyRatio;
 
         public Water Sewage;
 
         public Water groundwaterSupply;
-        private float maxGroundwaterAbstraction;
+        private double maxGroundwaterAbstraction;
 
         public Water riverSupply;
-        private float maxRiverAbstraction;
+        private double maxRiverAbstraction;
 
         public Water reservoirSupply;
 
@@ -64,11 +64,9 @@ namespace Water {
             reducedDemand = Demand;
 
             maxGroundwaterAbstraction = groundwater.MaxAbstraction;
-            groundwaterSupply.Quality = groundwater.Storage.Quality;
 
             if (hexCell.riverDistance == 1 && riverAbstractionCell) {
                 maxRiverAbstraction = riverAbstractionCell.MaxAbstraction;
-                riverSupply.Quality = riverAbstractionCell.Flow.Quality;
             }
 
             // rainfall and pipe data to go here
@@ -82,44 +80,50 @@ namespace Water {
 
             bool complete = false;
 
-            // stop if demand is met or allocation reaches end
+            // stop if demand is met or allocation reaches last source
             while (reducedDemand.Volume > 0 && !complete) {
+
+                Water supplied;
 
                 // Do reservoirs first
                 foreach (Reservoir reservoir in reservoirs) {
-                    Water supplied = reservoir.Abstract(reducedDemand);
+                    supplied = reservoir.Abstract(reducedDemand);
                     reservoirSupply += supplied;
                     reducedDemand.Volume -= supplied.Volume;
                 }
 
-                // Then prefer river vs groundwater based on quality (but prefer river)
-                if (riverSupply.Quality >= groundwaterSupply.Quality && riverAbstractionCell) {
+                // Then prefer river vs groundwater based on quality (but prefer river if equal)
 
-                    Water supplied = riverAbstractionCell.Abstract(reducedDemand.Volume);
-                    riverSupply += supplied;
-                    reducedDemand.Volume -= supplied.Volume;
+                if (riverAbstractionCell) {
+                    if (riverAbstractionCell.flow.Quality >= groundwater.Storage.Quality) {
+                        supplied = riverAbstractionCell.Abstract(reducedDemand.Volume);
+                        riverSupply += supplied;
+                        reducedDemand.Volume -= supplied.Volume;
 
-                    if (riverSupply.Volume < 0) {
-                        Debug.Log(hexCell.index);
-                        Debug.Log(riverSupply.Volume);
-                        Debug.Log(reducedDemand.Volume);
+                        supplied = groundwater.Abstract(reducedDemand.Volume);
+                        groundwaterSupply += supplied;
+                        reducedDemand.Volume -= supplied.Volume;
                     }
+                    else {
+                        supplied = groundwater.Abstract(reducedDemand.Volume);
+                        groundwaterSupply += supplied;
+                        reducedDemand.Volume -= supplied.Volume;
 
-                    supplied = groundwater.Abstract(reducedDemand.Volume);
-                    groundwaterSupply += supplied;
-                    reducedDemand.Volume -= supplied.Volume;                  
-                }
-                else {
-
-                    Water supplied = groundwater.Abstract(reducedDemand.Volume);
-                    groundwaterSupply += supplied;
-                    reducedDemand.Volume -= supplied.Volume;
-
-                    if (riverAbstractionCell) {
                         supplied = riverAbstractionCell.Abstract(reducedDemand.Volume);
                         riverSupply += supplied;
                         reducedDemand.Volume -= supplied.Volume;
                     }
+                }
+                else {
+                    supplied = groundwater.Abstract(reducedDemand.Volume);
+                    groundwaterSupply += supplied;
+                    reducedDemand.Volume -= supplied.Volume;
+                }
+
+                if (riverSupply.Volume < 0) {
+                    Debug.Log(hexCell.index);
+                    Debug.Log(riverSupply.Volume);
+                    Debug.Log(reducedDemand.Volume);
                 }
 
                 complete = true;
@@ -148,8 +152,6 @@ namespace Water {
 
         private void Distribute() {
             wasteRouter.DistributeWaste();
-
-            groundwaterSupply.Quality = groundwater.Storage.Quality;
         }
     }
 }
