@@ -35,6 +35,19 @@ namespace Water {
             }
         }
 
+        public double ReservoirMaxAbstraction {
+            get {
+                double maxAbstraction = double.PositiveInfinity;
+                if (flow.Volume == 0) {
+                    maxAbstraction = 0;
+                }
+                else if (maxAbstraction > flow.Volume) {
+                    maxAbstraction = flow.Volume;
+                }
+                return maxAbstraction;
+            }
+        }
+
         private void Awake() {
             flow = new Water(5200000000 * 30, 1);
         }
@@ -93,5 +106,20 @@ namespace Water {
                 return new Water(MaxAbstraction, flow.Quality);
             }
         }
+
+        public Water ReservoirAbstract(double demand) {
+
+            if (demand <= ReservoirMaxAbstraction) {
+                flow.Volume -= demand;
+                Abstractions.Volume += demand;
+                return new Water(demand, flow.Quality);
+            }
+            else {
+                flow.Volume -= ReservoirMaxAbstraction;
+                Abstractions.Volume += ReservoirMaxAbstraction;
+                return new Water(ReservoirMaxAbstraction, flow.Quality);
+            }
+        }
+
     }
 }
