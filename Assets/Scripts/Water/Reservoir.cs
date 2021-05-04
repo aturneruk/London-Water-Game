@@ -14,20 +14,20 @@ namespace Water {
         public List<HexCell> serviceArea = new List<HexCell>();
         private List<CellManager> serviceAreaCellManagers = new List<CellManager>();
 
-        private int grade;
+        private int level;
 
-        public Water Supply;
+        public Water Storage;
 
-        public int Grade {
+        public int Level {
             get {
-                return grade;
+                return level;
             }
             set {
                 if (value < 1) {
                     throw new System.ArgumentOutOfRangeException("The reservoir level must be at least 1");
                 }
-                else if (value <= capacities.Length + 1) {
-                    grade = value;
+                else if (value < capacities.Length) {
+                    level = value;
                 }
                 else {
                     throw new System.ArgumentOutOfRangeException("The reservoir has reached its maximum level");
@@ -38,7 +38,7 @@ namespace Water {
         //private int[] grades;
 
         private long[] capacities = {
-            5000000, 10000000, 15000000, 20000000, 30000000, 50000000, 100000000, 500000000, 1000000000, 5000000000, 10000000000, 15000000000, 20000000000, 30000000000, 50000000000
+            0, 5000000, 10000000, 15000000, 20000000, 30000000, 50000000, 100000000, 500000000, 1000000000, 5000000000, 10000000000, 15000000000, 20000000000, 30000000000, 50000000000
         };
 
         private void Awake() {
@@ -50,18 +50,18 @@ namespace Water {
 
             hexCell.SetMainColor();
 
-            Grade = 1;
+            Level = 1;
 
             CalculateServiceArea();
 
             gridManager.AddReservoir(this);
 
-            Supply = new Water(0, 1, capacities[grade - 1]);
+            Storage = new Water(0, 1, capacities[level]);
         }
 
         public void UpgradeReservoir() {
-            Grade++;
-            Supply.MaxCapacity = capacities[grade - 1];
+            Level++;
+            Storage.MaxCapacity = capacities[level];
             CalculateServiceArea();
         }
 
@@ -71,7 +71,7 @@ namespace Water {
             List<HexCell> cells = new List<HexCell> { hexCell };
             List<HexCell> newCells = new List<HexCell>();
 
-            for (int i = 0; i < Grade * 2; i++) {
+            for (int i = 0; i < Level * 2; i++) {
                 foreach (HexCell cell in cells) {
                     for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
                         HexCell neighbor = cell.GetNeighbor(d);
@@ -97,11 +97,11 @@ namespace Water {
 
         public Water Abstract(Water demand) {
 
-            if (demand.Volume <= Supply.MaxCapacity) {
-                return new Water(demand.Volume, Supply.Quality);
+            if (demand.Volume <= Storage.MaxCapacity) {
+                return new Water(demand.Volume, Storage.Quality);
             }
             else {
-                return new Water((double)Supply.MaxCapacity, Supply.Quality);
+                return new Water((double)Storage.MaxCapacity, Storage.Quality);
             }
         }
 

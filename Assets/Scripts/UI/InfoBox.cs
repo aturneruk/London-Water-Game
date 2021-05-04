@@ -270,9 +270,9 @@ namespace UI {
                 Water.Reservoir reservoir = selectedCell.gameObject.GetComponent<Water.Reservoir>();
 
                 reservoirCellIndex.text = "Cell " + selectedCell.index.ToString();
-                reservoirLevel.text = "Level " + reservoir.Grade + " reservoir";
-                reservoirCapacity.text = "Capacity: " + reservoir.Supply.FormattedMaxCapacity;
-                reservoirUpgrade.text = reservoir.Grade + " → " + (reservoir.Grade + 1);
+                reservoirLevel.text = "Level " + reservoir.Level + " reservoir";
+                reservoirCapacity.text = "Capacity: " + reservoir.Storage.FormattedMaxCapacity;
+                reservoirUpgrade.text = reservoir.Level + " → " + (reservoir.Level + 1);
             }
             else if (activeInfoBox == WWTPInfoBox) {
 
