@@ -6,9 +6,16 @@ namespace Water {
     public class RiverThames : MonoBehaviour {
 
         private HexGrid hexGrid;
+        private GridManager gridManager;
+
         private List<HexCell> hexCells = new List<HexCell>();
         private List<RiverCell> riverCells = new List<RiverCell>();
         public int RiverLength { get; private set; }
+
+        private float inflowValueScalar = 1;
+
+        public double inflow;
+        public double outflow; 
 
         [SerializeField]
         UnityEngine.UI.Slider inflowSlider;
@@ -16,6 +23,7 @@ namespace Water {
         private void Awake() {
 
             hexGrid = gameObject.GetComponent<HexGrid>();
+            gridManager = gameObject.GetComponent<GridManager>();
 
             CreateRiverCells();
             GenerateNetwork();
@@ -31,7 +39,7 @@ namespace Water {
                 hexCell.riverDistance = 0;
                 hexCell.riverDistanceSet = true;
 
-                hexGrid.GetComponent<GridManager>().RemoveCellManager(hexCell.GetComponent<CellManager>());
+                gridManager.RemoveCellManager(hexCell.GetComponent<CellManager>());
                 Destroy(hexCell.GetComponent<Population>());
 
                 RiverCell riverCell = hexCell.gameObject.AddComponent<RiverCell>();
@@ -39,6 +47,7 @@ namespace Water {
                 riverCell.river = this;
                 riverCell.hexCell = hexCell;
                 riverCell.index = i;
+                gridManager.riverCells.Add(riverCell);
                 if (i > 0) {
                     riverCell.PreviousCell = riverCells[i - 1];
                     riverCells[i - 1].NextCell = riverCell;
@@ -99,7 +108,7 @@ namespace Water {
                     return;
                 }
 
-                gameObject.GetComponent<GridManager>().AddCellManagerLevel(level, currentCells);
+                gameObject.GetComponent<GridManager>().AddCellManagerLevel(level, nextCells);
 
                 currentCells.Clear();
                 currentCells.AddRange(nextCells);
@@ -154,17 +163,12 @@ namespace Water {
                             manager.riverAbstractionCell = riverCells[i];
                             riverCells[i].AbstractionCells.Add(manager);
                         }
-
-
                     }
                 }
             }
         }
 
-        private float inflowValueScalar = 1;
-
         public Water GetInflow(RiverCell riverCell) {
-
             switch (riverCell.index) {
                 case 0:
                     return new Water(5200000000 * 30 * inflowValueScalar, 1);
@@ -176,16 +180,6 @@ namespace Water {
         public void UpdateSlider() {
             inflowValueScalar = inflowSlider.value;
         }
-
-
-        public void DailyRefresh() {
-
-            for (int i = riverCells.Count - 1; i >= 0; i-- ) {
-                riverCells[i].UpdateFlow();
-            }
-
-        }
-
 
         private int[] cellIndices = {
             192,
