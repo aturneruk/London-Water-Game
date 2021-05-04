@@ -16,90 +16,82 @@ namespace Water {
         public List<CellManager> DischargeCells = new List<CellManager>();
         public List<CellManager> AbstractionCells = new List<CellManager>();
 
-        public Water DischargeWater = new Water(0, 1);
-        public Water AbstractionWater = new Water(0, 1);
+        public Water Discharges = new Water(0, 1);
+        public Water Abstractions = new Water(0, 1);
 
-        public Water Flow { get; private set; }
+        public List<Water> Flows = new List<Water>();
+        public Water flow;
 
-        public float MaxAbstraction {
+        public double MaxAbstraction {
             get {
-                float maxAbstraction = 600000 * 30;
-
-                if (index == 0) {
-                    if ((river.GetInflow(this).Volume - AbstractionWater.Volume) == 0) {
-                        maxAbstraction = 0;
-                    }
-                    else if (maxAbstraction > (river.GetInflow(this).Volume - AbstractionWater.Volume)) {
-                        maxAbstraction = river.GetInflow(this).Volume - AbstractionWater.Volume;
-                    }
+                double maxAbstraction = 600000 * 30;
+                if (flow.Volume == 0) {
+                    maxAbstraction = 0;
                 }
-                else {
-                    if ((PreviousCell.Flow.Volume - AbstractionWater.Volume) == 0) {
-                        maxAbstraction = 0;
-                    }
-                    else if (maxAbstraction > (PreviousCell.Flow.Volume - AbstractionWater.Volume)) {
-                        maxAbstraction = PreviousCell.Flow.Volume - AbstractionWater.Volume;
-                    }
+                else if (maxAbstraction > flow.Volume) {
+                    maxAbstraction = flow.Volume;
                 }
-
                 return maxAbstraction;
             }
         }
 
         private void Awake() {
-            Flow = new Water(5200000000 * 30, 1);
+            flow = new Water(5200000000 * 30, 1);
         }
 
         public void UpdateFlow() {
 
-            Flow = new Water(0, 1);
+            Abstractions.Volume = 0;
+            Discharges.Volume = 0;
+
+            if (NextCell) {
+                flow = new Water(0, 1);
+            }
+            else {
+                river.outflow += flow.Volume;
+                flow = new Water(0, 1);
+            }
 
             if (PreviousCell) {
-                Flow += PreviousCell.Flow;
+                flow += PreviousCell.flow;
+            }
+            else {
+                Water inflow = river.GetInflow(this);
+                flow += inflow;
+                river.inflow += inflow.Volume;
             }
 
-            Flow += river.GetInflow(this);
-
-            foreach (CellManager manager in DischargeCells) {
-                Flow += manager.wasteRouter.GetOverlandFlow();
-            }
-
-            Flow += DischargeWater;
-            Flow -= AbstractionWater;
-
-            DischargeWater.Volume = 0;
-            AbstractionWater.Volume = 0;
-
-            if (Flow.Volume < 0) {
+            if (flow.Volume < 0) {
                 hexCell.MainColor = Color.white;
-                throw new System.ArgumentOutOfRangeException("Negative river flow in river cell " + index + ". Flow is " + Flow.Volume);
+                throw new System.ArgumentOutOfRangeException("Negative river flow in river cell " + index + ". Flow is " + flow.Volume);
             }
         }
 
         public void Discharge(Water discharge) {
 
-            if (DischargeWater.Volume + discharge.Volume > 0) {
-                DischargeWater.Quality = (DischargeWater.Product + discharge.Product) / (DischargeWater.Volume + discharge.Volume);
+            if (flow.Volume + discharge.Volume > 0) {
+                flow.Quality = (flow.Product + discharge.Product) / (flow.Volume + discharge.Volume);
             }
             else {
-                DischargeWater.Quality = 1;
+                flow.Quality = 0;
             }
 
-            DischargeWater.Volume += discharge.Volume;
+            flow.Volume += discharge.Volume;
+            Discharges.Volume += discharge.Volume;
         }
 
-        public Water Abstract(float demand) {
+        public Water Abstract(double demand) {
 
             if (demand <= MaxAbstraction) {
-                AbstractionWater.Volume += demand;
-                return new Water(demand, Flow.Quality);
+                flow.Volume -= demand;
+                Abstractions.Volume += demand;
+                return new Water(demand, flow.Quality);
             }
             else {
-                AbstractionWater.Volume += MaxAbstraction;
-                return new Water(MaxAbstraction, Flow.Quality);
+                flow.Volume -= MaxAbstraction;
+                Abstractions.Volume += MaxAbstraction;
+                return new Water(MaxAbstraction, flow.Quality);
             }
-
-            // return new Water(0, 1);
         }
     }
 }
