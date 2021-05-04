@@ -209,13 +209,6 @@ namespace Water {
                 Storage += refilled;
             }
         }
-
-        public void DistributeWater() {
-
-            //foreach (CellManager cellManager in serviceAreaCellManagers) {
-            //    cellManager.reservoirSupply += new Water((float)Supply.MaxCapacity, 1);
-            //}
-        }
     }
 }
 
