@@ -7,14 +7,13 @@ namespace Water {
     public struct Water {
 
         // Private fields
-        private float volume;
-        private float quality;
-
+        private double volume;
+        private double quality;
 
         // Public properties
-        public float? MaxCapacity { get; set; }
+        public double? MaxCapacity { get; set; }
 
-        public float Volume {
+        public double Volume {
             get {
                 return volume;
             }
@@ -31,7 +30,7 @@ namespace Water {
             }
         }
 
-        public float Quality {
+        public double Quality {
             get {
                 return quality;
             }
@@ -45,9 +44,9 @@ namespace Water {
             }
         }
 
-        public float Level {
+        public double Level {
             get {
-                float level = Volume / (float)MaxCapacity;
+                double level = Volume / (double)MaxCapacity;
 
                 if (level >= 0 && level <= 1) {
                     return level;
@@ -58,7 +57,7 @@ namespace Water {
             }
         }
 
-        public float? RemainingCapacity {
+        public double? RemainingCapacity {
             get {
                 if (MaxCapacity == null) {
                     return null;
@@ -72,7 +71,7 @@ namespace Water {
             }
         }
 
-        public float Product {
+        public double Product {
             get {
                 return Quality * Volume;
             }
@@ -82,13 +81,13 @@ namespace Water {
         public string FormattedVolume {
             get {
                 if (Volume < 300000) {
-                    return Mathf.Round(Volume / 30f).ToString() + " L/day";
+                    return Mathf.Round((float)Volume / 30).ToString() + " L/day";
                 }
                 else if (Volume >= 300000 && Volume < 30000000) {
-                    return Mathf.Round((Volume / 30000f)).ToString("F0") + "k" + " L/day";
+                    return Mathf.Round(((float)Volume / 30000f)).ToString("F0") + "k" + " L/day";
                 }
                 else if (Volume >= 30000000) {
-                    return Mathf.Round((Volume / 30000000f)).ToString("F0") + "M" + " L/day";
+                    return Mathf.Round(((float)Volume / 30000000f)).ToString("F0") + "M" + " L/day";
                 }
                 else {
                     throw new System.ArgumentException("Something has gone wrong formatting the supply to a string");
@@ -110,16 +109,16 @@ namespace Water {
 
         public string FormattedMaxCapacity {
             get {
-                float maxCapacity = (float)MaxCapacity;
+                double maxCapacity = (double)MaxCapacity;
 
                 if (maxCapacity < 300000) {
-                    return Mathf.Round(maxCapacity / 30f).ToString() + " L/day";
+                    return Mathf.Round((float)maxCapacity / 30f).ToString() + " L/day";
                 }
                 else if (maxCapacity >= 300000 && maxCapacity < 30000000) {
-                    return Mathf.Round((maxCapacity / 30000f)).ToString("F0") + "k" + " L/day";
+                    return Mathf.Round(((float)maxCapacity / 30000f)).ToString("F0") + "k" + " L/day";
                 }
                 else if (maxCapacity >= 30000000) {
-                    return Mathf.Round((maxCapacity / 30000000f)).ToString("F0") + "M" + " L/day";
+                    return Mathf.Round(((float)maxCapacity / 30000000f)).ToString("F0") + "M" + " L/day";
                 }
                 else {
                     throw new System.ArgumentException("Something has gone wrong formatting the max capacity to a string");
@@ -151,13 +150,13 @@ namespace Water {
             }
         }
 
-        public static Water operator -(Water source, float abstraction) {
+        public static Water operator -(Water source, double abstraction) {
 
             return new Water(source.Volume - abstraction, source.Quality);
         }
 
         // Constructors
-        public Water(float volume, float quality) {
+        public Water(double volume, double quality) {
 
             if (quality >= 0 && quality <= 1) {
                 this.quality = quality;
@@ -170,7 +169,7 @@ namespace Water {
             this.volume = volume;
         }
 
-        public Water(float volume, float quality, float maxCapacity) {
+        public Water(double volume, double quality, double maxCapacity) {
 
             if (quality >= 0 && quality <= 1) {
                 this.quality = quality;

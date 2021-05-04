@@ -65,14 +65,14 @@ namespace UI {
         }
 
         public static Color PopulationColor(HexCell cell) {
-            float population = cell.Population.Size;
+            double population = cell.Population.Size;
 
             if (population > 100000) {
                 throw new System.ArgumentOutOfRangeException("Population is greater than 100000");
             }
             else {
                 // scale to set x=1 to a convenient point for the function below
-                float val = population / 30000f;
+                float val = (float)population / 30000f;
 
                 // This function has a horiztonal asymtote at y = 1.0 :-)
                 // at x = 1, y = 0.74
@@ -88,7 +88,7 @@ namespace UI {
         }
 
         public static Color GroundwaterLevelColor(HexCell cell) {
-            float val = cell.waterManager.groundwater.Storage.Level;
+            float val = (float)cell.waterManager.groundwater.Storage.Level;
 
             if (val <= 1 && val >= 0) {
                 return new Color(1f - val, 1f, 1f);
@@ -99,7 +99,7 @@ namespace UI {
         }
 
         public static Color GroundwaterQualityColor(HexCell cell) {
-            float val = cell.waterManager.groundwater.Storage.Quality;
+            float val = (float)cell.waterManager.groundwater.Storage.Quality;
 
             if (val <= 1 && val >= 0) {
                 val = val * val;

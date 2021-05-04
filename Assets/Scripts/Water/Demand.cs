@@ -15,13 +15,13 @@ namespace Water {
             demandPerCapita = 20; // L/day
         }
 
-        public float GetDailyDemand {
+        public double GetDailyDemand {
             get {
                 return demandPerCapita * manager.hexCell.Population.Size;
             }            
         }
 
-        public float GetMonthlyDemand {
+        public double GetMonthlyDemand {
             get {
                 return GetDailyDemand * 30;
             }

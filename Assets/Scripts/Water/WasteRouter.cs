@@ -54,8 +54,8 @@ namespace Water {
 
         public void DistributeWaste() {
 
-            float infiltrationVolume = waste.Volume * (1f - RunoffCoefficient);
-            float maxInfiltration = groundwater.MaxInfiltration;
+            double infiltrationVolume = waste.Volume * (1f - RunoffCoefficient);
+            double maxInfiltration = groundwater.MaxInfiltration;
 
             if (infiltrationVolume > maxInfiltration) {
                 infiltrationVolume = maxInfiltration;

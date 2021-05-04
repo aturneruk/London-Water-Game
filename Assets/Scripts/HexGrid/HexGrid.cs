@@ -115,13 +115,13 @@ public class HexGrid : MonoBehaviour {
 
     public int GetTotalPopulation() {
 
-        float totalPopulation = 0;
+        double totalPopulation = 0;
 
         foreach (HexCell cell in cells) {
             totalPopulation += cell.Population.Size;
         }
 
-        return Mathf.RoundToInt(totalPopulation);
+        return Mathf.RoundToInt((float)totalPopulation);
     }
 
     public void SetDataOverlay(Overlay overlay) {

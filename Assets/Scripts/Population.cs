@@ -5,8 +5,8 @@ using UnityEngine;
 public class Population : MonoBehaviour {
 
     HexCell hexCell;
-    public float Size { get; set; }
-    public float GrowthRate { get; set; }
+    public double Size { get; set; }
+    public double GrowthRate { get; set; }
 
     private void Awake() {
         hexCell = gameObject.GetComponent<HexCell>();
@@ -23,20 +23,20 @@ public class Population : MonoBehaviour {
     }
 
     public override string ToString() {
-        return Mathf.Round(Size).ToString(); ;
+        return Mathf.Round((float)Size).ToString(); ;
     }
 
     public void UpdatePopulation() {
-        float waterSupplyRatio = hexCell.waterManager.supplyRatio;
-        float waterSupplyFactor = 10.526f * (waterSupplyRatio * waterSupplyRatio) - 8.526f;
+        double waterSupplyRatio = hexCell.waterManager.supplyRatio;
+        double waterSupplyFactor = 10.526f * (waterSupplyRatio * waterSupplyRatio) - 8.526f;
 
-        float waterSupplyQuality = hexCell.waterManager.Supply.Quality;
-        float waterQualityFactor = Mathf.InverseLerp(-1, 1, waterSupplyQuality * waterSupplyQuality);
+        double waterSupplyQuality = hexCell.waterManager.Supply.Quality;
+        double waterQualityFactor = Mathf.InverseLerp(-1, 1, (float)waterSupplyQuality * (float)waterSupplyQuality);
 
-        float factor;
+        double factor;
 
         if (waterSupplyFactor < 0 && waterQualityFactor < 0) {
-            factor = -Mathf.Abs(waterSupplyFactor) * Mathf.Abs(waterQualityFactor);
+            factor = -Mathf.Abs((float)waterSupplyFactor) * Mathf.Abs((float)waterQualityFactor);
         }
         else {
             factor = waterSupplyFactor * waterQualityFactor;

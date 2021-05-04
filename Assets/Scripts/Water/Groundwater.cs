@@ -8,16 +8,15 @@ namespace Water {
 
         private readonly CellManager manager;
         public Water Storage;
-        private float maxAbstraction = 600000; // L/day
-        private float maxInfiltration = 600000; // L/day
+        private double maxAbstraction = 600000; // L/day
+        private double maxInfiltration = 600000; // L/day
 
         public Groundwater(CellManager manager) {
             this.manager = manager;
             Storage = new Water(1000000000, 1, 5000000000);
-            Storage = new Water(1000000000, 1, 5000000000);
         }
 
-        private float MaxDailyAbstraction {
+        private double MaxDailyAbstraction {
             get {
                 if (Storage.Level < 1e-6) {
                     return Storage.Volume;
@@ -28,13 +27,13 @@ namespace Water {
             }
         }
 
-        private float MaxMonthlyAbstraction {
+        private double MaxMonthlyAbstraction {
             get {
                 return MaxDailyAbstraction * 30;
             }
         }
 
-        public float MaxAbstraction {
+        public double MaxAbstraction {
             get {
                 if (Storage.Volume == 0) {
                     return 0;
@@ -48,20 +47,19 @@ namespace Water {
             }
         }
 
-        private float MaxDailyInfiltration {
+        private double MaxDailyInfiltration {
             get {
                 return maxInfiltration;
             }
         }
 
-        private float MaxMonthlyInfiltration {
+        private double MaxMonthlyInfiltration {
             get {
                 return MaxDailyInfiltration * 30;
-
             }
         }
 
-        public float MaxInfiltration {
+        public double MaxInfiltration {
             get {
 
                 if (Storage.RemainingCapacity == null) {
@@ -72,13 +70,13 @@ namespace Water {
                         return MaxMonthlyInfiltration;
                     }
                     else {
-                        return (float)Storage.RemainingCapacity;
+                        return (double)Storage.RemainingCapacity;
                     }
                 }
             }
         }
 
-        public Water Abstract(float abstraction) {
+        public Water Abstract(double abstraction) {
             if (abstraction <= MaxAbstraction) {
                 Storage.Volume -= abstraction;
                 return new Water(abstraction, Storage.Quality);
