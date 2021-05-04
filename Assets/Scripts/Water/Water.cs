@@ -130,29 +130,29 @@ namespace Water {
         public static Water operator +(Water a, Water b) {
 
             if (a.Volume + b.Volume > 0) {
-                return new Water(a.Volume + b.Volume, (a.Product + b.Product) / (a.Volume + b.Volume));
+                return new Water(a.Volume + b.Volume, (a.Product + b.Product) / (a.Volume + b.Volume), a.MaxCapacity);
             }
             else {
-                return new Water(0, 1);
+                return new Water(0, 1, a.MaxCapacity);
             }
         }
 
         public static Water operator -(Water source, Water abstraction) {
 
             if (abstraction.Quality == 1) {
-                return new Water(source.Volume - abstraction.Volume, source.Quality);
+                return new Water(source.Volume - abstraction.Volume, source.Quality, source.MaxCapacity);
             }
             //else if (source.Quality == 1) {
             //    return new Water(abstraction.Volume - source.Volume, abstraction.Quality);
             //}
             else {
-                throw new System.ArgumentOutOfRangeException("One of the water qualities when doing an abstraction should be 1");
+                throw new System.ArgumentOutOfRangeException("The abstraction quality should be set at 1");
             }
         }
 
         public static Water operator -(Water source, double abstraction) {
 
-            return new Water(source.Volume - abstraction, source.Quality);
+            return new Water(source.Volume - abstraction, source.Quality, source.MaxCapacity);
         }
 
         // Constructors
@@ -169,7 +169,7 @@ namespace Water {
             this.volume = volume;
         }
 
-        public Water(double volume, double quality, double maxCapacity) {
+        public Water(double volume, double quality, double? maxCapacity) {
 
             if (quality >= 0 && quality <= 1) {
                 this.quality = quality;
