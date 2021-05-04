@@ -75,11 +75,15 @@ namespace Water {
         public void HexGridWaterUpdate() {
 
             foreach (Reservoir reservoir in reservoirs) {
-                reservoir.Refill();
+                reservoir.SetSupply();
             }
 
             // Update each individual CellManager now
             UpdateManager();
+
+            foreach (Reservoir reservoir in reservoirs) {
+                reservoir.SetStorage();
+            }
 
             OverlandFlow();
             DailyRefresh();
