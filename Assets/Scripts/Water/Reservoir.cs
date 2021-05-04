@@ -14,9 +14,11 @@ namespace Water {
         public List<HexCell> serviceArea = new List<HexCell>();
         private List<CellManager> serviceAreaCellManagers = new List<CellManager>();
 
-        private int level;
+        private RiverCell abstractionCell;
 
         public Water Storage;
+
+        private int level = 0;
 
         public int Level {
             get {
@@ -35,10 +37,75 @@ namespace Water {
             }
         }
 
-        //private int[] grades;
+        private double MaxDailyAbstraction {
+            get {
+                if (Storage.Level < 1e-6) {
+                    return Storage.Volume;
+                }
+                else {
+                    return maxAbstractions[Level];  //* Storage.Level * Storage.Level;
+                }
+            }
+        }
 
-        private long[] capacities = {
+        private double MaxMonthlyAbstraction {
+            get {
+                return MaxDailyAbstraction * 30;
+            }
+        }
+
+        public double MaxAbstraction {
+            get {
+                if (Storage.Volume == 0) {
+                    return 0;
+                }
+                else if (MaxMonthlyAbstraction > Storage.Volume) {
+                    return Storage.Volume;
+                }
+                else {
+                    return MaxMonthlyAbstraction;
+                }
+            }
+        }
+
+        private double MaxDailyRefill {
+            get {
+                return maxRefills[Level];       
+            }
+        }
+
+        private double MaxMonthlyRefill {
+            get {
+                return MaxDailyRefill * 30;
+            }
+        }
+
+        public double MaxRefill {
+            get {
+                if (Storage.RemainingCapacity == null) {
+                    return 0;
+                }
+                else {
+                    if (MaxMonthlyRefill <= Storage.RemainingCapacity) {
+                        return MaxMonthlyRefill;
+                    }
+                    else {
+                        return (double)Storage.RemainingCapacity;
+                    }
+                }
+            }
+        }
+
+        private double[] capacities = {
             0, 5000000, 10000000, 15000000, 20000000, 30000000, 50000000, 100000000, 500000000, 1000000000, 5000000000, 10000000000, 15000000000, 20000000000, 30000000000, 50000000000
+        };
+
+        private double[] maxAbstractions = {
+            0, 5000, 10000, 15000, 20000, 30000, 50000, 100000, 500000, 1000000, 5000000, 10000000, 15000000, 20000000, 30000000, 50000000 
+        };
+
+        private double[] maxRefills = {
+            0, 50000, 100000, 150000, 200000, 300000, 500000, 1000000, 5000000, 10000000, 50000000, 100000000, 150000000, 200000000, 300000000, 500000000
         };
 
         private void Awake() {
@@ -48,15 +115,13 @@ namespace Water {
             cellManager = gameObject.GetComponent<CellManager>();
             gridManager = gameObject.GetComponentInParent<GridManager>();
 
+            Level = 1;
+            Storage = new Water(0, 1, capacities[level]);
+            abstractionCell = cellManager.riverAbstractionCell;
+            gridManager.AddReservoir(this);
             hexCell.SetMainColor();
 
-            Level = 1;
-
             CalculateServiceArea();
-
-            gridManager.AddReservoir(this);
-
-            Storage = new Water(0, 1, capacities[level]);
         }
 
         public void UpgradeReservoir() {
@@ -95,13 +160,24 @@ namespace Water {
             }
         }
 
-        public Water Abstract(Water demand) {
-
-            if (demand.Volume <= Storage.MaxCapacity) {
-                return new Water(demand.Volume, Storage.Quality);
+        public Water Abstract(double abstraction) {
+            if (abstraction <= MaxAbstraction) {
+                Storage.Volume -= abstraction;
+                return new Water(abstraction, Storage.Quality);
             }
             else {
-                return new Water((double)Storage.MaxCapacity, Storage.Quality);
+                abstraction = MaxAbstraction;
+                Storage.Volume -= abstraction;
+                return new Water(abstraction, Storage.Quality);
+            }
+        }
+
+        public void Refill() {
+            if (MaxMonthlyRefill <= Storage.RemainingCapacity) {
+                Storage += abstractionCell.ReservoirAbstract(MaxMonthlyRefill);
+            }
+            else {
+                Storage += abstractionCell.ReservoirAbstract((double)Storage.RemainingCapacity);
             }
         }
 

@@ -87,7 +87,7 @@ namespace Water {
 
                 // Do reservoirs first
                 foreach (Reservoir reservoir in reservoirs) {
-                    supplied = reservoir.Abstract(reducedDemand);
+                    supplied = reservoir.Abstract(reducedDemand.Volume);
                     reservoirSupply += supplied;
                     reducedDemand.Volume -= supplied.Volume;
                 }

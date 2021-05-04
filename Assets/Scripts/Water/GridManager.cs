@@ -75,11 +75,12 @@ namespace Water {
         public void HexGridWaterUpdate() {
 
             foreach (Reservoir reservoir in reservoirs) {
-                reservoir.DistributeWater();
+                reservoir.Refill();
             }
 
             // Update each individual CellManager now
             UpdateManager();
+
             OverlandFlow();
             DailyRefresh();
 
@@ -88,6 +89,10 @@ namespace Water {
             for (int i = 0; i < cellManagers.Count; i++) {
                 volume += cellManagers[i].wasteRouter.waste.Volume;
                 volume += cellManagers[i].groundwater.Storage.Volume;
+            }
+
+            for (int i = 0; i < reservoirs.Count; i++) {
+                volume += reservoirs[i].Storage.Volume;
             }
 
             for (int i = 0; i < riverCells.Count; i++) {
