@@ -105,8 +105,9 @@ namespace UI {
                 if (selectedCell) {
                     DeselectCell(selectedCell);
                 }
-                selectedCell = null;
-                HideWindow(activeInfoBox);
+                if (activeInfoBox) {
+                    HideWindow(activeInfoBox);
+                }
             }
         }
 
@@ -163,7 +164,6 @@ namespace UI {
         }
 
         void SelectCell(HexCell cell) {
-
             if (activeInfoBox == CellInfoBox) {
                 cell.HighlightColor = HexMetrics.selectedColor;
                 Borough borough = cell.borough;
@@ -186,10 +186,10 @@ namespace UI {
             else {
                 cell.HighlightColor = HexMetrics.selectedColor;
             }
+            selectedCell = cell;
         }
 
         void DeselectCell(HexCell cell) {
-
             if (activeInfoBox == CellInfoBox) {
                 Borough borough = cell.borough;
 
@@ -211,8 +211,7 @@ namespace UI {
             else {
                 cell.HighlightColor = null;
             }
-
-
+            selectedCell = null;
         }
 
         void UpdateInfo() {
