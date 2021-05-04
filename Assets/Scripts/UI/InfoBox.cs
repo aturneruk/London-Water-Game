@@ -259,12 +259,12 @@ namespace UI {
                 hexCellIndexRiver.text = "Cell " + selectedCell.index.ToString();
                 riverCellIndex.text = "River cell: " + riverCell.index.ToString();
 
-                riverFlow.text = "Flow: " + riverCell.Flow.FormattedVolume; ;
-                riverQuality.text = "River Quality: " + riverCell.Flow.FormattedQuality;
+                riverFlow.text = "Flow: " + riverCell.flow.FormattedVolume; ;
+                riverQuality.text = "River Quality: " + riverCell.flow.FormattedQuality;
 
-                riverAbstraction.text = "Abstraction: " + riverCell.AbstractionWater.FormattedVolume;
-                riverDischarge.text = "Discharge: " + riverCell.DischargeWater.FormattedVolume;
-                dischargeQuality.text = "Discharge quality: " + riverCell.DischargeWater.FormattedQuality;
+                riverAbstraction.text = "Abstraction: " + riverCell.Abstractions.FormattedVolume;
+                riverDischarge.text = "Discharge: " + riverCell.Discharges.FormattedVolume;
+                dischargeQuality.text = "Discharge quality: " + riverCell.Discharges.FormattedQuality;
             }
             else if (activeInfoBox == ReservoirInfoBox) {
 
