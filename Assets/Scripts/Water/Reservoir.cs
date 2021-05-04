@@ -18,7 +18,6 @@ namespace Water {
 
         public Water Storage;
         private Water riverAbstraction;
-        private double maxRiverAbstraction;
 
         private int level = 0;
 
@@ -39,10 +38,10 @@ namespace Water {
             }
         }
 
-        private double MaxDailyAbstraction {
+        private double MaxDailyCellSupply {
             get {
-                if (Storage.Volume < 1e-6 && maxRiverAbstraction - riverAbstraction.Volume < 1e-6) {
-                    return Storage.Volume + (maxRiverAbstraction - riverAbstraction.Volume);
+                if (Storage.Volume < 1e-6 && RemainingRiverAbstractionCapacity < 1e-6) {
+                    return Storage.Volume + RemainingRiverAbstractionCapacity;
                 }
                 else {
                     return maxAbstractions[Level];  //* Storage.Level * Storage.Level;
@@ -50,61 +49,56 @@ namespace Water {
             }
         }
 
-        private double MaxMonthlyAbstraction {
+        private double MaxMonthlyCellSupply {
             get {
-                return MaxDailyAbstraction * 30;
+                return MaxDailyCellSupply * 30;
             }
         }
 
-        public double MaxAbstraction {
+        public double MaxCellSupply {
             get {
-                double riverCapacity = maxRiverAbstraction - riverAbstraction.Volume;
-                if (Storage.Volume == 0 && riverCapacity == 0) {
+                if (Storage.Volume == 0 && RemainingRiverAbstractionCapacity == 0) {
                     return 0;
                 }
-                else if (MaxMonthlyAbstraction > Storage.Volume + riverCapacity) {
-                    return Storage.Volume + riverCapacity;
+                else if (MaxMonthlyCellSupply > Storage.Volume + RemainingRiverAbstractionCapacity) {
+                    return Storage.Volume + RemainingRiverAbstractionCapacity;
                 }
                 else {
-                    return MaxMonthlyAbstraction;
+                    return MaxMonthlyCellSupply;
                 }
             }
         }
 
-        private double MaxDailyRefill {
+        private double MaxDailyRiverAbstraction {
             get {
-                return maxRefills[Level];       
+                return maxRefills[Level];
             }
         }
 
-        private double MaxMonthlyRefill {
+        private double MaxMonthlyRiverAbstraction {
             get {
-                return MaxDailyRefill * 30;
+                return MaxDailyRiverAbstraction * 30;
             }
         }
 
-        //public double MaxRefill {
-        //    get {
-        //        if (Storage.RemainingCapacity == null) {
-        //            return 0;
-        //        }
-        //        else {
-        //            if (MaxMonthlyRefill <= Storage.RemainingCapacity) {
-        //                return MaxMonthlyRefill;
-        //            }
-        //            else {
-        //                return (double)Storage.RemainingCapacity;
-        //            }
-        //        }
-        //    }
-        //}
+        public double MaxRiverAbstraction {
+            get {
+                return Mathf.Min((float)MaxMonthlyRiverAbstraction, (float)abstractionCell.ReservoirMaxAbstraction);
+            }
+        }
+
+        public double RemainingRiverAbstractionCapacity {
+            get {
+                return MaxRiverAbstraction - riverAbstraction.Volume;
+            }
+        }
 
         private double[] capacities = {
             0, 5000000, 10000000, 15000000, 20000000, 30000000, 50000000, 100000000, 500000000, 1000000000, 5000000000, 10000000000, 15000000000, 20000000000, 30000000000, 50000000000
         };
 
         private double[] maxAbstractions = {
-            0, 5000, 10000, 15000, 20000, 30000, 50000, 100000, 500000, 1000000, 5000000, 10000000, 15000000, 20000000, 30000000, 50000000 
+            0, 5000, 10000, 15000, 20000, 30000, 50000, 100000, 500000, 1000000, 5000000, 10000000, 15000000, 20000000, 30000000, 50000000
         };
 
         private double[] maxRefills = {
@@ -134,7 +128,6 @@ namespace Water {
         }
 
         public void CalculateServiceArea() {
-
             serviceArea.Clear();
             List<HexCell> cells = new List<HexCell> { hexCell };
             List<HexCell> newCells = new List<HexCell>();
@@ -164,56 +157,52 @@ namespace Water {
         }
 
         public Water Abstract(double abstraction) {
-            if (abstraction <= MaxAbstraction) {
-                if (abstraction <= maxRiverAbstraction - riverAbstraction.Volume) {
+            if (abstraction <= MaxCellSupply) {
+                if (abstraction <= RemainingRiverAbstractionCapacity) {
                     riverAbstraction.Volume += abstraction;
                     return new Water(abstraction, riverAbstraction.Quality);
                 }
                 else {
-                    double riverVolume = maxRiverAbstraction - riverAbstraction.Volume;
-                    riverAbstraction.Volume += riverVolume;
-                    abstraction -= riverVolume;
+                    double riverPortion = RemainingRiverAbstractionCapacity;
+                    riverAbstraction.Volume += riverPortion;
+                    abstraction -= riverPortion;
                     Storage.Volume -= abstraction;
-                    return new Water(riverVolume + abstraction, (riverVolume * riverAbstraction.Quality + abstraction * Storage.Quality) / (riverVolume + abstraction));
+                    return new Water(riverPortion + abstraction, (riverPortion * riverAbstraction.Quality + abstraction * Storage.Quality) / (riverPortion + abstraction));
                 }
             }
             else {
-                abstraction = MaxAbstraction;
-                if (abstraction <= maxRiverAbstraction - riverAbstraction.Volume) {
+                abstraction = MaxCellSupply;
+                if (abstraction <= RemainingRiverAbstractionCapacity) {
                     riverAbstraction.Volume += abstraction;
                     return new Water(abstraction, abstractionCell.flow.Quality);
                 }
                 else {
-                    double riverVolume = maxRiverAbstraction - riverAbstraction.Volume;
-                    riverAbstraction.Volume += riverVolume;
-                    abstraction -= riverVolume;
+                    double riverPortion = RemainingRiverAbstractionCapacity;
+                    riverAbstraction.Volume += riverPortion;
+                    abstraction -= riverPortion;
                     Storage.Volume -= abstraction;
-                    return new Water(riverVolume + abstraction, (riverVolume * riverAbstraction.Quality + abstraction * Storage.Quality) / (riverVolume + abstraction));
+                    return new Water(riverPortion + abstraction, (riverPortion * riverAbstraction.Quality + abstraction * Storage.Quality) / (riverPortion + abstraction));
                 }
             }
         }
 
         public void SetSupply() {
             riverAbstraction.Volume = 0;
-            maxRiverAbstraction = Mathf.Min((float)MaxMonthlyRefill, (float)abstractionCell.ReservoirMaxAbstraction);
             riverAbstraction.Quality = abstractionCell.flow.Quality;
         }
 
         public void SetStorage() {
-
-            double abstractionCapacity = maxRiverAbstraction - riverAbstraction.Volume;
-
-            if (abstractionCapacity == 0) {
-                double abstraction = maxRiverAbstraction;
+            if (RemainingRiverAbstractionCapacity == 0) {
+                double abstraction = MaxRiverAbstraction;
                 abstractionCell.ReservoirAbstract(abstraction);
             }
-            else if (abstractionCapacity <= Storage.RemainingCapacity) {
-                double abstraction = maxRiverAbstraction;
+            else if (RemainingRiverAbstractionCapacity <= Storage.RemainingCapacity) {
+                double abstraction = MaxRiverAbstraction;
                 Water abstracted = abstractionCell.ReservoirAbstract(abstraction);
                 Water refilled = abstracted - riverAbstraction.Volume;
                 Storage += refilled;
             }
-            else if (abstractionCapacity > Storage.RemainingCapacity) {
+            else if (RemainingRiverAbstractionCapacity > Storage.RemainingCapacity) {
                 double abstraction = riverAbstraction.Volume + (double)Storage.RemainingCapacity;
                 Water abstracted = abstractionCell.ReservoirAbstract(abstraction);
                 Water refilled = abstracted - riverAbstraction.Volume;
