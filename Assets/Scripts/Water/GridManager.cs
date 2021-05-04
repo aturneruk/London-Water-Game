@@ -107,7 +107,9 @@ namespace Water {
                 double deltaS = volumes[volumes.Count - 2] - volumes[volumes.Count - 1];
                 double sum = deltaS + inflow - outflow;
                 //Debug.Log("Change in storage: " + deltaS);
-                Debug.Log("Total delta: " + sum);
+                if (Mathf.Abs((float)sum) > 1) {
+                    Debug.LogError("Total delta: " + sum);
+                }
             }
         }
 
