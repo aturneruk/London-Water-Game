@@ -98,10 +98,10 @@ namespace Water {
         public Water Abstract(Water demand) {
 
             if (demand.Volume <= Supply.MaxCapacity) {
-                return new Water((float)demand.Volume, Supply.Quality);
+                return new Water(demand.Volume, Supply.Quality);
             }
             else {
-                return new Water((float)Supply.MaxCapacity, Supply.Quality);
+                return new Water((double)Supply.MaxCapacity, Supply.Quality);
             }
         }
 
