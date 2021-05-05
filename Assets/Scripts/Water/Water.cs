@@ -78,7 +78,7 @@ namespace Water {
         }
 
         // Formatted strings
-        public string FormattedVolume {
+        public string FormattedFlow {
             get {
                 if (Volume < 300000) {
                     return Mathf.Round((float)Volume / 30).ToString() + " L/day";
@@ -88,6 +88,23 @@ namespace Water {
                 }
                 else if (Volume >= 30000000) {
                     return Mathf.Round(((float)Volume / 30000000f)).ToString("F0") + "M" + " L/day";
+                }
+                else {
+                    throw new System.ArgumentException("Something has gone wrong formatting the supply to a string");
+                }
+            }
+        }
+
+        public string FormattedVolume {
+            get {
+                if (Volume < 10000) {
+                    return Mathf.Round((float)Volume).ToString() + " L/day";
+                }
+                else if (Volume >= 10000 && Volume < 1000000) {
+                    return Mathf.Round((float)Volume / 1000).ToString("F0") + "k" + " L";
+                }
+                else if (Volume >= 1000000) {
+                    return Mathf.Round((float)Volume / 1000000).ToString("F0") + "M" + " L";
                 }
                 else {
                     throw new System.ArgumentException("Something has gone wrong formatting the supply to a string");
@@ -107,7 +124,7 @@ namespace Water {
             }
         }
 
-        public string FormattedMaxCapacity {
+        public string FormattedMaxFlow {
             get {
                 double maxCapacity = (double)MaxCapacity;
 
@@ -119,6 +136,25 @@ namespace Water {
                 }
                 else if (maxCapacity >= 30000000) {
                     return Mathf.Round(((float)maxCapacity / 30000000f)).ToString("F0") + "M" + " L/day";
+                }
+                else {
+                    throw new System.ArgumentException("Something has gone wrong formatting the max capacity to a string");
+                }
+            }
+        }
+
+        public string FormattedMaxVolume {
+            get {
+                double maxCapacity = (double)MaxCapacity;
+
+                if (maxCapacity < 10000) {
+                    return Mathf.Round((float)maxCapacity).ToString() + " L";
+                }
+                else if (maxCapacity >= 10000 && maxCapacity < 1000000) {
+                    return Mathf.Round((float)maxCapacity / 1000).ToString("F0") + "k" + " L";
+                }
+                else if (maxCapacity >= 1000000) {
+                    return Mathf.Round((float)maxCapacity / 1000000).ToString("F0") + "M" + " L";
                 }
                 else {
                     throw new System.ArgumentException("Something has gone wrong formatting the max capacity to a string");
