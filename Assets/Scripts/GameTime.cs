@@ -97,68 +97,69 @@ public static class GameTime {
         dayFraction += gameSpeed * Time.unscaledDeltaTime;
 
         while (dayFraction >= 1) {
+
             NewDay();
-        }
 
-        switch (month) {
-            case Month.Feb:
-                // Check for leap year
-                if (year % 400 == 0 | (year % 4 == 0 && year % 100 != 0)) {
-                    // leap year
-                    if (day > 29) {
+            if (weekday == Weekday.Sun) {
+                NewWeek();
+            }
+            else {
+                weekday++;
+            }
+
+            switch (month) {
+                case Month.Feb:
+                    // Check for leap year
+                    if (year % 400 == 0 | (year % 4 == 0 && year % 100 != 0)) {
+                        // leap year
+                        if (day > 29) {
+                            NewMonth();
+                        }
+                    }
+                    else {
+                        // not leap year
+                        if (day > 28) {
+                            NewMonth();
+                        }
+                    }
+                    break;
+
+                case Month.Apr:
+                case Month.Jun:
+                case Month.Sep:
+                case Month.Nov:
+                    if (day > 30) {
                         NewMonth();
                     }
-                }
-                else {
-                    // not leap year
-                    if (day > 28) {
+                    break;
+
+                case Month.Jan:
+                case Month.Mar:
+                case Month.May:
+                case Month.Jul:
+                case Month.Aug:
+                case Month.Oct:
+                    if (day > 31) {
                         NewMonth();
                     }
-                }
-                break;
+                    break;
 
-            case Month.Apr:
-            case Month.Jun:
-            case Month.Sep:
-            case Month.Nov:
-                if (day > 30) {
-                    NewMonth();
-                }
-                break;
+                case Month.Dec:
+                    if (day > 31) {
+                        NewYear();
+                    }
+                    break;
 
-            case Month.Jan:
-            case Month.Mar:
-            case Month.May:
-            case Month.Jul:
-            case Month.Aug:
-            case Month.Oct:
-                if (day > 31) {
-                    NewMonth();
-                }
-                break;
-
-            case Month.Dec:
-                if (day > 31) {
-                    NewYear();
-                }
-                break;
-
-            default:
-                Debug.LogError("GameTime.month is outside of expected values");
-                break;
+                default:
+                    Debug.LogError("GameTime.month is outside of expected values");
+                    break;         
+            }
         }
     }
 
     static private void ChangeDay() {
         day++;
         dayFraction--;
-
-        if (weekday == Weekday.Sun) {
-            NewWeek();
-        }
-        else {
-            weekday++;
-        }
     }
 
     static private void ChangeWeek() {
