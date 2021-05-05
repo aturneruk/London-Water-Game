@@ -13,11 +13,12 @@ namespace UI {
 
         public HexGrid hexGrid;
 
-        public void ChangeOverlay() {
-            int index = gameObject.GetComponent<Dropdown>().value;
-            Overlay overlay = (Overlay)index;
+        Overlay selectedOverlay;
 
-            switch (overlay) {
+        public void ChangeOverlay(int index) {
+            selectedOverlay = (Overlay)index;
+
+            switch (selectedOverlay) {
                 case Overlay.None:
                 case Overlay.Population:
                     HexMetrics.selectedColor = Color.cyan;
@@ -29,14 +30,12 @@ namespace UI {
                 default:
                     throw new System.ArgumentException("Selected overlay is not recognised");
             }
-            hexGrid.SetDataOverlay(overlay);
+            hexGrid.SetDataOverlay(selectedOverlay);
         }        
         
         public void UpdateOverlay() {
-            int index = gameObject.GetComponent<Dropdown>().value;
-            if (index > 0) {
-                Overlay overlay = (Overlay)index;
-                hexGrid.SetDataOverlay(overlay);
+            if (selectedOverlay != Overlay.None) {
+                hexGrid.SetDataOverlay(selectedOverlay);
             }
         }
 
