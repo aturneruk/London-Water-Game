@@ -96,7 +96,7 @@ public static class GameTime {
 
         dayFraction += gameSpeed * Time.unscaledDeltaTime;
 
-        if (dayFraction >= 1) {
+        while (dayFraction >= 1) {
             NewDay();
         }
 
