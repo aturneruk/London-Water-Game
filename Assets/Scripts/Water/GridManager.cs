@@ -74,6 +74,8 @@ namespace Water {
 
         public void HexGridWaterUpdate() {
 
+            DailyRefresh();
+
             foreach (Reservoir reservoir in reservoirs) {
                 reservoir.SetSupply();
             }
@@ -86,7 +88,6 @@ namespace Water {
             }
 
             OverlandFlow();
-            DailyRefresh();
 
             double volume = 0;
 
