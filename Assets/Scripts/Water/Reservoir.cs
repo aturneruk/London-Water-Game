@@ -50,7 +50,7 @@ namespace Water {
                     return Storage.Volume + RemainingRiverAbstractionCapacity;
                 }
                 else {
-                    return maxAbstractions[Level] * supplyMultiplier;  //* Storage.Level * Storage.Level;
+                    return maxAbstractions[Level];  //* Storage.Level * Storage.Level;
                 }
             }
         }
@@ -95,6 +95,9 @@ namespace Water {
 
         public double RemainingRiverAbstractionCapacity {
             get {
+                if (MaxRiverAbstraction - riverAbstraction.Volume < 0) {
+                    throw new System.ArgumentOutOfRangeException("The remaining river abstraction capacity must be nonnegative");
+                }
                 return MaxRiverAbstraction - riverAbstraction.Volume;
             }
         }
@@ -163,6 +166,7 @@ namespace Water {
         }
 
         public Water Abstract(double demand) {
+            demand *= supplyMultiplier;
             if (demand <= MaxCellSupply) {
                 if (demand <= RemainingRiverAbstractionCapacity) {
                     riverAbstraction.Volume += demand;
