@@ -42,7 +42,6 @@ public class Population : MonoBehaviour {
             factor = waterSupplyFactor * waterQualityFactor;
         }
 
-
         Size += Size * GrowthRate * factor;
     }
 }
