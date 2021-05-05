@@ -29,9 +29,9 @@ namespace UI {
         [SerializeField]
         CanvasGroup ReservoirInfoBox;
         [SerializeField]
-        Text reservoirCellIndex, reservoirLevel, reservoirStorageCapacity, reservoirStorageLevel, reservoirStorageQuality, reservoirAbstractionVolume, reservoirSupplyVolume, reservoirUpgrade;
+        Text reservoirCellIndex, reservoirLevel, reservoirStorageCapacity, reservoirStorageLevel, reservoirStorageQuality, reservoirAbstractionVolume, reservoirSupplyVolume, reservoirSupplyMultiplier, reservoirUpgrade;
         [SerializeField]
-        Slider supplyMultiplierSlider;
+        Slider reservoirSupplyMultiplierSlider;
 
         [SerializeField]
         CanvasGroup WWTPInfoBox;
@@ -231,16 +231,16 @@ namespace UI {
                     boroughPopulation.text = null;
                 }
 
-                waterDemand.text = "Demand: " + selectedCell.waterManager.Demand.FormattedVolume;
+                waterDemand.text = "Demand: " + selectedCell.waterManager.Demand.FormattedFlow;
 
-                groundwaterSupply.text = "Supplied:" + selectedCell.waterManager.groundwaterSupply.FormattedVolume;
+                groundwaterSupply.text = "Supplied:" + selectedCell.waterManager.groundwaterSupply.FormattedFlow;
                 groundwaterLevel.text = "Remaining: " + selectedCell.waterManager.groundwater.Storage.FormattedLevel;
                 groundwaterQuality.text = "Quality: " + selectedCell.waterManager.groundwater.Storage.FormattedQuality;
-                riverSupply.text = "Supplied: " + selectedCell.waterManager.riverSupply.FormattedVolume;
+                riverSupply.text = "Supplied: " + selectedCell.waterManager.riverSupply.FormattedFlow;
 
-                reservoirSupply.text = "Supplied: " + selectedCell.waterManager.reservoirSupply.FormattedVolume;
+                reservoirSupply.text = "Supplied: " + selectedCell.waterManager.reservoirSupply.FormattedFlow;
 
-                waterSupply.text = "Total supplied: " + selectedCell.waterManager.Supply.FormattedVolume;
+                waterSupply.text = "Total supplied: " + selectedCell.waterManager.Supply.FormattedFlow;
             }
             else if (activeInfoBox == EmptyInfoBox) {
                 emptyCellIndex.text = "Cell " + selectedCell.index.ToString();
@@ -260,11 +260,11 @@ namespace UI {
                 hexCellIndexRiver.text = "Cell " + selectedCell.index.ToString();
                 riverCellIndex.text = "River cell: " + riverCell.index.ToString();
 
-                riverFlow.text = "Flow: " + riverCell.flow.FormattedVolume; ;
+                riverFlow.text = "Flow: " + riverCell.flow.FormattedFlow; ;
                 riverQuality.text = "River Quality: " + riverCell.flow.FormattedQuality;
 
-                riverAbstraction.text = "Abstraction: " + riverCell.Abstractions.FormattedVolume;
-                riverDischarge.text = "Discharge: " + riverCell.Discharges.FormattedVolume;
+                riverAbstraction.text = "Abstraction: " + riverCell.Abstractions.FormattedFlow;
+                riverDischarge.text = "Discharge: " + riverCell.Discharges.FormattedFlow;
                 dischargeQuality.text = "Discharge quality: " + riverCell.Discharges.FormattedQuality;
             }
             else if (activeInfoBox == ReservoirInfoBox) {
@@ -273,18 +273,17 @@ namespace UI {
 
                 reservoirCellIndex.text = "Cell " + selectedCell.index.ToString();
                 reservoirLevel.text = "Level " + reservoir.Level + " reservoir";
-                reservoirStorageCapacity.text = "Capacity: " + reservoir.Storage.FormattedMaxCapacity;
+                reservoirStorageCapacity.text = "Capacity: " + reservoir.Storage.FormattedMaxVolume;
                 reservoirStorageLevel.text = "Remaining: " + reservoir.Storage.FormattedLevel;
                 reservoirStorageQuality.text = "Quality: " + reservoir.Storage.FormattedQuality;
-                reservoirAbstractionVolume.text = "Abstraction: " + reservoir.RiverAbstraction.FormattedVolume;
-                reservoirSupplyVolume.text = "Supply: " + reservoir.CellSupply.FormattedVolume;
+                reservoirAbstractionVolume.text = "Abstraction: " + reservoir.RiverAbstraction.FormattedFlow;
+                reservoirSupplyVolume.text = "Supply: " + reservoir.CellSupply.FormattedFlow;
                 reservoirUpgrade.text = reservoir.Level + " → " + (reservoir.Level + 1);
 
-                reservoir.supplyMultiplier = supplyMultiplierSlider.value;
-
+                reservoir.supplyMultiplier = reservoirSupplyMultiplierSlider.value;
+                reservoirSupplyMultiplier.text = reservoir.supplyMultiplier.ToString("P0");
             }
             else if (activeInfoBox == WWTPInfoBox) {
-
             }
         }
     }
