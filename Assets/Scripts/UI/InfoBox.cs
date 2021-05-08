@@ -276,8 +276,8 @@ namespace UI {
                 reservoirStorageCapacity.text = "Capacity: " + reservoir.Storage.FormattedMaxVolume;
                 reservoirStorageLevel.text = "Remaining: " + reservoir.Storage.FormattedLevel;
                 reservoirStorageQuality.text = "Quality: " + reservoir.Storage.FormattedQuality;
-                reservoirAbstractionVolume.text = "Abstraction: " + reservoir.RiverAbstraction.FormattedFlow;
-                reservoirSupplyVolume.text = "Supply: " + reservoir.CellSupply.FormattedFlow;
+                reservoirAbstractionVolume.text = "Abstraction: " + reservoir.AbstractedFromRiver.FormattedFlow;
+                reservoirSupplyVolume.text = "Supply: " + reservoir.SuppliedToCells.FormattedFlow;
                 reservoirUpgrade.text = reservoir.Level + " → " + (reservoir.Level + 1);
 
                 reservoir.supplyMultiplier = reservoirSupplyMultiplierSlider.value;
