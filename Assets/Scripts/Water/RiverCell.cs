@@ -10,8 +10,8 @@ namespace Water {
         public RiverThames river;
         public HexCell hexCell;
 
-        public RiverCell PreviousCell { get; set; }
-        public RiverCell NextCell { get; set; }
+        public RiverCell PreviousCell;
+        public RiverCell NextCell;
 
         public List<CellManager> DischargeCells = new List<CellManager>();
         public List<CellManager> AbstractionCells = new List<CellManager>();
@@ -57,20 +57,16 @@ namespace Water {
             Abstractions.Volume = 0;
             Discharges.Volume = 0;
 
-            if (NextCell) {
-                flow = new Water(0, 1);
-            }
-            else {
+            if (!NextCell) {
                 river.outflow += flow.Volume;
-                flow = new Water(0, 1);
             }
 
             if (PreviousCell) {
-                flow += PreviousCell.flow;
+                flow = PreviousCell.flow;
             }
             else {
                 Water inflow = river.GetInflow(this);
-                flow += inflow;
+                flow = inflow;
                 river.inflow += inflow.Volume;
             }
 
@@ -95,15 +91,17 @@ namespace Water {
 
         public Water Abstract(double demand) {
 
-            if (demand <= MaxAbstraction) {
+            if (demand > MaxAbstraction) {
+                demand = MaxAbstraction;
+            }
+
+            if (demand <= flow.Volume) {
                 flow.Volume -= demand;
                 Abstractions.Volume += demand;
                 return new Water(demand, flow.Quality);
             }
             else {
-                flow.Volume -= MaxAbstraction;
-                Abstractions.Volume += MaxAbstraction;
-                return new Water(MaxAbstraction, flow.Quality);
+                throw new System.ArgumentException("The adjusted demand must be not greater than the river flow");
             }
         }
 
