@@ -129,11 +129,9 @@ namespace Water {
                 manager.riverDischargeCell.Discharge(manager.wasteRouter.GetOverlandFlow());
             }
 
-            for (int i = 1; i < cellManagersByLevel.Count; i++) {
+            for (int i = 2; i < cellManagersByLevel.Count; i++) {
                 foreach (CellManager manager in cellManagersByLevel[i]) {
-                    foreach (CellManager previousManager in manager.overlandFlowPrevious) {
-                        manager.wasteRouter.WasteInput(previousManager.wasteRouter.GetOverlandFlow());
-                    }
+                    manager.overlandFlowNext.wasteRouter.WasteInput(manager.wasteRouter.GetOverlandFlow());
                 }
             }
         }
