@@ -12,7 +12,13 @@ namespace Water {
         private List<RiverCell> riverCells = new List<RiverCell>();
         public int RiverLength { get; private set; }
 
-        private float inflowValueScalar = 1;
+        private double inflowFactor {
+            get {
+                return inflowSliderValue * annualInflowFactor;
+            }
+        }
+        private double inflowSliderValue;
+        private double annualInflowFactor;
 
         public double inflow;
         public double outflow; 
@@ -27,6 +33,34 @@ namespace Water {
 
             CreateRiverCells();
             GenerateNetwork();
+
+            UpdateAnnualFlowFactor();
+            UpdateInflowSlider();
+        }
+
+        private void OnEnable() {
+            GameTime.NewYear += UpdateAnnualFlowFactor;
+        }
+
+        private void OnDisable() {
+            GameTime.NewYear -= UpdateAnnualFlowFactor;
+        }
+
+        public Water GetInflow(RiverCell riverCell) {
+            switch (riverCell.index) {
+                case 0:
+                    return new Water(65000d * 86400d * 30d * inflowFactor, 1);
+                default:
+                    return new Water(0, 1);
+            }
+        }
+
+        public void UpdateAnnualFlowFactor() {
+            annualInflowFactor = Stochasticity.RiverFlowMultiplier;
+        }
+
+        public void UpdateInflowSlider() {
+            inflowSliderValue = inflowSlider.value;
         }
 
         private void CreateRiverCells() {
@@ -58,7 +92,6 @@ namespace Water {
         }
 
         public void GenerateNetwork() {
-
             SetOverlandFlowCell();
             SetDischargeAndAbstractionCell();                     
         }
@@ -168,19 +201,6 @@ namespace Water {
             }
         }
 
-        public Water GetInflow(RiverCell riverCell) {
-            switch (riverCell.index) {
-                case 0:
-                    return new Water(5200000000 * 30 * inflowValueScalar, 1);
-                default:
-                    return new Water(0, 1);
-            }
-        }
-
-        public void UpdateSlider() {
-            inflowValueScalar = inflowSlider.value;
-        }
-
         private int[] cellIndices = {
             192,
             144,
@@ -267,6 +287,3 @@ namespace Water {
         };
     }
 }
-
-
-

@@ -1,29 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MathNet.Numerics.Distributions;
 
+public static class Stochasticity {
+    private static Gamma riverFlows = new Gamma(8.22, 0.0253);
 
-public class Stochasticity : MonoBehaviour
-{
-    public float RiverScarcity { get; private set; }
-
-    private void Awake() {
-        RiverScarcity = 1;
+    public static double RiverFlowMultiplier {
+        get {
+            return riverFlows.Sample() / 325.1d;
+         }
     }
-
-
-    private void OnEnable() {
-        GameTime.NewYear += UpdateScarcity;
-    }
-
-    private void OnDisable() {
-        GameTime.NewYear -= UpdateScarcity;
-          
-    }
-
-    private void UpdateScarcity() {
-        RiverScarcity = 1;
-    }
-
-
 }
