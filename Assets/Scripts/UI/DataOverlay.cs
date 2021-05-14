@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace UI {
 
     public enum Overlay {
-        None, Population, GroundwaterLevel, GroundwaterQuality
+        None, Population, GroundwaterLevel, GroundwaterQuality, SupplyRatio, WaterSources
     }
 
     public class DataOverlay : MonoBehaviour {
@@ -25,6 +25,8 @@ namespace UI {
                     break;
                 case Overlay.GroundwaterLevel:
                 case Overlay.GroundwaterQuality:
+                case Overlay.SupplyRatio:
+                case Overlay.WaterSources:
                     HexMetrics.selectedColor = Color.magenta;
                     break;
                 default:
@@ -59,12 +61,17 @@ namespace UI {
                     return GroundwaterLevelColor(cell);
                 case Overlay.GroundwaterQuality:
                     return GroundwaterQualityColor(cell);
-                default: return null;
+                case Overlay.SupplyRatio:
+                    return SupplyRatioColor(cell);
+                case Overlay.WaterSources:
+                    return WaterSourcesColor(cell);
+                default: 
+                    return null;
             }
         }
 
         public static Color PopulationColor(HexCell cell) {
-            double population = cell.Population.Size;
+            double population = cell.GetComponent<Population>().Size;
 
             if (population > 100000) {
                 throw new System.ArgumentOutOfRangeException("Population is greater than 100000");
@@ -109,6 +116,52 @@ namespace UI {
             }
         }
 
+        public static Color? SupplyRatioColor(HexCell cell) {
+
+            Water.CellManager manager = cell.waterManager;
+            double supplyRatio = manager.supplyRatio;
+
+            if (cell.GetComponent<Water.Reservoir>()) {
+                return null;
+            }
+            else if (supplyRatio <= 1 && supplyRatio >= 0) {
+                return new Color((float)(1 - supplyRatio), (float)supplyRatio, 0f);
+            }
+            else {
+                throw new System.ArgumentOutOfRangeException("Supply ratio must be between 0 and 1");
+            }
+        }
+
+        public static Color WaterSourcesColor(HexCell cell) {
+
+            Water.CellManager manager = cell.waterManager;
+
+            bool reservoir = false;
+            bool river = false;
+
+            if (manager.reservoirs.Count != 0) {
+                reservoir = true;
+            }
+
+            if (cell.riverDistance == 1) {
+                river = true;
+            }
+
+            if (reservoir) {
+                if (river) {
+                    return Color.yellow;
+                }
+                else {
+                    return Color.red;
+                }
+            }
+            else if (river) {
+                return Color.green;
+            }
+            else {
+                return Color.white;
+            }
+        }
     }
 }
 

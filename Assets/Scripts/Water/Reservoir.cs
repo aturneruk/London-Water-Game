@@ -32,8 +32,8 @@ namespace Water {
                 return level;
             }
             set {
-                if (value < 1) {
-                    throw new System.ArgumentOutOfRangeException("The reservoir level must be at least 1");
+                if (value < 0) {
+                    throw new System.ArgumentOutOfRangeException("The reservoir level must be at least 0");
                 }
                 else if (value < capacities.Length) {
                     level = value;
@@ -107,21 +107,50 @@ namespace Water {
             }
         }
 
-        private double[] capacities = {
+        public double CapitalUpgradeCost {
+            get {
+                return capacities[level + 1] / 20d;
+            }
+        }
+
+        public double UpgradeCost {
+            get {
+                return CapitalUpgradeCost;
+            }
+        }
+
+        public static double CapitalBuildCost {
+            get {
+                return 250000d;
+            }
+        }
+
+        public static double PopulationBuildCost(HexCell cell) {            
+            if (cell.GetComponent<Population>().Size != 0) {
+                return cell.GetComponent<Population>().Size * 10;
+            }
+            else {
+                return 0;
+            }            
+        }
+
+        public static double BuildCost(HexCell cell) {
+            return CapitalBuildCost + PopulationBuildCost(cell);
+        }
+
+        public static readonly double[] capacities = {
             0, 5000000, 10000000, 15000000, 20000000, 30000000, 50000000, 100000000, 500000000, 1000000000, 5000000000, 10000000000, 15000000000, 20000000000, 30000000000, 50000000000
         };
 
-        private double[] maxAbstractions = {
+        private static readonly double[] maxAbstractions = {
             0, 5000, 10000, 15000, 20000, 30000, 50000, 100000, 500000, 1000000, 5000000, 10000000, 15000000, 20000000, 30000000, 50000000
         };
 
-        private double[] maxRefills = {
+        private static readonly double[] maxRefills = {
             0, 50000, 100000, 150000, 200000, 300000, 500000, 1000000, 5000000, 10000000, 50000000, 100000000, 150000000, 200000000, 300000000, 500000000
         };
 
         private void Awake() {
-            //grades = Enumerable.Range(0, capacities.Length + 1).ToArray();
-
             hexCell = gameObject.GetComponent<HexCell>();
             cellManager = gameObject.GetComponent<CellManager>();
             gridManager = gameObject.GetComponentInParent<GridManager>();
@@ -131,14 +160,15 @@ namespace Water {
             abstractionCell = cellManager.riverAbstractionCell;
             gridManager.AddReservoir(this);
             hexCell.SetMainColor();
+            Destroy(hexCell.GetComponent<Population>());
 
-            CalculateServiceArea();
+            CalculateServiceArea();            
         }
 
         public void UpgradeReservoir() {
             Level++;
             Storage.MaxCapacity = capacities[level];
-            CalculateServiceArea();
+            CalculateServiceArea();            
         }
 
         public void CalculateServiceArea() {
@@ -172,37 +202,24 @@ namespace Water {
 
         public Water Abstract(double demand) {
             demand *= supplyMultiplier;
-            if (demand <= MaxCellSupply) {
-                if (demand <= RemainingRiverAbstractionCapacity) {
-                    riverAbstraction.Volume += demand;
-                    SuppliedToCells.Volume += demand;
-                    return new Water(demand, riverAbstraction.Quality);
-                }
-                else {
-                    double riverPortion = RemainingRiverAbstractionCapacity;
-                    riverAbstraction.Volume += riverPortion;
-                    demand -= riverPortion;
-                    Storage.Volume -= demand;
-                    SuppliedToCells.Volume += (riverPortion + demand);
-                    return new Water(riverPortion + demand, (riverPortion * riverAbstraction.Quality + demand * Storage.Quality) / (riverPortion + demand));
-                }
+
+            if (demand > MaxCellSupply) {
+                demand = MaxCellSupply;
+            }
+
+            if (demand <= RemainingRiverAbstractionCapacity) {
+                riverAbstraction.Volume += demand;
+                SuppliedToCells.Volume += demand;
+                return new Water(demand, riverAbstraction.Quality);
             }
             else {
-                demand = MaxCellSupply;
-                if (demand <= RemainingRiverAbstractionCapacity) {
-                    riverAbstraction.Volume += demand;
-                    SuppliedToCells.Volume += demand;
-                    return new Water(demand, riverAbstraction.Quality);
-                }
-                else {
-                    double riverPortion = RemainingRiverAbstractionCapacity;
-                    riverAbstraction.Volume += riverPortion;
-                    demand -= riverPortion;
-                    Storage.Volume -= demand;
-                    SuppliedToCells.Volume += (riverPortion + demand);
-                    return new Water(riverPortion + demand, (riverPortion * riverAbstraction.Quality + demand * Storage.Quality) / (riverPortion + demand));
-                }
-            }
+                double riverPortion = RemainingRiverAbstractionCapacity;
+                riverAbstraction.Volume += riverPortion;
+                demand -= riverPortion;
+                Storage.Volume -= demand;
+                SuppliedToCells.Volume += (riverPortion + demand);
+                return new Water(riverPortion + demand, (riverPortion * riverAbstraction.Quality + demand * Storage.Quality) / (riverPortion + demand));
+            }   
         }
 
         public void SetSupply() {

@@ -14,7 +14,7 @@ namespace UI {
         private Button speedControl, playPauseButton;
 
         [SerializeField]
-        private Text date, population;
+        private Text population, moneyBalance, date;
 
         [SerializeField]
         private CanvasGroup playImage, pauseImage;
@@ -22,6 +22,8 @@ namespace UI {
         void Start() {
             paused = true;
             SwapToImage(playImage);
+
+            Money.SetMoney(1000000);
 
             GameTime.Set(1800, Month.Jan, 1, Weekday.Mon);
             GameTime.SetSpeed(Speed.X1);
@@ -34,8 +36,9 @@ namespace UI {
                 GameTime.UpdateTime();
             }
 
-            date.text = GameTime.GetLongForm();
             population.text = "Population: " + grid.GetTotalPopulation().ToString();
+            moneyBalance.text = Money.FormattedMoney(Money.Balance);
+            date.text = GameTime.GetLongForm();
             
         }
 

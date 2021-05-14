@@ -24,7 +24,7 @@ namespace Water {
         public Water Demand;
         private Water reducedDemand;
         public Water Supply;
-        public double supplyRatio;
+        public float supplyRatio;
 
         public Water Sewage;
 
@@ -60,8 +60,11 @@ namespace Water {
         }
 
         private void Collate() {
-            Demand = new Water(waterDemand.GetMonthlyDemand, 1);
-            reducedDemand = Demand;
+
+            if (hexCell.GetComponent<Population>()) {
+                Demand = new Water(waterDemand.GetMonthlyDemand, 1);
+                reducedDemand = Demand;
+            }
 
             maxGroundwaterAbstraction = groundwater.MaxAbstraction;
 
@@ -132,13 +135,17 @@ namespace Water {
             Supply = reservoirSupply + groundwaterSupply + riverSupply;
 
             if (Demand.Volume > 0) {
-                supplyRatio = Supply.Volume / Demand.Volume;
+                supplyRatio = (float)(Supply.Volume / Demand.Volume);
             }
             else if (Demand.Volume == 0) {
                 supplyRatio = 1;
             }
             else {
                 throw new System.ArgumentOutOfRangeException("Demand is less than 0 in cell " + hexCell.index);
+            }
+
+            if (supplyRatio > 1 || supplyRatio < 0) {
+                throw new System.ArgumentOutOfRangeException("The supply ratio in cell " + hexCell.index + " is out of bounds. Supply = " + Supply.Volume + ". Demand =  " + Demand.Volume);
             }
 
             Sewage = new Water(Supply.Volume, 0f);

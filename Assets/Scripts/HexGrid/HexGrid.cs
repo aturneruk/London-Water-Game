@@ -62,7 +62,7 @@ public class HexGrid : MonoBehaviour {
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.index = i;
 
-        cell.Population = cell.gameObject.AddComponent<Population>();
+        cell.gameObject.AddComponent<Population>();
 
         gameObject.GetComponent<Water.GridManager>().AddCellManager(cell);
 
@@ -118,7 +118,10 @@ public class HexGrid : MonoBehaviour {
         double totalPopulation = 0;
 
         foreach (HexCell cell in cells) {
-            totalPopulation += cell.Population.Size;
+            Population cellPopulation = cell.GetComponent<Population>();
+            if (cellPopulation) {
+                totalPopulation += cellPopulation.Size;
+            }
         }
 
         return Mathf.RoundToInt((float)totalPopulation);

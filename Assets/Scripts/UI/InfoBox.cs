@@ -12,9 +12,14 @@ namespace UI {
         CanvasGroup activeInfoBox;
 
         [SerializeField]
+        ConfirmationDialog confirmationDialog;
+
+        [SerializeField]
         CanvasGroup CellInfoBox;
         [SerializeField]
-        Text hexCellIndex, cellPopulation, cellBorough, boroughPopulation, waterDemand, groundwaterSupply, groundwaterLevel, groundwaterQuality, riverSupply, reservoirSupply,  waterSupply;
+        Text hexCellIndex, cellPopulation, cellBorough, boroughPopulation, waterDemand, groundwaterSupply, groundwaterLevel, groundwaterQuality, riverSupply, reservoirSupply,  waterSupply, newPopulatedReservoirLevel, newPopulatedReservoirDetails;
+        [SerializeField]
+        Button newPopulatedReservoirButton;
 
         [SerializeField]
         CanvasGroup RiverInfoBox;
@@ -24,14 +29,18 @@ namespace UI {
         [SerializeField]
         CanvasGroup EmptyInfoBox;
         [SerializeField]
-        Text emptyCellIndex, emptyCellPopulation, newReservoir, newWWTP;
+        Text emptyCellIndex, emptyCellPopulation, newReservoirLevel, newReservoirDetails, newWWTPLevel, newWWTPDetails;
+        [SerializeField]
+        Button newReservoirButton, newWWTPButton;
 
         [SerializeField]
         CanvasGroup ReservoirInfoBox;
         [SerializeField]
-        Text reservoirCellIndex, reservoirLevel, reservoirStorageCapacity, reservoirStorageLevel, reservoirStorageQuality, reservoirAbstractionVolume, reservoirSupplyVolume, reservoirSupplyMultiplier, reservoirUpgrade;
+        Text reservoirCellIndex, reservoirLevel, reservoirStorageCapacity, reservoirStorageLevel, reservoirStorageQuality, reservoirAbstractionVolume, reservoirSupplyVolume, reservoirSupplyMultiplier, reservoirUpgradeLevel, reservoirUpgradeDetails;
         [SerializeField]
         Slider reservoirSupplyMultiplierSlider;
+        [SerializeField]
+        Button reservoirUpgradeButton;
 
         [SerializeField]
         CanvasGroup WWTPInfoBox;
@@ -65,13 +74,14 @@ namespace UI {
 
                     if (selectedCell) {
                         DeselectCell(selectedCell);
+                        selectedCell = null;
                         HideWindow(activeInfoBox);
                     }
 
                     selectedCell = newCell;
 
                     if (selectedCell.riverDistance != 0) {
-                        if (selectedCell.Population.Size != 0) {
+                        if (selectedCell.GetComponent<Population>() && selectedCell.GetComponent<Population>().Size != 0) {
                             activeInfoBox = CellInfoBox;
                             SelectCell(selectedCell);
                             ShowWindow();
@@ -106,6 +116,7 @@ namespace UI {
             else {
                 if (selectedCell) {
                     DeselectCell(selectedCell);
+                    selectedCell = null;
                 }
                 if (activeInfoBox) {
                     HideWindow(activeInfoBox);
@@ -115,21 +126,78 @@ namespace UI {
 
         public void CloseButton() {
             DeselectCell(selectedCell);
+            selectedCell = null;
             HideWindow(activeInfoBox);
             selectedCell = null;
         }
 
+        IEnumerator PlaceBuilding(DialogType dialogType) {
+
+            Water.Reservoir reservoir = selectedCell.GetComponent<Water.Reservoir>();
+
+            if (dialogType == DialogType.EmptyCell) {
+                confirmationDialog.ShowConfirmationDialog(dialogType, Water.Reservoir.CapitalBuildCost);
+            }
+            else if (dialogType == DialogType.PopulatedCell) {
+                confirmationDialog.ShowConfirmationDialog(dialogType, Water.Reservoir.CapitalBuildCost, selectedCell.GetComponent<Population>().Size, Water.Reservoir.PopulationBuildCost(selectedCell));
+            }
+            else if (dialogType == DialogType.Upgrade) {
+                confirmationDialog.ShowConfirmationDialog(dialogType, reservoir.UpgradeCost);
+            }
+            else {
+                throw new System.ArgumentNullException("the dialog type cannot be null");
+            }
+
+            while (confirmationDialog.result == DialogResult.None) {
+                yield return null; // wait
+            }
+
+            if (confirmationDialog.result == DialogResult.Yes) {
+
+                if (dialogType == DialogType.EmptyCell) {
+                    if (Money.SubtractMoney(Water.Reservoir.BuildCost(selectedCell)) == true) {
+                        DeselectCell(selectedCell);
+                        HideWindow(EmptyInfoBox);
+                        activeInfoBox = ReservoirInfoBox;
+                        selectedCell.BuildReservoir();
+                        SelectCell(selectedCell);
+                        ShowWindow();
+                    }
+                }
+                else if (dialogType == DialogType.PopulatedCell) {
+                    if (Money.SubtractMoney(Water.Reservoir.BuildCost(selectedCell)) == true) {
+                        DeselectCell(selectedCell);
+                        HideWindow(CellInfoBox);
+                        activeInfoBox = ReservoirInfoBox;
+                        selectedCell.BuildReservoir();
+                        SelectCell(selectedCell);
+                        ShowWindow();
+                    }
+                }
+                else if (dialogType == DialogType.Upgrade) {
+                    if (Money.SubtractMoney(reservoir.UpgradeCost) == true) {
+                        reservoir.UpgradeReservoir();
+                        SelectCell(selectedCell);
+                    }
+                }
+            }
+            else if (confirmationDialog.result == DialogResult.No) {
+            }
+        }
+
         public void BuildReservoir() {
-            HideWindow(EmptyInfoBox);
-            activeInfoBox = ReservoirInfoBox;
-            selectedCell.BuildReservoir();
-            SelectCell(selectedCell);
-            ShowWindow();
+            if (activeInfoBox == EmptyInfoBox) {
+                StartCoroutine(PlaceBuilding(DialogType.EmptyCell));
+            }
+            else if (activeInfoBox == CellInfoBox) {
+                StartCoroutine(PlaceBuilding(DialogType.PopulatedCell));
+            }
         }
 
         public void UpgradeReservoir() {
-            selectedCell.GetComponent<Water.Reservoir>().UpgradeReservoir();
-            SelectCell(selectedCell);
+            if (activeInfoBox == ReservoirInfoBox) {
+                StartCoroutine(PlaceBuilding(DialogType.Upgrade));
+            }
         }
 
         public void BuildWWTP() {
@@ -213,14 +281,13 @@ namespace UI {
             else {
                 cell.HighlightColor = null;
             }
-            selectedCell = null;
         }
 
         void UpdateInfo() {
 
             if (activeInfoBox == CellInfoBox) {
                 hexCellIndex.text = "Cell " + selectedCell.index.ToString();
-                cellPopulation.text = "Population: " + selectedCell.Population.ToString();
+                cellPopulation.text = "Population: " + selectedCell.GetComponent<Population>().ToString();
 
                 if (selectedCell.borough.Name != null) {
                     cellBorough.text = selectedCell.borough.ToString();
@@ -231,26 +298,46 @@ namespace UI {
                     boroughPopulation.text = null;
                 }
 
-                waterDemand.text = "Demand: " + selectedCell.waterManager.Demand.FormattedFlow;
+                waterDemand.text = selectedCell.waterManager.Demand.FormattedFlow;
 
-                groundwaterSupply.text = "Supplied:" + selectedCell.waterManager.groundwaterSupply.FormattedFlow;
-                groundwaterLevel.text = "Remaining: " + selectedCell.waterManager.groundwater.Storage.FormattedLevel;
-                groundwaterQuality.text = "Quality: " + selectedCell.waterManager.groundwater.Storage.FormattedQuality;
-                riverSupply.text = "Supplied: " + selectedCell.waterManager.riverSupply.FormattedFlow;
+                groundwaterSupply.text = selectedCell.waterManager.groundwaterSupply.FormattedFlow;
+                groundwaterLevel.text = selectedCell.waterManager.groundwater.Storage.FormattedLevel;
+                groundwaterQuality.text = selectedCell.waterManager.groundwater.Storage.FormattedQuality;
+                
+                riverSupply.text = selectedCell.waterManager.riverSupply.FormattedFlow;
 
-                reservoirSupply.text = "Supplied: " + selectedCell.waterManager.reservoirSupply.FormattedFlow;
+                reservoirSupply.text = selectedCell.waterManager.reservoirSupply.FormattedFlow;
 
-                waterSupply.text = "Total supplied: " + selectedCell.waterManager.Supply.FormattedFlow;
+                waterSupply.text = selectedCell.waterManager.Supply.FormattedFlow;
+
+                newPopulatedReservoirLevel.text = "0 → 1";
+                newPopulatedReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Reservoir.capacities[1];
+
+                if (Water.Reservoir.BuildCost(selectedCell) <= Money.Balance) {
+                    newPopulatedReservoirButton.interactable = true;
+                }
+                else {
+                    newPopulatedReservoirButton.interactable = false;
+                }
             }
             else if (activeInfoBox == EmptyInfoBox) {
                 emptyCellIndex.text = "Cell " + selectedCell.index.ToString();
-                emptyCellPopulation.text = "Population: " + selectedCell.Population.ToString();
+                emptyCellPopulation.text = "Population: " + selectedCell.GetComponent<Population>().ToString();
+
                 if (selectedCell.GetComponent<Water.Reservoir>() == null) {
-                    newReservoir.text = "0 → 1";
+                    newReservoirLevel.text = "0 → 1";
+                    newReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Reservoir.capacities[1];
                 }
 
                 if (selectedCell.GetComponent<Water.WWTP>() == null) {
-                    newWWTP.text = "0 → 1";
+                    newWWTPLevel.text = "0 → 1";
+                }
+
+                if (Water.Reservoir.BuildCost(selectedCell) <= Money.Balance) {
+                    newReservoirButton.interactable = true;
+                }
+                else {
+                    newReservoirButton.interactable = false;
                 }
             }
             else if (activeInfoBox == RiverInfoBox) {
@@ -260,12 +347,12 @@ namespace UI {
                 hexCellIndexRiver.text = "Cell " + selectedCell.index.ToString();
                 riverCellIndex.text = "River cell: " + riverCell.index.ToString();
 
-                riverFlow.text = "Flow: " + riverCell.flow.FormattedFlow; ;
-                riverQuality.text = "River Quality: " + riverCell.flow.FormattedQuality;
+                riverFlow.text = riverCell.flow.FormattedFlow; ;
+                riverQuality.text = riverCell.flow.FormattedQuality;
 
-                riverAbstraction.text = "Abstraction: " + riverCell.Abstractions.FormattedFlow;
-                riverDischarge.text = "Discharge: " + riverCell.Discharges.FormattedFlow;
-                dischargeQuality.text = "Discharge quality: " + riverCell.Discharges.FormattedQuality;
+                riverAbstraction.text = riverCell.Abstractions.FormattedFlow;
+                riverDischarge.text = riverCell.Discharges.FormattedFlow;
+                dischargeQuality.text = riverCell.Discharges.FormattedQuality;
             }
             else if (activeInfoBox == ReservoirInfoBox) {
 
@@ -273,15 +360,24 @@ namespace UI {
 
                 reservoirCellIndex.text = "Cell " + selectedCell.index.ToString();
                 reservoirLevel.text = "Level " + reservoir.Level + " reservoir";
-                reservoirStorageCapacity.text = "Capacity: " + reservoir.Storage.FormattedMaxVolume;
-                reservoirStorageLevel.text = "Remaining: " + reservoir.Storage.FormattedLevel;
-                reservoirStorageQuality.text = "Quality: " + reservoir.Storage.FormattedQuality;
-                reservoirAbstractionVolume.text = "Abstraction: " + reservoir.AbstractedFromRiver.FormattedFlow;
-                reservoirSupplyVolume.text = "Supply: " + reservoir.SuppliedToCells.FormattedFlow;
-                reservoirUpgrade.text = reservoir.Level + " → " + (reservoir.Level + 1);
+                reservoirStorageCapacity.text = reservoir.Storage.FormattedMaxVolume;
+                reservoirStorageLevel.text = reservoir.Storage.FormattedLevel;
+                reservoirStorageQuality.text = reservoir.Storage.FormattedQuality;
+                reservoirAbstractionVolume.text = reservoir.AbstractedFromRiver.FormattedFlow;
+                reservoirSupplyVolume.text = reservoir.SuppliedToCells.FormattedFlow;
 
                 reservoir.supplyMultiplier = reservoirSupplyMultiplierSlider.value;
                 reservoirSupplyMultiplier.text = reservoir.supplyMultiplier.ToString("P0");
+                
+                reservoirUpgradeLevel.text = reservoir.Level + " → " + (reservoir.Level + 1);
+                reservoirUpgradeDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(reservoir.UpgradeCost) + "\nNew capacity: " + Water.Reservoir.capacities[1];
+
+                if (reservoir.UpgradeCost <= Money.Balance) {
+                    reservoirUpgradeButton.interactable = true;
+                }
+                else {
+                    reservoirUpgradeButton.interactable = false;
+                }
             }
             else if (activeInfoBox == WWTPInfoBox) {
             }

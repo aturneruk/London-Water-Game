@@ -16,10 +16,12 @@ public class Population : MonoBehaviour {
 
     private void OnEnable() {
         GameTime.NewMonth += UpdatePopulation;
+        GameTime.NewYear += PopulationIncome;
     }
 
     private void OnDisable() {
         GameTime.NewMonth -= UpdatePopulation;
+        GameTime.NewYear -= PopulationIncome;
     }
 
     public override string ToString() {
@@ -43,5 +45,11 @@ public class Population : MonoBehaviour {
         }
 
         Size += Size * GrowthRate * factor;
+    }
+
+    public void PopulationIncome() {
+        if (Size > 0) {
+            Money.AddMoney(Size);
+        }
     }
 }
