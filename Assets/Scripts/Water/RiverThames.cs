@@ -12,19 +12,10 @@ namespace Water {
         private List<RiverCell> riverCells = new List<RiverCell>();
         public int RiverLength { get; private set; }
 
-        private double inflowFactor {
-            get {
-                return inflowSliderValue * annualInflowFactor;
-            }
-        }
-        private double inflowSliderValue;
-        private double annualInflowFactor;
+        private double inflowFactor;
 
         public double inflow;
         public double outflow; 
-
-        [SerializeField]
-        UnityEngine.UI.Slider inflowSlider;
 
         private void Awake() {
 
@@ -35,7 +26,6 @@ namespace Water {
             GenerateNetwork();
 
             UpdateAnnualFlowFactor();
-            UpdateInflowSlider();
         }
 
         private void OnEnable() {
@@ -56,11 +46,7 @@ namespace Water {
         }
 
         public void UpdateAnnualFlowFactor() {
-            annualInflowFactor = Stochasticity.RiverFlowMultiplier;
-        }
-
-        public void UpdateInflowSlider() {
-            inflowSliderValue = inflowSlider.value;
+            inflowFactor = Stochasticity.RiverFlowMultiplier;
         }
 
         private void CreateRiverCells() {
