@@ -1082,6 +1082,7 @@ GameObject:
   - component: {fileID: 158096129}
   - component: {fileID: 158096128}
   - component: {fileID: 158096130}
+  - component: {fileID: 158096131}
   m_Layer: 0
   m_Name: Hex Grid
   m_TagString: Untagged
@@ -1162,6 +1163,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   riverCells: []
+--- !u!114 &158096131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158096125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23a31235b9635a44398aecbe691e5ca9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &159149680
 GameObject:
   m_ObjectHideFlags: 0
