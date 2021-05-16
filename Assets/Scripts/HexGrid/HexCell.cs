@@ -33,8 +33,8 @@ public class HexCell : MonoBehaviour {
     public bool isRiverside;
 
     public Water.CellManager waterManager;
-
-    private Water.Reservoir reservoir;
+    public CellPopulation cellPopulation;
+    public Water.Reservoir reservoir;
 
     public int Elevation {
         get {

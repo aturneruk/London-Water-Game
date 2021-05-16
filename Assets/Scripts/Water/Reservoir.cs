@@ -126,8 +126,8 @@ namespace Water {
         }
 
         public static double PopulationBuildCost(HexCell cell) {            
-            if (cell.GetComponent<Population>().Size != 0) {
-                return cell.GetComponent<Population>().Size * 10;
+            if (cell.GetComponent<CellPopulation>().Size != 0) {
+                return cell.GetComponent<CellPopulation>().Size * 10;
             }
             else {
                 return 0;
@@ -155,12 +155,14 @@ namespace Water {
             cellManager = gameObject.GetComponent<CellManager>();
             gridManager = gameObject.GetComponentInParent<GridManager>();
 
+            hexCell.reservoir = this;
+
             Level = 1;
             Storage = new Water(0, 0, capacities[level]);
             abstractionCell = cellManager.riverAbstractionCell;
             gridManager.AddReservoir(this);
             hexCell.SetMainColor();
-            Destroy(hexCell.GetComponent<Population>());
+            Destroy(hexCell.GetComponent<CellPopulation>());
 
             CalculateServiceArea();            
         }

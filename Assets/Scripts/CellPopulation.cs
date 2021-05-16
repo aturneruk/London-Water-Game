@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Population : MonoBehaviour {
+public class CellPopulation : MonoBehaviour {
 
-    HexCell hexCell;
-    public double Size { get; set; }
+    public HexCell hexCell;
+    public GridPopulation gridPopulation;
+
+    public double Size;
     public double GrowthRate { get; set; }
 
     private void Awake() {
-        hexCell = gameObject.GetComponent<HexCell>();
         Size = 0;
         GrowthRate = 0.0004f;
     }

@@ -62,8 +62,7 @@ public class HexGrid : MonoBehaviour {
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.index = i;
 
-        cell.gameObject.AddComponent<Population>();
-
+        gameObject.GetComponent<GridPopulation>().AddCellPopulation(cell);
         gameObject.GetComponent<Water.GridManager>().AddCellManager(cell);
 
         if (x > 0) {
@@ -113,26 +112,16 @@ public class HexGrid : MonoBehaviour {
         return cells[i];
     }
 
-    public int GetTotalPopulation() {
-
-        double totalPopulation = 0;
-
-        foreach (HexCell cell in cells) {
-            Population cellPopulation = cell.GetComponent<Population>();
-            if (cellPopulation) {
-                totalPopulation += cellPopulation.Size;
-            }
-        }
-
-        return Mathf.RoundToInt((float)totalPopulation);
-    }
-
     public void SetDataOverlay(Overlay overlay) {
 
         foreach (HexCell cell in cells) {
-
-            if (cell.riverDistance != 0) {
-                cell.OverlayColor = overlay.CellColor(cell);
+            if (cell.riverDistance != 0 && !cell.reservoir) {
+                if (overlay == Overlay.Population) {
+                    cell.OverlayColor = overlay.CellColor(cell, gameObject.GetComponent<GridPopulation>().MaxCellPopulation);
+                }
+                else {
+                    cell.OverlayColor = overlay.CellColor(cell);
+                }
             }
         }
     }

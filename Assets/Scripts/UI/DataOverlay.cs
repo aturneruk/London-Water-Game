@@ -56,7 +56,7 @@ namespace UI {
 
             switch (overlay) {
                 case Overlay.Population:
-                    return PopulationColor(cell);
+                    throw new System.ArgumentException("When using the population overlay the maximum cell population should also be specified");
                 case Overlay.GroundwaterLevel:
                     return GroundwaterLevelColor(cell);
                 case Overlay.GroundwaterQuality:
@@ -70,27 +70,40 @@ namespace UI {
             }
         }
 
-        public static Color PopulationColor(HexCell cell) {
-            double population = cell.GetComponent<Population>().Size;
+        public static Color? CellColor(this Overlay overlay, HexCell cell, double maxCellPopulation) {
 
-            if (population > 100000) {
-                throw new System.ArgumentOutOfRangeException("Population is greater than 100000");
+            switch (overlay) {
+                case Overlay.Population:
+                    return PopulationColor(cell, maxCellPopulation);
+                case Overlay.GroundwaterLevel:
+                    return GroundwaterLevelColor(cell);
+                case Overlay.GroundwaterQuality:
+                    return GroundwaterQualityColor(cell);
+                case Overlay.SupplyRatio:
+                    return SupplyRatioColor(cell);
+                case Overlay.WaterSources:
+                    return WaterSourcesColor(cell);
+                default:
+                    return null;
+            }
+        }
+
+        public static Color PopulationColor(HexCell cell, double maxPopulation) {
+            double population = cell.GetComponent<CellPopulation>().Size;
+
+            // scale to set x=1 to a convenient point for the function below
+            float val = (float)(population / maxPopulation);
+
+            // This function has a horiztonal asymtote at y = 1.0 :-)
+            // at x = 1, y = 0.74
+            if (val > 0) {
+                val = 0.1f + 0.9f * Mathf.Sqrt(val / (val + 1));
             }
             else {
-                // scale to set x=1 to a convenient point for the function below
-                float val = (float)population / 30000f;
-
-                // This function has a horiztonal asymtote at y = 1.0 :-)
-                // at x = 1, y = 0.74
-                if (val > 0) {
-                    val = 0.1f + 0.9f * Mathf.Sqrt(val / (val + 1));
-                }
-                else {
-                    val = 0;
-                }
-
-                return new Color(1f, 1 - val, 1f);
+                val = 0;
             }
+
+            return new Color(1f, 1 - val, 1f);            
         }
 
         public static Color GroundwaterLevelColor(HexCell cell) {

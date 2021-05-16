@@ -61,7 +61,7 @@ namespace Water {
 
         private void Collate() {
 
-            if (hexCell.GetComponent<Population>()) {
+            if (hexCell.GetComponent<CellPopulation>()) {
                 Demand = new Water(waterDemand.GetMonthlyDemand, 1);
                 reducedDemand = Demand;
             }

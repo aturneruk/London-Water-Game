@@ -36,7 +36,7 @@ namespace UI {
                 GameTime.UpdateTime();
             }
 
-            population.text = "Population: " + grid.GetTotalPopulation().ToString();
+            population.text = "Population: " + grid.GetComponent<GridPopulation>().GetTotalPopulation().ToString();
             moneyBalance.text = Money.FormattedMoney(Money.Balance);
             date.text = GameTime.GetLongForm();
             
