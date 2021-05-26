@@ -60,6 +60,7 @@ namespace Water {
                 hexCell.riverDistanceSet = true;
 
                 gridManager.RemoveCellManager(hexCell.GetComponent<CellManager>());
+                hexCell.cellPopulation = null;
                 Destroy(hexCell.GetComponent<CellPopulation>());
 
                 RiverCell riverCell = hexCell.gameObject.AddComponent<RiverCell>();

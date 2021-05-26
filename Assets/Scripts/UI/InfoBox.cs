@@ -81,7 +81,7 @@ namespace UI {
                     selectedCell = newCell;
 
                     if (selectedCell.riverDistance != 0) {
-                        if (selectedCell.GetComponent<CellPopulation>() && selectedCell.GetComponent<CellPopulation>().Size != 0) {
+                        if (selectedCell.cellPopulation && selectedCell.cellPopulation.Size != 0) {
                             activeInfoBox = CellInfoBox;
                             SelectCell(selectedCell);
                             ShowWindow();
@@ -139,7 +139,7 @@ namespace UI {
                 confirmationDialog.ShowConfirmationDialog(dialogType, Water.Reservoir.CapitalBuildCost);
             }
             else if (dialogType == DialogType.PopulatedCell) {
-                confirmationDialog.ShowConfirmationDialog(dialogType, Water.Reservoir.CapitalBuildCost, selectedCell.GetComponent<CellPopulation>().Size, Water.Reservoir.PopulationBuildCost(selectedCell));
+                confirmationDialog.ShowConfirmationDialog(dialogType, Water.Reservoir.CapitalBuildCost, selectedCell.cellPopulation.Size, Water.Reservoir.PopulationBuildCost(selectedCell));
             }
             else if (dialogType == DialogType.Upgrade) {
                 confirmationDialog.ShowConfirmationDialog(dialogType, reservoir.UpgradeCost);
@@ -287,7 +287,7 @@ namespace UI {
 
             if (activeInfoBox == CellInfoBox) {
                 hexCellIndex.text = "Cell " + selectedCell.index.ToString();
-                cellPopulation.text = "Population: " + selectedCell.GetComponent<CellPopulation>().ToString();
+                cellPopulation.text = "Population: " + selectedCell.cellPopulation.ToString();
 
                 if (selectedCell.borough.Name != null) {
                     cellBorough.text = selectedCell.borough.ToString();
@@ -322,7 +322,7 @@ namespace UI {
             }
             else if (activeInfoBox == EmptyInfoBox) {
                 emptyCellIndex.text = "Cell " + selectedCell.index.ToString();
-                emptyCellPopulation.text = "Population: " + selectedCell.GetComponent<CellPopulation>().ToString();
+                emptyCellPopulation.text = "Population: " + selectedCell.cellPopulation.ToString();
 
                 if (selectedCell.GetComponent<Water.Reservoir>() == null) {
                     newReservoirLevel.text = "0 → 1";

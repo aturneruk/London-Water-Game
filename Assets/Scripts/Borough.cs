@@ -23,7 +23,7 @@ public struct Borough {
         foreach (HexCell cell in cells) {
             cell.borough = this;
             cell.MainColor = Color.grey;
-            cell.GetComponent<CellPopulation>().Size = cellPopulation;
+            cell.cellPopulation.Size = cellPopulation;
         }
     }
 
@@ -31,9 +31,8 @@ public struct Borough {
         double boroughPopulation = 0;
 
         foreach (HexCell cell in Cells) {
-            CellPopulation cellPopulation = cell.GetComponent<CellPopulation>();
-            if (cellPopulation) {
-                boroughPopulation += cellPopulation.Size;
+            if (cell.cellPopulation) {
+                boroughPopulation += cell.cellPopulation.Size;
             }
         }
 

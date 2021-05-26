@@ -162,6 +162,7 @@ namespace Water {
             abstractionCell = cellManager.riverAbstractionCell;
             gridManager.AddReservoir(this);
             hexCell.SetMainColor();
+            hexCell.cellPopulation = null;
             Destroy(hexCell.GetComponent<CellPopulation>());
 
             CalculateServiceArea();            

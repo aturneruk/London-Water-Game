@@ -89,7 +89,7 @@ namespace UI {
         }
 
         public static Color PopulationColor(HexCell cell, double maxPopulation) {
-            double population = cell.GetComponent<CellPopulation>().Size;
+            double population = cell.cellPopulation.Size;
 
             // scale to set x=1 to a convenient point for the function below
             float val = (float)(population / maxPopulation);

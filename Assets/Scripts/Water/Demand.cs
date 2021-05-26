@@ -17,7 +17,7 @@ namespace Water {
 
         public double GetDailyDemand {
             get {
-                return demandPerCapita * manager.hexCell.GetComponent<CellPopulation>().Size;
+                return demandPerCapita * manager.hexCell.cellPopulation.Size;
             }            
         }
 
