@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,11 +32,13 @@ namespace Water {
 
         public void AddCellManager(HexCell cell) {
             CellManager cellManager = cell.waterManager = cell.gameObject.AddComponent<CellManager>();
+            cell.waterManager.hexCell = cell;
             cell.waterManager.gridManager = this;
             cellManagers.Add(cellManager);
         }
 
         public void RemoveCellManager(CellManager manager) {
+            manager.hexCell.waterManager = null;
             cellManagers.Remove(manager);
             Destroy(manager);
         }
@@ -74,7 +75,7 @@ namespace Water {
 
         public void HexGridWaterUpdate() {
 
-            DailyRefresh();
+            RiverFlow();
 
             foreach (Reservoir reservoir in reservoirs) {
                 reservoir.SetSupply();
@@ -118,7 +119,7 @@ namespace Water {
                 double sum = deltaS + inflow - outflow;
                 //Debug.Log("Change in storage: " + deltaS);
                 if (Mathf.Abs((float)sum) > 1) {
-                    Debug.LogError("Total delta: " + sum);
+                    throw new System.ArithmeticException("Total delta: " + sum);
                 }
             }
         }
@@ -136,7 +137,7 @@ namespace Water {
             }
         }
 
-        public void DailyRefresh() {
+        public void RiverFlow() {
 
             riverThames.inflow = 0;
             riverThames.outflow = 0;

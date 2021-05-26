@@ -7,7 +7,7 @@ namespace Water {
 
         public GridManager gridManager;
         public HexCell hexCell;
-        private HexGrid hexGrid;
+        //private HexGrid hexGrid;
 
         public List<CellManager> overlandFlowPrevious = new List<CellManager>();
         public CellManager overlandFlowNext;
@@ -37,9 +37,6 @@ namespace Water {
         public Water reservoirSupply;
 
         private void Start() {
-            hexCell = gameObject.GetComponent<HexCell>();
-            hexGrid = hexCell.GetComponentInParent<HexGrid>();
-
             groundwater = new Groundwater(this);
             waterDemand = new Demand(this);
             wasteRouter = new WasteRouter(this);
