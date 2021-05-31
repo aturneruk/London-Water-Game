@@ -25,6 +25,8 @@ namespace Water {
         public Water AbstractedFromRiver;
 
         public double requestedStorageLevel;
+        public double maxCellSupplyMultiplier;
+        public string displayedMaxCellSupply;
 
         private int level = 0;
 
@@ -51,7 +53,7 @@ namespace Water {
                     return Storage.Volume + RemainingRiverAbstractionCapacity;
                 }
                 else {
-                    return maxAbstractions[Level];  //* Storage.Level * Storage.Level;
+                    return maxAbstractions[Level] * maxCellSupplyMultiplier;  //* Storage.Level * Storage.Level;
                 }
             }
         }
@@ -239,6 +241,7 @@ namespace Water {
             else {
                 riverAbstraction.Quality = 0;
             }
+            displayedMaxCellSupply = Water.FormatFlow(MaxMonthlyCellSupply);
         }
 
         public void SetStorage() {

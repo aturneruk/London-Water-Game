@@ -36,9 +36,9 @@ namespace UI {
         [SerializeField]
         CanvasGroup ReservoirInfoBox;
         [SerializeField]
-        Text reservoirCellIndex, reservoirLevel, reservoirStorageCapacity, reservoirStorageLevel, reservoirStorageQuality, reservoirAbstractionVolume, reservoirSupplyVolume, reservoirSupplyMultiplier, reservoirUpgradeLevel, reservoirUpgradeDetails;
+        Text reservoirCellIndex, reservoirLevel, reservoirStorageCapacity, reservoirStorageLevel, reservoirStorageQuality, reservoirAbstractionVolume, reservoirSupplyVolume, maxCellSupply, reservoirUpgradeLevel, reservoirUpgradeDetails;
         [SerializeField]
-        Slider reservoirSupplyMultiplierSlider;
+        Slider requestedStorageLevelSlider, maxCellSupplyMultiplierSlider;
         [SerializeField]
         Button reservoirUpgradeButton;
 
@@ -366,8 +366,9 @@ namespace UI {
                 reservoirAbstractionVolume.text = reservoir.AbstractedFromRiver.FormattedFlow;
                 reservoirSupplyVolume.text = reservoir.SuppliedToCells.FormattedFlow;
 
-                reservoir.requestedStorageLevel = reservoirSupplyMultiplierSlider.value;
-                reservoirSupplyMultiplier.text = reservoir.requestedStorageLevel.ToString("P0");
+                reservoir.requestedStorageLevel = requestedStorageLevelSlider.value;
+                reservoir.maxCellSupplyMultiplier = maxCellSupplyMultiplierSlider.value;
+                maxCellSupply.text = reservoir.displayedMaxCellSupply;
                 
                 reservoirUpgradeLevel.text = reservoir.Level + " → " + (reservoir.Level + 1);
                 reservoirUpgradeDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(reservoir.UpgradeCost) + "\nNew capacity: " + Water.Reservoir.capacities[1];
