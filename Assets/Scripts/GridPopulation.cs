@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ public class GridPopulation : MonoBehaviour
     List<CellPopulation> populations = new List<CellPopulation>();
     List<double> populationSizes = new List<double>();
 
-    public int GetTotalPopulation() {
+    public double GetTotalPopulation() {
 
         double totalPopulation = 0;
 
@@ -19,7 +20,7 @@ public class GridPopulation : MonoBehaviour
 
 
         //double totalPopulation = populationSizes.Sum();
-        return Mathf.RoundToInt((float)totalPopulation);
+        return Math.Round(totalPopulation);
     }
 
     public double MaxCellPopulation {

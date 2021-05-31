@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -92,28 +93,28 @@ namespace UI {
             double population = cell.cellPopulation.Size;
 
             // scale to set x=1 to a convenient point for the function below
-            float val = (float)(population / maxPopulation);
+            double val = population / maxPopulation;
 
             // This function has a horiztonal asymtote at y = 1.0 :-)
             // at x = 1, y = 0.74
             if (val > 0) {
-                val = 0.1f + 0.9f * Mathf.Sqrt(val / (val + 1));
+                val = 0.1f + 0.9f * Math.Sqrt(val / (val + 1));
             }
             else {
                 val = 0;
             }
 
-            return new Color(1f, 1 - val, 1f);            
+            return new Color(1f, 1 - (float)val, 1f);            
         }
 
         public static Color GroundwaterLevelColor(HexCell cell) {
-            float val = (float)cell.waterManager.groundwater.Storage.Level;
+            double val = cell.waterManager.groundwater.Storage.Level;
 
             if (val <= 1 && val >= 0) {
-                return new Color(1f - val, 1f, 1f);
+                return new Color(1f - (float)val, 1f, 1f);
             }
             else {
-                throw new System.ArgumentOutOfRangeException("Groundwater level must be between 0 and 1");
+                throw new ArgumentOutOfRangeException("Groundwater level must be between 0 and 1");
             }
         }
 
@@ -125,7 +126,7 @@ namespace UI {
                 return new Color(1 - val, val, 0f);
             }
             else {
-                throw new System.ArgumentOutOfRangeException("Groundwater quality must be between 0 and 1");
+                throw new ArgumentOutOfRangeException("Groundwater quality must be between 0 and 1");
             }
         }
 
@@ -138,10 +139,10 @@ namespace UI {
                 return null;
             }
             else if (supplyRatio <= 1 && supplyRatio >= 0) {
-                return new Color((float)(1 - supplyRatio), (float)supplyRatio, 0f);
+                return new Color(1 - (float)supplyRatio, (float)supplyRatio, 0f);
             }
             else {
-                throw new System.ArgumentOutOfRangeException("Supply ratio must be between 0 and 1");
+                throw new ArgumentOutOfRangeException("Supply ratio must be between 0 and 1");
             }
         }
 
