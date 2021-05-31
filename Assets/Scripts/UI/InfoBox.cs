@@ -366,8 +366,8 @@ namespace UI {
                 reservoirAbstractionVolume.text = reservoir.AbstractedFromRiver.FormattedFlow;
                 reservoirSupplyVolume.text = reservoir.SuppliedToCells.FormattedFlow;
 
-                reservoir.supplyMultiplier = reservoirSupplyMultiplierSlider.value;
-                reservoirSupplyMultiplier.text = reservoir.supplyMultiplier.ToString("P0");
+                reservoir.requestedStorageLevel = reservoirSupplyMultiplierSlider.value;
+                reservoirSupplyMultiplier.text = reservoir.requestedStorageLevel.ToString("P0");
                 
                 reservoirUpgradeLevel.text = reservoir.Level + " → " + (reservoir.Level + 1);
                 reservoirUpgradeDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(reservoir.UpgradeCost) + "\nNew capacity: " + Water.Reservoir.capacities[1];
