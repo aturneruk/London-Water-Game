@@ -88,7 +88,7 @@ public class MetropolitanBoroughs : MonoBehaviour {
         new int[] { } // Woolwich
     };
 
-    private int[] boroughPopulations = {
+    private double[] boroughPopulations = {
         128833, // City of London
         3368, // Battersea
         46221, // Bermondsey

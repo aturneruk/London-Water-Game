@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,10 +20,10 @@ namespace Water {
             }
             set {
                 if (value < 0) {
-                    throw new System.ArgumentException("Volume must be greater than 0. Tried to set volume " + value);
+                    throw new ArgumentException("Volume must be greater than 0. Tried to set volume " + value);
                 }
                 else if (MaxCapacity != null && value > MaxCapacity) {
-                    throw new System.ArgumentException("Maximum volume is " + MaxCapacity.ToString() + ". Tried to set volume " + value);
+                    throw new ArgumentException("Maximum volume is " + MaxCapacity.ToString() + ". Tried to set volume " + value);
                 }
                 else {
                     volume = value;
@@ -39,7 +40,7 @@ namespace Water {
                     quality = value;
                 }
                 else {
-                    throw new System.ArgumentException("The quality must be between 0 and 1 inclusive, value is " + value);
+                    throw new ArgumentException("The quality must be between 0 and 1 inclusive, value is " + value);
                 }
             }
         }
@@ -52,7 +53,7 @@ namespace Water {
                     return level;
                 }
                 else {
-                    throw new System.ArgumentException("The storage level must be between 0 and 1 inclusive, value is " + level + "Volume is " + Volume + "Capacity is " + MaxCapacity);
+                    throw new ArgumentException("The storage level must be between 0 and 1 inclusive, value is " + level + "Volume is " + Volume + "Capacity is " + MaxCapacity);
                 }
             }
         }
@@ -81,16 +82,16 @@ namespace Water {
         public string FormattedFlow {
             get {
                 if (Volume < 300000) {
-                    return Mathf.Round((float)Volume / 30).ToString() + " L/day";
+                    return Math.Round(Volume / 30).ToString() + " L/day";
                 }
                 else if (Volume >= 300000 && Volume < 30000000) {
-                    return Mathf.Round(((float)Volume / 30000f)).ToString("F0") + "k" + " L/day";
+                    return Math.Round(Volume / 30000f).ToString("F0") + "k" + " L/day";
                 }
                 else if (Volume >= 30000000) {
-                    return Mathf.Round(((float)Volume / 30000000f)).ToString("F0") + "M" + " L/day";
+                    return Math.Round(Volume / 30000000f).ToString("F0") + "M" + " L/day";
                 }
                 else {
-                    throw new System.ArgumentException("Something has gone wrong formatting the supply to a string");
+                    throw new ArgumentException("Something has gone wrong formatting the supply to a string");
                 }
             }
         }
@@ -98,16 +99,16 @@ namespace Water {
         public string FormattedVolume {
             get {
                 if (Volume < 10000) {
-                    return Mathf.Round((float)Volume).ToString() + " L/day";
+                    return Math.Round(Volume).ToString() + " L/day";
                 }
                 else if (Volume >= 10000 && Volume < 1000000) {
-                    return Mathf.Round((float)Volume / 1000).ToString("F0") + "k" + " L";
+                    return Math.Round(Volume / 1000).ToString("F0") + "k" + " L";
                 }
                 else if (Volume >= 1000000) {
-                    return Mathf.Round((float)Volume / 1000000).ToString("F0") + "M" + " L";
+                    return Math.Round(Volume / 1000000).ToString("F0") + "M" + " L";
                 }
                 else {
-                    throw new System.ArgumentException("Something has gone wrong formatting the supply to a string");
+                    throw new ArgumentException("Something has gone wrong formatting the supply to a string");
                 }
             }
         }
@@ -129,16 +130,16 @@ namespace Water {
                 double maxCapacity = (double)MaxCapacity;
 
                 if (maxCapacity < 300000) {
-                    return Mathf.Round((float)maxCapacity / 30f).ToString() + " L/day";
+                    return Math.Round((float)maxCapacity / 30f).ToString() + " L/day";
                 }
                 else if (maxCapacity >= 300000 && maxCapacity < 30000000) {
-                    return Mathf.Round(((float)maxCapacity / 30000f)).ToString("F0") + "k" + " L/day";
+                    return Math.Round(maxCapacity / 30000f).ToString("F0") + "k" + " L/day";
                 }
                 else if (maxCapacity >= 30000000) {
-                    return Mathf.Round(((float)maxCapacity / 30000000f)).ToString("F0") + "M" + " L/day";
+                    return Math.Round(maxCapacity / 30000000f).ToString("F0") + "M" + " L/day";
                 }
                 else {
-                    throw new System.ArgumentException("Something has gone wrong formatting the max capacity to a string");
+                    throw new ArgumentException("Something has gone wrong formatting the max capacity to a string");
                 }
             }
         }
@@ -148,16 +149,16 @@ namespace Water {
                 double maxCapacity = (double)MaxCapacity;
 
                 if (maxCapacity < 10000) {
-                    return Mathf.Round((float)maxCapacity).ToString() + " L";
+                    return Math.Round(maxCapacity).ToString() + " L";
                 }
                 else if (maxCapacity >= 10000 && maxCapacity < 1000000) {
-                    return Mathf.Round((float)maxCapacity / 1000).ToString("F0") + "k" + " L";
+                    return Math.Round(maxCapacity / 1000).ToString("F0") + "k" + " L";
                 }
                 else if (maxCapacity >= 1000000) {
-                    return Mathf.Round((float)maxCapacity / 1000000).ToString("F0") + "M" + " L";
+                    return Math.Round(maxCapacity / 1000000).ToString("F0") + "M" + " L";
                 }
                 else {
-                    throw new System.ArgumentException("Something has gone wrong formatting the max capacity to a string");
+                    throw new ArgumentException("Something has gone wrong formatting the max capacity to a string");
                 }
             }
         }
@@ -182,7 +183,7 @@ namespace Water {
             //    return new Water(abstraction.Volume - source.Volume, abstraction.Quality);
             //}
             else {
-                throw new System.ArgumentOutOfRangeException("The abstraction quality should be set at 1");
+                throw new ArgumentOutOfRangeException("The abstraction quality should be set at 1");
             }
         }
 
@@ -198,7 +199,7 @@ namespace Water {
                 this.quality = quality;
             }
             else {
-                throw new System.ArgumentException("The quality must be between 0 and 1 inclusive, value is " + quality);
+                throw new ArgumentException("The quality must be between 0 and 1 inclusive, value is " + quality);
             }
 
             MaxCapacity = null;
@@ -211,13 +212,13 @@ namespace Water {
                 this.quality = quality;
             }
             else {
-                throw new System.ArgumentException("The quality must be between 0 and 1 inclusive, value is " + quality);
+                throw new ArgumentException("The quality must be between 0 and 1 inclusive, value is " + quality);
             }
 
             MaxCapacity = maxCapacity;
 
             if (volume > maxCapacity) {
-                throw new System.ArgumentException("Maximum volume is " + MaxCapacity.ToString());
+                throw new ArgumentException("Maximum volume is " + MaxCapacity.ToString());
             }
             this.volume = volume;
         }

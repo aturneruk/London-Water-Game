@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ public class CellPopulation : MonoBehaviour {
     }
 
     public override string ToString() {
-        return Mathf.Round((float)Size).ToString(); ;
+        return Math.Round(Size).ToString(); ;
     }
 
     public void UpdatePopulation() {
@@ -39,7 +40,7 @@ public class CellPopulation : MonoBehaviour {
         double factor;
 
         if (waterSupplyFactor < 0 && waterQualityFactor < 0) {
-            factor = -Mathf.Abs((float)waterSupplyFactor) * Mathf.Abs((float)waterQualityFactor);
+            factor = -Math.Abs(waterSupplyFactor) * Math.Abs(waterQualityFactor);
         }
         else {
             factor = waterSupplyFactor * waterQualityFactor;

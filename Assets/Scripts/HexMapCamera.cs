@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class HexMapCamera : MonoBehaviour
@@ -43,7 +44,7 @@ public class HexMapCamera : MonoBehaviour
     void AdjustPosition(float xDelta, float zDelta) {
 
         Vector3 direction = new Vector3(xDelta, 0, zDelta).normalized;
-        float damping = Mathf.Max(Mathf.Abs(xDelta), Mathf.Abs(zDelta));
+        float damping = Math.Max(Math.Abs(xDelta), Math.Abs(zDelta));
         float distance = Mathf.Lerp(moveSpeedMinZoom, moveSpeedMaxZoom, zoom) * Time.unscaledDeltaTime * damping;
 
         Vector3 position = transform.localPosition;

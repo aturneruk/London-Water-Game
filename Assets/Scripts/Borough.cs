@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,14 +8,14 @@ public struct Borough {
     public HexCell[] Cells { get; }
     public string Name { get; }
 
-    public Borough(string name, HexCell[] cells, int population) {
+    public Borough(string name, HexCell[] cells, double population) {
         Cells = cells;
         Name = name;
 
-        int cellPopulation;
+        double cellPopulation;
 
         if (cells.Length > 0) {
-            cellPopulation = Mathf.RoundToInt((float)population / (float)cells.Length);
+            cellPopulation = Math.Round(population / cells.Length);
         }
         else {
             cellPopulation = 0;
@@ -36,7 +37,7 @@ public struct Borough {
             }
         }
 
-        return Mathf.RoundToInt((float)boroughPopulation).ToString();
+        return Math.Round(boroughPopulation).ToString();
     }
 
     public override string ToString() {
