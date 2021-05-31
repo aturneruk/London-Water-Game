@@ -24,7 +24,7 @@ namespace Water {
         public Water SuppliedToCells;
         public Water AbstractedFromRiver;
 
-        public float requestedStorageLevel;
+        public double requestedStorageLevel;
 
         private int level = 0;
 
