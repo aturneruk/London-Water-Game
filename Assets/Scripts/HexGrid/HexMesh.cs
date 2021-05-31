@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
@@ -203,7 +204,7 @@ public class HexMesh : MonoBehaviour {
     }
 
     private void TriangulateCornerTerraceCliff(HexCell startCell, Vector3 start, HexCell leftCell, Vector3 left, HexCell rightCell, Vector3 right) {
-        float b = Mathf.Abs(1f / (rightCell.Elevation - startCell.Elevation));
+        float b = Math.Abs(1f / (rightCell.Elevation - startCell.Elevation));
         Vector3 boundary = Vector3.Lerp(start, right, b);
         Color boundaryColor = Color.Lerp(startCell.Color, rightCell.Color, b);
 
@@ -219,7 +220,7 @@ public class HexMesh : MonoBehaviour {
 
     }
     private void TriangulateCornerCliffTerrace(HexCell startCell, Vector3 start, HexCell leftCell, Vector3 left, HexCell rightCell, Vector3 right) {
-        float b = Mathf.Abs(1f / (leftCell.Elevation - startCell.Elevation));
+        float b = Math.Abs(1f / (leftCell.Elevation - startCell.Elevation));
         Vector3 boundary = Vector3.Lerp(start, left, b);
         Color boundaryColor = Color.Lerp(startCell.Color, leftCell.Color, b);
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -118,8 +119,8 @@ namespace Water {
                 double deltaS = volumes[volumes.Count - 2] - volumes[volumes.Count - 1];
                 double sum = deltaS + inflow - outflow;
                 //Debug.Log("Change in storage: " + deltaS);
-                if (Mathf.Abs((float)sum) > 1) {
-                    throw new System.ArithmeticException("Total delta: " + sum);
+                if (Math.Abs(sum) > 1) {
+                    throw new ArithmeticException("Total delta: " + sum);
                 }
             }
         }

@@ -11,9 +11,9 @@ namespace Water {
 
         public Water waste;
 
-        private float runoffCoefficient;
+        private double runoffCoefficient;
 
-        public float RunoffCoefficient {
+        public double RunoffCoefficient {
             get {
                 return runoffCoefficient;
             }

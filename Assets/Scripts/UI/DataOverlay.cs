@@ -31,7 +31,7 @@ namespace UI {
                     HexMetrics.selectedColor = Color.magenta;
                     break;
                 default:
-                    throw new System.ArgumentException("Selected overlay is not recognised");
+                    throw new ArgumentException("Selected overlay is not recognised");
             }
             hexGrid.SetDataOverlay(selectedOverlay);
         }        
@@ -119,11 +119,11 @@ namespace UI {
         }
 
         public static Color GroundwaterQualityColor(HexCell cell) {
-            float val = (float)cell.waterManager.groundwater.Storage.Quality;
+            double val = cell.waterManager.groundwater.Storage.Quality;
 
             if (val <= 1 && val >= 0) {
                 val = val * val;
-                return new Color(1 - val, val, 0f);
+                return new Color(1 - (float)val, (float)val, 0f);
             }
             else {
                 throw new ArgumentOutOfRangeException("Groundwater quality must be between 0 and 1");

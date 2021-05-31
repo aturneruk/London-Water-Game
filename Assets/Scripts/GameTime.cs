@@ -36,7 +36,7 @@ public static class GameTime {
     static private int day;
     static private int week;
     static private Weekday weekday;
-    static private float dayFraction;
+    static private double dayFraction;
 
     static private int gameSpeed;
     static private int baseGameSpeed = 60;

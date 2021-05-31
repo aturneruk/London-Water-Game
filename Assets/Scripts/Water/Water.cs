@@ -85,10 +85,10 @@ namespace Water {
                     return Math.Round(Volume / 30).ToString() + " L/day";
                 }
                 else if (Volume >= 300000 && Volume < 30000000) {
-                    return Math.Round(Volume / 30000f).ToString("F0") + "k" + " L/day";
+                    return Math.Round(Volume / 30000).ToString("F0") + "k" + " L/day";
                 }
                 else if (Volume >= 30000000) {
-                    return Math.Round(Volume / 30000000f).ToString("F0") + "M" + " L/day";
+                    return Math.Round(Volume / 30000000).ToString("F0") + "M" + " L/day";
                 }
                 else {
                     throw new ArgumentException("Something has gone wrong formatting the supply to a string");
@@ -130,13 +130,13 @@ namespace Water {
                 double maxCapacity = (double)MaxCapacity;
 
                 if (maxCapacity < 300000) {
-                    return Math.Round((float)maxCapacity / 30f).ToString() + " L/day";
+                    return Math.Round(maxCapacity / 30).ToString() + " L/day";
                 }
                 else if (maxCapacity >= 300000 && maxCapacity < 30000000) {
-                    return Math.Round(maxCapacity / 30000f).ToString("F0") + "k" + " L/day";
+                    return Math.Round(maxCapacity / 30000).ToString("F0") + "k" + " L/day";
                 }
                 else if (maxCapacity >= 30000000) {
-                    return Math.Round(maxCapacity / 30000000f).ToString("F0") + "M" + " L/day";
+                    return Math.Round(maxCapacity / 30000000).ToString("F0") + "M" + " L/day";
                 }
                 else {
                     throw new ArgumentException("Something has gone wrong formatting the max capacity to a string");
@@ -152,10 +152,10 @@ namespace Water {
                     return Math.Round(maxCapacity).ToString() + " L";
                 }
                 else if (maxCapacity >= 10000 && maxCapacity < 1000000) {
-                    return Math.Round(maxCapacity / 1000).ToString("F0") + "k" + " L";
+                    return Math.Round(maxCapacity / 1000d).ToString("F0") + "k" + " L";
                 }
                 else if (maxCapacity >= 1000000) {
-                    return Math.Round(maxCapacity / 1000000).ToString("F0") + "M" + " L";
+                    return Math.Round(maxCapacity / 1000000d).ToString("F0") + "M" + " L";
                 }
                 else {
                     throw new ArgumentException("Something has gone wrong formatting the max capacity to a string");

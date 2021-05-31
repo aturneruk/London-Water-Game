@@ -24,7 +24,7 @@ namespace Water {
         public Water Demand;
         private Water reducedDemand;
         public Water Supply;
-        public float supplyRatio;
+        public double supplyRatio;
 
         public Water Sewage;
 
@@ -132,7 +132,7 @@ namespace Water {
             Supply = reservoirSupply + groundwaterSupply + riverSupply;
 
             if (Demand.Volume > 0) {
-                supplyRatio = (float)(Supply.Volume / Demand.Volume);
+                supplyRatio = Supply.Volume / Demand.Volume;
             }
             else if (Demand.Volume == 0) {
                 supplyRatio = 1;
