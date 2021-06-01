@@ -311,7 +311,7 @@ namespace UI {
                 waterSupply.text = selectedCell.waterManager.Supply.FormattedFlow;
 
                 newPopulatedReservoirLevel.text = "0 → 1";
-                newPopulatedReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Reservoir.capacities[1];
+                newPopulatedReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[1]);
 
                 if (Water.Reservoir.BuildCost(selectedCell) <= Money.Balance) {
                     newPopulatedReservoirButton.interactable = true;
@@ -326,7 +326,7 @@ namespace UI {
 
                 if (selectedCell.GetComponent<Water.Reservoir>() == null) {
                     newReservoirLevel.text = "0 → 1";
-                    newReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Reservoir.capacities[1];
+                    newReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[1]);
                 }
 
                 if (selectedCell.GetComponent<Water.WWTP>() == null) {
@@ -371,7 +371,7 @@ namespace UI {
                 maxCellSupply.text = reservoir.displayedMaxCellSupply;
                 
                 reservoirUpgradeLevel.text = reservoir.Level + " → " + (reservoir.Level + 1);
-                reservoirUpgradeDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(reservoir.UpgradeCost) + "\nNew capacity: " + Water.Reservoir.capacities[1];
+                reservoirUpgradeDetails.text = "Upgrade Reservoir\nCost: " + Money.FormattedMoney(reservoir.UpgradeCost) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[reservoir.Level + 1]);
 
                 if (reservoir.UpgradeCost <= Money.Balance) {
                     reservoirUpgradeButton.interactable = true;
