@@ -310,7 +310,12 @@ namespace UI {
 
                 waterSupply.text = selectedCell.waterManager.Supply.FormattedFlow;
 
-                newPopulatedReservoirLevel.text = "0 → 1";
+                #if UNITY_WEBGL
+                    newPopulatedReservoirLevel.text = "0 > 1";
+                #else
+                    newPopulatedReservoirLevel.text = "0 → 1";
+                #endif
+
                 newPopulatedReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[1]);
 
                 if (Water.Reservoir.BuildCost(selectedCell) <= Money.Balance) {
@@ -325,12 +330,23 @@ namespace UI {
                 emptyCellPopulation.text = "Population: " + selectedCell.cellPopulation.ToString();
 
                 if (selectedCell.GetComponent<Water.Reservoir>() == null) {
-                    newReservoirLevel.text = "0 → 1";
+
+                    #if UNITY_WEBGL
+                        newReservoirLevel.text = "0 > 1";
+                    #else
+                        newReservoirLevel.text = "0 → 1";
+                    #endif
+
                     newReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[1]);
                 }
 
                 if (selectedCell.GetComponent<Water.WWTP>() == null) {
-                    newWWTPLevel.text = "0 → 1";
+
+                    #if UNITY_WEBGL
+                        newWWTPLevel.text = "0 > 1";
+                    #else
+                        newWWTPLevel.text = "0 → 1";
+                    #endif
                 }
 
                 if (Water.Reservoir.BuildCost(selectedCell) <= Money.Balance) {
@@ -369,8 +385,13 @@ namespace UI {
                 reservoir.requestedStorageLevel = requestedStorageLevelSlider.value;
                 reservoir.maxCellSupplyMultiplier = maxCellSupplyMultiplierSlider.value;
                 maxCellSupply.text = reservoir.displayedMaxCellSupply;
-                
-                reservoirUpgradeLevel.text = reservoir.Level + " → " + (reservoir.Level + 1);
+
+                #if UNITY_WEBGL
+                    reservoirUpgradeLevel.text = reservoir.Level + " > " + (reservoir.Level + 1);
+                #else
+                    reservoirUpgradeLevel.text = reservoir.Level + " → " + (reservoir.Level + 1);
+                #endif
+
                 reservoirUpgradeDetails.text = "Upgrade Reservoir\nCost: " + Money.FormattedMoney(reservoir.UpgradeCost) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[reservoir.Level + 1]);
 
                 if (reservoir.UpgradeCost <= Money.Balance) {
