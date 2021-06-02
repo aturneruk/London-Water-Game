@@ -79,12 +79,12 @@ namespace Water {
         }
 
         public void GenerateNetwork() {
-            SetOverlandFlowCell();
-            SetDischargeCell();
-            SetAbstractionCell();
+            SetOverlandFlowCells();
+            SetDischargeCells();
+            SetAbstractionCells();
         }
 
-        private void SetOverlandFlowCell() {
+        private void SetOverlandFlowCells() {
 
             List<HexCell> currentCells = new List<HexCell>(hexCells);
             List<HexCell> nextCells = new List<HexCell>();
@@ -139,7 +139,7 @@ namespace Water {
             }
         }
 
-        private void SetDischargeCell() {
+        private void SetDischargeCells() {
             // Discharge cell
             for (int i = 0; i < RiverLength; i++) {
 
@@ -165,7 +165,7 @@ namespace Water {
             }
         }
 
-        private void SetAbstractionCell() {        
+        private void SetAbstractionCells() {        
 
             // Abstraction cell
             for (int i = RiverLength - 1; i >= 0; i--) {
