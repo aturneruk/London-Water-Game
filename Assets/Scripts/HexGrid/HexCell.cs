@@ -146,7 +146,6 @@ public class HexCell : MonoBehaviour {
             //Gizmos.DrawLine(transform.position, abstractionCell.transform.position);
             Gizmos.DrawLine(manager.transform.position, manager.riverDischargeCell.transform.position);
         }
-
     }
 
     public HexCell GetNeighbor(HexDirection direction) {
