@@ -80,7 +80,8 @@ namespace Water {
 
         public void GenerateNetwork() {
             SetOverlandFlowCell();
-            SetDischargeAndAbstractionCell();                     
+            SetDischargeCell();
+            SetAbstractionCell();
         }
 
         private void SetOverlandFlowCell() {
@@ -138,7 +139,7 @@ namespace Water {
             }
         }
 
-        private void SetDischargeAndAbstractionCell() {
+        private void SetDischargeCell() {
             // Discharge cell
             for (int i = 0; i < RiverLength; i++) {
 
@@ -162,6 +163,9 @@ namespace Water {
                     }
                 }
             }
+        }
+
+        private void SetAbstractionCell() {        
 
             // Abstraction cell
             for (int i = RiverLength - 1; i >= 0; i--) {
