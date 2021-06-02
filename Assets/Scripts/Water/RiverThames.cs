@@ -140,7 +140,7 @@ namespace Water {
         }
 
         private void SetDischargeCells() {
-            // Discharge cell
+
             for (int i = 0; i < RiverLength; i++) {
 
                 for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
@@ -165,9 +165,8 @@ namespace Water {
             }
         }
 
-        private void SetAbstractionCells() {        
+        private void SetAbstractionCells() {      
 
-            // Abstraction cell
             for (int i = RiverLength - 1; i >= 0; i--) {
 
                 for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
