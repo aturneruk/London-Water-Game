@@ -37,7 +37,7 @@ namespace UI {
             }
 
             population.text = "Population: " + grid.GetComponent<GridPopulation>().GetTotalPopulation().ToString();
-            moneyBalance.text = Money.FormattedMoney(Money.Balance);
+            moneyBalance.text = Money.FormatMoney(Money.Balance);
             date.text = GameTime.GetLongForm();
             
         }

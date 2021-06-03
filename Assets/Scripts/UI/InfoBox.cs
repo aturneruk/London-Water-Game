@@ -316,7 +316,7 @@ namespace UI {
                     newPopulatedReservoirLevel.text = "0 → 1";
                 #endif
 
-                newPopulatedReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[1]);
+                newPopulatedReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormatMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[1]);
 
                 if (Water.Reservoir.BuildCost(selectedCell) <= Money.Balance) {
                     newPopulatedReservoirButton.interactable = true;
@@ -337,7 +337,7 @@ namespace UI {
                         newReservoirLevel.text = "0 → 1";
                     #endif
 
-                    newReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormattedMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[1]);
+                    newReservoirDetails.text = "Build Reservoir\nCost: " + Money.FormatMoney(Water.Reservoir.BuildCost(selectedCell)) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[1]);
                 }
 
                 if (selectedCell.GetComponent<Water.WWTP>() == null) {
@@ -392,7 +392,7 @@ namespace UI {
                     reservoirUpgradeLevel.text = reservoir.Level + " → " + (reservoir.Level + 1);
                 #endif
 
-                reservoirUpgradeDetails.text = "Upgrade Reservoir\nCost: " + Money.FormattedMoney(reservoir.UpgradeCost) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[reservoir.Level + 1]);
+                reservoirUpgradeDetails.text = "Upgrade Reservoir\nCost: " + Money.FormatMoney(reservoir.UpgradeCost) + "\nNew capacity: " + Water.Water.FormatVolume(Water.Reservoir.capacities[reservoir.Level + 1]);
 
                 if (reservoir.UpgradeCost <= Money.Balance) {
                     reservoirUpgradeButton.interactable = true;

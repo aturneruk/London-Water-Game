@@ -9,7 +9,7 @@ public static class Money {
         get {
             return balance;
         }
-        set {
+        private set {
             if (value < 0) {
                 throw new System.ArgumentOutOfRangeException("The money balance must be positive");
             }
@@ -47,7 +47,7 @@ public static class Money {
         }
     }
 
-    public static string FormattedMoney(double money) {
+    public static string FormatMoney(double money) {
         if (money < 1000) {
             return "£" + money.ToString("###0");
         }

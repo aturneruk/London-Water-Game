@@ -27,12 +27,12 @@ namespace UI {
 
             switch (dialogType) {
                 case DialogType.EmptyCell:
-                    textField.text = "Construct a reservoir in an empty field.\nThis will cost " + Money.FormattedMoney(capitalCost) + ".\nDo you wish to continue?";
+                    textField.text = "Construct a reservoir in an empty field.\nThis will cost " + Money.FormatMoney(capitalCost) + ".\nDo you wish to continue?";
                     break;
                 case DialogType.PopulatedCell:
                     throw new System.ArgumentException("A population must be supplied where the dialog type is PopulatedCell");
                 case DialogType.Upgrade:
-                    textField.text = "Upgrade the existing reservoir to increase storage and supply capacity.\nThis will cost " + Money.FormattedMoney(capitalCost) + ".\nDo you wish to continue?";
+                    textField.text = "Upgrade the existing reservoir to increase storage and supply capacity.\nThis will cost " + Money.FormatMoney(capitalCost) + ".\nDo you wish to continue?";
                     break;
                 default:
                     throw new System.ArgumentNullException("Confirmation dialog type is null");
@@ -50,7 +50,7 @@ namespace UI {
                 case DialogType.EmptyCell:
                     throw new System.ArgumentException("A population loss must not be supplied where the dialog type is EmptyCell");
                 case DialogType.PopulatedCell:
-                    textField.text = "Construct a reservoir in populated area, costing " + Money.FormattedMoney(capitalCost) + ".\n" + populationLoss.ToString("F0") + " residents will be relocated, costing " + Money.FormattedMoney(populationCost) +  "\nThe total cost will be " + Money.FormattedMoney(capitalCost + populationCost) + ".\nDo you wish to continue?";
+                    textField.text = "Construct a reservoir in populated area, costing " + Money.FormatMoney(capitalCost) + ".\n" + populationLoss.ToString("F0") + " residents will be relocated, costing " + Money.FormatMoney(populationCost) +  "\nThe total cost will be " + Money.FormatMoney(capitalCost + populationCost) + ".\nDo you wish to continue?";
                     break;
                 case DialogType.Upgrade:
                     throw new System.ArgumentException("A population loss must not be supplied where the dialog type is Upgrade");
