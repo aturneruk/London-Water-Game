@@ -13,7 +13,7 @@ public class CellPopulation : MonoBehaviour {
 
     private void Awake() {
         Size = 0;
-        GrowthRate = 0.00143f;
+        GrowthRate = 0.00130d;
     }
 
     private void OnEnable() {
