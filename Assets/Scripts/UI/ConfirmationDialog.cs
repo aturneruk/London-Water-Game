@@ -35,7 +35,7 @@ namespace UI {
                     textField.text = "Upgrade the existing reservoir to increase storage and supply capacity.\nThis will cost " + Money.FormatMoney(capitalCost) + ".\nDo you wish to continue?";
                     break;
                 default:
-                    throw new System.ArgumentNullException("Confirmation dialog type is null");
+                    throw new System.ArgumentException("Confirmation dialog type is null");
             }
 
             confirmationDialog.alpha = 1f;
