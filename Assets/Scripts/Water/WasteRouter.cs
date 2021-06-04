@@ -9,7 +9,7 @@ namespace Water {
         private readonly CellManager manager;
         private readonly Groundwater groundwater;
 
-        public Water waste;
+        public Water waste = new Water(0, 0);
 
         private double runoffCoefficient;
 

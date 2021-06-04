@@ -19,10 +19,10 @@ namespace Water {
         private RiverCell abstractionCell;
 
         public Water Storage;
-        private Water riverAbstraction;
 
-        public Water SuppliedToCells;
-        public Water AbstractedFromRiver;
+        private Water riverAbstraction = new Water(0, 0);
+        public Water SuppliedToCells = new Water(0, 0);
+        public Water AbstractedFromRiver = new Water(0, 0);
 
         public double requestedStorageLevel;
         public double maxCellSupplyMultiplier;

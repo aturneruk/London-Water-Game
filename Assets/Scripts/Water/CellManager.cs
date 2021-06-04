@@ -28,13 +28,13 @@ namespace Water {
 
         public Water Sewage;
 
-        public Water groundwaterSupply;
+        public Water groundwaterSupply = new Water(0, 0);
         private double maxGroundwaterAbstraction;
 
-        public Water riverSupply;
+        public Water riverSupply = new Water(0, 0);
         private double maxRiverAbstraction;
 
-        public Water reservoirSupply;
+        public Water reservoirSupply = new Water(0, 0);
 
         private void Start() {
             groundwater = new Groundwater(this);
@@ -52,7 +52,7 @@ namespace Water {
 
         public void UpdateWater() {
             Collate();
-            Calculate();
+            Allocate();
             Distribute();
         }
 
@@ -72,7 +72,7 @@ namespace Water {
             // rainfall and pipe data to go here
         }
 
-        private void Calculate() {
+        private void Allocate() {
 
             reservoirSupply.Volume = 0;
             groundwaterSupply.Volume = 0;
