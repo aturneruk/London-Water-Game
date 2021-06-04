@@ -10,10 +10,9 @@ namespace Water {
         // Private fields
         private double volume;
         private double quality;
+        private double maxCapacity;
 
         // Public properties
-        public double? MaxCapacity { get; set; }
-
         public double Volume {
             get {
                 return volume;
@@ -42,6 +41,28 @@ namespace Water {
                 else {
                     throw new ArgumentException("The quality must be between 0 and 1 inclusive, value is " + value);
                 }
+            }
+        }
+
+        public double? MaxCapacity {
+            get {
+                if (maxCapacity == double.PositiveInfinity) {
+                    return null;
+                }
+                else {
+                    return maxCapacity;
+                }
+            }
+            set {
+                if (value == null) {
+                    maxCapacity = double.PositiveInfinity;
+                }
+                else if (value >= Volume) {
+                    maxCapacity = (double)value;
+                }
+                else {
+                    throw new ArgumentException("Cannot set a maximum capacity lower than current volume");
+                }                
             }
         }
 
@@ -185,7 +206,7 @@ namespace Water {
                 throw new ArgumentException("The quality must be between 0 and 1 inclusive, value is " + quality);
             }
 
-            MaxCapacity = null;
+            maxCapacity = double.PositiveInfinity;
             this.volume = volume;
         }
 
@@ -198,10 +219,15 @@ namespace Water {
                 throw new ArgumentException("The quality must be between 0 and 1 inclusive, value is " + quality);
             }
 
-            MaxCapacity = maxCapacity;
+            if (maxCapacity == null) {
+                this.maxCapacity = double.PositiveInfinity;
+            }
+            else {
+                this.maxCapacity = (double)maxCapacity;
+            }
 
             if (volume > maxCapacity) {
-                throw new ArgumentException("Maximum volume is " + MaxCapacity.ToString());
+                throw new ArgumentException("Maximum volume is " + maxCapacity.ToString());
             }
             this.volume = volume;
         }
