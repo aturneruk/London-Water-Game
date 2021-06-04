@@ -43,11 +43,11 @@ namespace UI {
         }
 
         private void OnEnable() {
-            GameTime.NewDay += UpdateOverlay;
+            GameTime.NewMonth += UpdateOverlay;
         }
 
         private void OnDisable() {
-            GameTime.NewDay -= UpdateOverlay;
+            GameTime.NewMonth -= UpdateOverlay;
         }
     }
 
