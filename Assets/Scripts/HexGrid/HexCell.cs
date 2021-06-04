@@ -132,19 +132,22 @@ public class HexCell : MonoBehaviour {
     }
 
     private void OnDrawGizmosSelected() {
-        Water.CellManager manager = this.waterManager;
 
-        for (int? i = riverDistance; i > 0; i--) {
-            Gizmos.color = Color.black;
-            if (manager.overlandFlowNext) {
-                Gizmos.DrawLine(manager.transform.position, manager.overlandFlowNext.transform.position);
-                manager = manager.overlandFlowNext;
+        if (riverDistance > 0) {
+            Water.CellManager manager = this.waterManager;
+
+            for (int? i = riverDistance; i > 0; i--) {
+                Gizmos.color = Color.black;
+                if (manager.overlandFlowNext) {
+                    Gizmos.DrawLine(manager.transform.position, manager.overlandFlowNext.transform.position);
+                    manager = manager.overlandFlowNext;
+                }
             }
-        }
 
-        if (manager.riverAbstractionCell && manager.riverDischargeCell) {
-            //Gizmos.DrawLine(transform.position, abstractionCell.transform.position);
-            Gizmos.DrawLine(manager.transform.position, manager.riverDischargeCell.transform.position);
+            if (manager.riverAbstractionCell && manager.riverDischargeCell) {
+                //Gizmos.DrawLine(transform.position, abstractionCell.transform.position);
+                Gizmos.DrawLine(manager.transform.position, manager.riverDischargeCell.transform.position);
+            }
         }
     }
 
